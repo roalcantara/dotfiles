@@ -1,0 +1,82 @@
+#!/usr/bin/env bash
+# shellcheck shell=bash disable=SC2154
+
+#? puts 0.1.0
+#? Copyright (C) 200X Thomas Light
+#? License RIT (Robot Institute of Technology)
+#? This is free software: you are free to change and redistribute it.
+#? There is NO WARRANTY, to the extent permitted by law.
+#? http://docopt.org · Command-line interface description language
+
+##? Formats and prints a messsge
+##?
+##? Usage:
+##?    puts [-g|--green] [-r|--red] [-y|--yellow] [-b|--blue] <message>
+##?
+##? Arguments:
+##?    message       The text message to print
+##?
+##? Options:
+##?    -g, --green   Print message in green
+##?    -r, --red     Print message in red
+##?    -y, --yellow  Print message in yellow
+##?    -b, --blue    Print message in blue
+##?
+##? Examples:
+##?    puts --green 'Success!'
+##?    puts --red 'Error!'
+##?    puts --yellow 'Warning!'
+##?    puts --blue 'Info!'
+
+# BG provides background colors.
+# FG provides foreground colors.
+# FX provides effects.
+# Use $BG[none], $FG[none], or $FX[none] to turn off formatting.
+# https://github.com/sorin-ionescu/prezto/tree/master/modules/spectrum
+function puts() {
+  local message
+  local color=""
+
+  # Parse options using zparseopts
+  # -D: remove parsed flags from $@
+  # -E: stop at first non-option (the message)
+  # -F: fail if an invalid option is found
+  zparseopts -D -E -F \
+      g=green -green=green \
+      r=red -red=red \
+      y=yellow -yellow=yellow \
+      b=blue -blue=blue \
+      || return 1
+
+  # Get the remaining argument as the message
+  message="$1"
+
+  # Show usage if no message provided
+  if [[ -z "$message" ]]; then
+    autoload -Uz show_usage
+    show_usage
+    return 1
+  fi
+
+  # Map flags to spectrum colors
+  if (( $#green )); then
+    color="%F{green}"
+  elif (( $#red )); then
+    color="%F{red}"
+  elif (( $#yellow )); then
+    color="%F{yellow}"
+  elif (( $#blue )); then
+    color="%F{blue}"
+  fi
+
+  # Print the colored message
+  if [[ -n "$color" ]]; then
+    print -P "${color}${message}%f"
+  else
+    print "$message"
+  fi
+}
+
+puts "${@}"
+
+# vi: set ft=sh:

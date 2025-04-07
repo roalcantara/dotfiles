@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+# shellcheck shell=bash disable=SC2154,SC2155
+
+#? pss 0.1.0
+#? License RIT (Robot Institute of Technology)
+#? This is free software: you are free to change and redistribute it.
+#? There is NO WARRANTY, to the extent permitted by law.
+#? http://docopt.org · Command-line interface description language
+#? https://gopass.pw · Password manager
+
+##? Reveals the pass|gopass 'key' value
+##?
+##? Usage:
+##?      pss [KEY] [ options ]
+##?
+##? Options:
+##?     -h, --help                    Show this screen.
+##?     -c, --cp                      Copy the password value into the clipboard. [default: false].
+##?     -e <PATH>, --export=<PATH>    Export secrets to a directory.
+##?
+##? Examples:
+##?     pss
+##?     pss tools/bitly.com/token
+##?     pss --cp tools/bitly.com/token
+##?     pss --export /path/to/secrets
+
+pss() {
+    local -A opts
+
+    # Parse options into opts associative array
+    # -D: remove parsed flags from $@
+    # -F: fail on unknown flags
+    # -E: stop at first non-option
+    # -A: store results in associative array
+    zparseopts -D -F -E -A opts \
+        h=help -help=help  \
+        c=cp -cp=cp  \
+        e=export -export=export
+
+  # Example usage of parsed options
+  if (( ${+opts[-h]} )) || (( ${+opts[--help]} )); then
+    autoload -Uz show_usage
+    show_usage
+    return 0
+  fi
+
+  local export="${opts[-e]:-${opts[--export]}}"
+  local cp="${opts[-c]:-${opts[--cp]}}"
+  local long="${opts[-l]:-${opts[--long]}}"
+
+  if [[ -n "$export" ]]; then
+    for it in $(gopass ls --flat); do gopass show -y -f -n "$it" > "${export}/${it//\//_}.secret.yml"; done;
+    return 0;
+  fi
+
+  if [[ "$cp" == 'true' ]]; then
+    gopass show -c "$1";
+    return 0;
+  fi
+
+  if [[ -z "$1" ]]; then
+    local it="$(gopass ls --flat | gum filter --limit=1)"
+    if [[ -n "$it" ]]; then
+      pss "$it"
+    fi
+    return 0;
+  fi
+
+  gopass show -n --password "$1";
+}
+
+pss "$@"
+
+# vi: set ft=sh:
