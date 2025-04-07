@@ -1,0 +1,12 @@
+*.log
+
+raycast/extensions/*
+
+# gcloud
+gcloud/cache/*
+gcloud/logs/*
+.bak/*
+
+.env.bak
+.env.local
+.env~

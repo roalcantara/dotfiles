@@ -1,0 +1,8 @@
+# https://www.shellcheck.net/wiki/Directive
+
+# ignore all files at zsh/opt/completions
+exclude=~/.config/zsh/opt/completions/*
+source=!~/.config/zsh/opt/completions/*
+
+disable=SC1091
+disable=SC1071
