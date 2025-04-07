@@ -1,0 +1,33 @@
+#!/bin/bash
+# Install homebrew
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Set HOMEBREW_PREFIX
+: "${HOMEBREW_PREFIX:="${HOMEBREW_PREFIX:-$(
+  if [ -d "/opt/homebrew" ]; then
+    echo "/opt/homebrew"
+  elif [ -d "${HOME}/.linuxbrew" ]; then
+    echo "${HOME}/.linuxbrew"
+  else
+    echo "/usr/local"
+  fi
+)}"}"
+
+# Initialize homebrew in the current session
+eval "$("$HOMEBREW_PREFIX"/bin/brew shellenv)"
+
+# Install brew dependencies from Brewfile
+brew bundle --file=~/.config/homebrew/Brewfile
+
+# Install neovim
+make nvim/install -f ~/.config/nvim/Makefile
+
+# Install zim
+make zim/install -f ~/.config/zsh/Makefile
+
+# symlink files to home directory
+ln -s ~/.config/zsh/.zshenv ~/.zshenv
+ln -s ~/.config/zsh/.profile ~/.profile
+ln -s ~/.config/zsh/.zprofile ~/.zprofile
+ln -s ~/.config/bash/bashrc ~/.bashrc
+ln -s ~/.config/bash/aliases ~/.bash_aliases
