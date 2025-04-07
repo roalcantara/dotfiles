@@ -1,0 +1,20 @@
+schemaVersion: '2.0.0'
+
+metadataTest:
+  envVars:
+    - key: TERM
+      value: xterm-256color
+  workdir: '/home/linuxbrew'
+  cmd: ['/bin/bash', '--login']
+
+commandTests:
+  - name: User should exist
+    command: whoami
+    expectedOutput: ['linuxbrew']
+  - name: 'Curl Installation'
+    command: 'curl'
+    args: ['--version']
+    expectedOutput: ['curl.*']
+  - name: 'Working Directory'
+    command: 'pwd'
+    expectedOutput: ['/home/linuxbrew']

@@ -1,4 +1,8 @@
 #!/bin/bash
+
+# Prepare the environment
+make setup/prepare -f ~/.config/setup/Makefile
+
 # Install homebrew
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
