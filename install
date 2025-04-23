@@ -1,0 +1,41 @@
+#!/bin/bash
+
+root="$(pwd)"
+
+# Setup config files
+setup_config() {
+  # If the ~/.config directory exists
+  if [[ -d "$HOME/.config" ]]; then
+    # Create a symlink for each directory in the config directory in the current ~/.config
+    for dir in "$root/config"/*; do
+      ln -sf "$dir" "$HOME/.config/$(basename "$dir")"
+    done
+  else
+    # Create a symlink to the config directory
+    ln -sf "$root/config" "$HOME/.config"
+  fi
+}
+
+# Setup ZSH
+setup_zsh() {
+  # Create the ~/.cache/zsh/compcache directory if it doesn't exist
+  if [[ ! -d "${ZSH_CACHE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/zsh}/compcache" ]]; then
+    mkdir -p "${ZSH_CACHE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/zsh}/compcache"
+  fi
+
+  # Create symlinks for the ZSH config files
+  for file in .zshenv .zprofile .zshrc; do
+    if [[ -f "$HOME/.config/zsh/$file" ]]; then
+      ln -sf "$HOME/.config/zsh/$file" "$HOME/$file"
+    fi
+  done
+}
+
+# Main function
+main() {
+  setup_config
+  setup_zsh
+}
+
+# Run the main function
+main

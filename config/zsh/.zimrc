@@ -1,0 +1,56 @@
+#!/usr/bin/env zsh
+# shellcheck disable=SC1071,SC1128,SC2148
+
+# Zim | The Zsh configuration framework with blazing speed and modular extensions (https://zimfw.sh)
+# Start configuration added by Zim install {{{
+
+# Essential settings first
+# zstyle ':zim' 'disable-version-check' 'true'                                                                 # [UNECESSARY] Disable zimfw version check
+# zstyle ':zim:input' double-dot-expand yes                                                                    # [BUGS the zim into reporting] Append `../` to your input for each `.` you type after an initial `..` | https://github.com/zimfw/input?tab=readme-ov-file#settings
+zstyle ':zim:zmodule' use 'degit'                                                                              # Use degit to clone modules - better when git history is not needed, quick module installation is priority, disk space is limited
+zstyle ':zim:completion' dumpfile "${ZSH_CACHE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/zsh}/compcache/.zcompdump" # Enables and configures smart and extensive tab completion.
+
+#
+# Modules
+# https://zimfw.sh/docs/modules
+#
+
+# Foundation modules
+zmodule environment # Sets sane Zsh built-in environment options. (https://github.com/zimfw/environment)
+zmodule input       # Applies correct bindkeys for input events. (https://github.com/zimfw/input)
+zmodule run-help    # Figures out where to get the best help, and gets it. Type ESC-H to execute run-help for the current command. (https://github.com/zimfw/run-help)
+
+# Tool Integration
+zmodule fzf --if-command fzf                                         # Fuzzy finder (https://github.com/zimfw/fzf)
+zmodule joke/zim-mise --if-command mise                              # Sets up mise Zsh shell integration (https://github.com/joke/zim-mise)
+zmodule joke/zim-starship --if-command starship                      # The minimal, blazing-fast, and infinitely customizable prompt for any shell (https://starship.rs)
+zmodule sorin-ionescu/prezto --root modules/spectrum --no-submodules # This module contains git submodules, which are not supported by zimfw's degit. The zmodule option --no-submodules disable this warning.
+
+#
+# Completion
+# Completions should be configured before compinit, as stated in the zsh-completions manual installation guide.
+#
+zmodule completion # calls compinit and must be sourced after all modules that add completion definitions
+
+#
+# Modules that must be initialized last
+#
+zmodule jscutlery/nx-completion --if-command nx
+zmodule chrisands/zsh-yarn-completions --if-command yarn
+zmodule lukechilds/zsh-better-npm-completion --if-command npm
+zmodule MenkeTechnologies/zsh-cargo-completion --if-command cargo
+
+# fzf-tab needs to be loaded after comp init, but before plugins which will wrap widgets, such as zsh-autosuggestions or fast-syntax-highlighting
+# zmodule Aloxaf/fzf-tab --source fzf-tab.zsh --on-pull "if [[ ! -f ./build_fzf_tab_module.log ]]; then source fzf-tab.zsh && echo 'Pre-building fzf-tab module...' && yes | build-fzf-tab-module && echo $(date +\"%Y-%m-%dT%T.%3N%z\") > build_fzf_tab_module.log; fi && if [[ ! -e ./modules/Src/aloxaf/fzftab.bundle && -e ./modules/Src/aloxaf/fzftab.so ]]; then cp ./modules/Src/aloxaf/fzftab.so ./modules/Src/aloxaf/fzftab.bundle; fi" --if-command fzf --if '[[ $- =~ l && -z "$z_prof" && -z "$z_trace" && "$TERM_PROGRAM" != "vscode" ]]'
+zmodule Aloxaf/fzf-tab --source fzf-tab.zsh --if-command fzf
+
+# Fish-like syntax highlighting for Zsh. It must be sourced after completion
+zmodule zsh-users/zsh-syntax-highlighting
+
+# Fish-like history search (up arrow) for Zsh. It must be sourced after zsh-syntax-highlighting
+zmodule zsh-users/zsh-history-substring-search
+
+# Fish-like autosuggestions for Zsh. It must be sourced after zsh-syntax-highlighting
+zmodule zsh-users/zsh-autosuggestions
+
+# }}} End configuration added by Zim install
