@@ -1,4 +1,4 @@
-# shellcheck disable=SC2086,SC2296,SC2299,SC2016,SC2206,SC2154,SC2223,SC1091
+# shellcheck disable=SC2086,SC2016,SC2206
 
 # ~/.zshrc
 # Sourced on all invocations of the shell - unless the -f option is set
@@ -8,9 +8,9 @@
 # Contains commands that loads shell options, aliases, functions, key bindings and plugins
 
 # Essential Environment Variables
-: ${ZDOTDIR:="$HOME/.config/zsh"}
-: ${ZIM_HOME:="$HOME/.local/state/zim"}
-: ${ZSH_CACHE_DIR:="$HOME/.cache/zsh"}
+export ZDOTDIR=${ZDOTDIR:="$HOME/.config/zsh"}
+export ZIM_HOME=${ZIM_HOME:="$HOME/.local/state/zim"}
+export ZSH_CACHE_DIR=${ZSH_CACHE_DIR:="$HOME/.cache/zsh"}
 
 # Use same LS_COLORS definition from utility module, in case it was not set
 export LS_COLORS=${LS_COLORS:-"di=1;34:ln=35:so=32:pi=33:ex=31:bd=1;36:cd=1;33:su=30;41:sg=30;46:tw=30;42:ow=30;43"}
@@ -143,23 +143,26 @@ unset NO_COLOR
 
 # Download zimfw plugin manager if missing
 if [[ ! -e $ZIM_HOME/zimfw.zsh ]]; then
-  if (( $+commands[curl] )); then
-    curl -fsSL --create-dirs -o $ZIM_HOME/zimfw.zsh \
-      https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
+  ZIM_URL="https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh"
+  if command -v curl >/dev/null 2>&1; then
+    curl -fsSL --create-dirs -o $ZIM_HOME/zimfw.zsh $ZIM_URL
+  elif command -v wget >/dev/null 2>&1; then
+    mkdir -p $ZIM_HOME && wget -nv -O $ZIM_HOME/zimfw.zsh $ZIM_URL
   else
-    mkdir -p $ZIM_HOME && wget -nv -O $ZIM_HOME/zimfw.zsh \
-      https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
+    echo "ZIM could not be installed: curl or wget is required!"
   fi
 fi
 
 # Install missing modules, and update $ZIM_HOME/init.zsh if missing or outdated
-if [[ ! $ZIM_HOME/init.zsh -nt ${ZDOTDIR:-$HOME}/.zimrc ]]; then
+if [[ ! $ZIM_HOME/init.zsh -nt $ZDOTDIR/.zimrc ]]; then
   source $ZIM_HOME/zimfw.zsh init -q
 fi
 
 # Initialize modules.
-source $ZIM_HOME/init.zsh
-## }
+if [[ -f $ZIM_HOME/init.zsh ]]; then
+  source $ZIM_HOME/init.zsh
+fi
+# }
 
 # ZSH COMPLETIONS SETTINGS | http://zsh.sourceforge.io/Doc/Release/Options.html#Completion-4 {
 zstyle ':completion:*' list-colors "$LS_COLORS"
