@@ -40,3 +40,26 @@ if [[ -d /opt/homebrew || -d /home/linuxbrew/.linuxbrew || -d /usr/local/Homebre
   eval "$("$HOMEBREW_BIN"/brew shellenv)"
 fi
 # }
+
+# [N]VIM {
+# +BundleInstall +qall, Install all vim bundles
+# https://superuser.com/a/874924/389767
+if command -v nvim >/dev/null 2>&1; then
+  export EDITOR=$(command -v nvim)
+  export VIM_PATH=$XDG_CONFIG_HOME/nvim
+  export MYVIMRC=$VIM_PATH/init.lua
+  export NVIM_LOG_FILE=$XDG_CACHE_HOME/nvim/.nvimlog
+  alias vim=nvim
+  alias vi=nvim
+else
+  export EDITOR=$(command -v vim || command -v vi)
+  alias vi=vim
+fi
+# }
+
+# EDITOR {
+export VISUAL=$EDITOR
+export SUDO_EDITOR=$EDITOR
+export GIT_EDITOR="$EDITOR -c 'startinsert'"
+export LAUNCH_EDITOR=$EDITOR
+# }
