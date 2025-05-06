@@ -1,0 +1,21 @@
+# https://shellcheck.net/wiki/Directive
+
+# ignore all files at zsh/etc
+exclude=config/zsh/etc/*
+
+# ignore all files at zsh/opt/completions
+exclude=config/zsh/opt/completions/*
+
+# ignore all files at zsh/.zshenv
+exclude=config/zsh/.zshenv
+
+# ignore all files at zsh/.zprofile
+exclude=config/zsh/.zprofile
+
+# ignore all files at zsh/.zshrc
+exclude=config/zsh/.zshrc
+
+# ignore all files at zsh/.zimrc
+exclude=config/zsh/.zimrc
+
+disable=SC1091,SC1071,SC2155,SC1090
