@@ -7,13 +7,10 @@ setup_config() {
   # If the ~/.config directory exists
   if [[ -d "$HOME/.config" ]]; then
     # Create a symlink for each directory in the config directory in the current ~/.config
-    for dir in "$root/config"/*; do
-      ln -sf "$dir" "$HOME/.config/$(basename "$dir")"
-    done
-  else
-    # Create a symlink to the config directory
-    ln -sf "$root/config" "$HOME/.config"
+    rm -rf "$HOME/.config"
   fi
+  # Create a symlink to the config directory
+  ln -sf "$root/config" "$HOME/.config"
 }
 
 # Setup ZSH
