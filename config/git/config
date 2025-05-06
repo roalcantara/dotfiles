@@ -1,0 +1,711 @@
+# https://git-scm.com/docs/git-config#Documentation/git-config.txt-color
+
+[color]
+ui = auto
+diff = auto
+
+[color "branch"]
+current = magenta reverse bold
+local = magenta bold
+remote = blue bold ul
+upstream = cyan bold
+plain = white dim bold
+
+[color "decorate"]
+branch = magenta bold
+remoteBranch = blue bold ul
+tag = red italic bold
+grafted = cyan
+
+[color "diff"]
+commit = green bold
+
+[color "status"]
+branch = green reverse
+added = green bold
+changed = yellow italic bold ul
+unmerged = red italic bold strike
+untracked = white italic dim
+
+[diff]
+colormoved = dimmed-zebra
+
+[delta]
+navigate = true  # use n and N to move between diff sections
+features = dark line-numbers decorations
+side-by-side = true
+syntax-theme = Dracula
+diff-so-fancy = true
+zero-style = dim syntax
+
+[interactive]
+diffFilter = delta --color-only --features=interactive
+
+# [delta "decorations"]
+# commit-decoration-style = blue ol
+# commit-style = raw
+# file-style = omit
+# hunk-header-decoration-style = blue box
+# hunk-header-file-style = red
+# hunk-header-line-number-style = "#067a00"
+# hunk-header-style = file line-number syntax
+
+[delta "decorations"]
+commit-decoration-style = bold yellow
+commit-style = raw
+file-style = bold yellow
+file-decoration-style = ul ol bold yellow
+hunk-header-decoration-style = magenta
+hunk-header-file-style = red
+hunk-header-line-number-style = "#067a00"
+hunk-header-style = bold magenta reverse
+
+[delta "line-numbers"]
+line-numbers-minus-style = red bold
+line-numbers-plus-style = green
+
+# https://git-scm.com/docs/git-config#Documentation/git-config.txt-alias
+
+[alias]
+# Add files to the staging area
+# @example: git a
+a=add
+
+# Add all files to the staging area
+# @example: git aa
+aa=add --all
+
+# Commit the staged changes
+# @example: git c
+c=commit
+
+# Commit with a message
+# @example: git cm
+cm=commit --message
+
+# Commit without running hooks
+# @example: git cn
+cn=commit --no-verify
+
+# Commit with a message, without running hooks
+# @example: git cmn
+cmn=commit --message --no-verify
+
+# Amend the last commit
+# @example: git ca
+ca=commit --amend
+
+# Amend the last commit without running hooks
+# @example: git can
+can=commit --amend --no-verify
+
+# Amend the last commit, reusing the same message
+# @example: git car
+car=commit --amend --reuse-message HEAD
+
+# Commit all changes
+# @example: git caa
+caa=commit --all
+
+# Commit all changes without running hooks
+# @example: git caan
+caan=commit --all --no-verify
+
+# Commit all changes with a message
+# @example: git caam
+caam=commit --all --message
+
+# Work-in-progress commit of all changes
+# @example: git wip "Temp"
+wip=!git commit --all --no-verify --message 'wip: '${1:-Temp}
+
+# Reset HEAD softly to a specific commit
+# @example: git rh
+# @example: git rh [commit]
+rh=!git reset --soft ${1:-HEAD}
+
+# Reset HEAD hard to a specific commit
+# @example: git rhr
+# @example: git rhr [commit]
+rhr=!git reset --hard ${1:-HEAD}
+
+# Restore working directory files
+# @example: git discard
+discard=!git restore ${1:-.}
+
+# Unstage files from the staging area
+# @example: git unstage
+unstage=!git restore --staged ${1:-.}
+
+# Undo a commit (keep changes)
+# @example: git undo
+# @example: git undo [commit]
+undo=!git reset ${1:-HEAD}^
+
+# Delete the HEAD reference
+# @example: git undo-from-root
+undo-from-root=update-ref -d HEAD
+
+# Show short status of the repository
+# @example: git st
+st=status --short
+
+# Show the status of the repository
+# @example: git sts
+sts=status
+
+# Show short status with branch information
+# @example: git stv
+stv=status --short --branch
+
+# List files with merge conflicts
+# @example: git conflicts
+conflicts=!git st | grep '^[UMDA]\\{2\\} ' | awk '{ print $2 }'
+
+# List all staged files
+# @example: git staged
+staged=!git st | grep '^[M|A|D]'
+
+# List all unstaged but tracked files
+# @example: git unstaged
+unstaged=!git st | grep '^ [M|A|D]'
+
+# List all untracked files
+# @example: git untracked
+untracked=!git st | grep '^?'
+
+# List all files with changes, including untracked and modified
+# @example: git changes
+changes=!git st | grep -E '\\?| M|MM|DM| D'
+
+# Display the log with color
+# @example: git l
+l=log --color=always
+
+# Display the last 100 commits from all branches with color
+# @example: git lo
+la=log --color=always --all --max-count=100
+
+# Display a colored graphical log of all branches
+# @example: git lolg
+lolg=log --color=always --all --graph
+
+# Show the last commit with file changes statistics
+# @example: git last
+last=log -1 HEAD --stat
+
+# Display a graphical tree of all commits and branches
+# @example: git tree
+tree=log --graph --oneline --all
+
+# List commit hashes
+# @example: git commits
+commits=log --pretty='%h'
+
+# Show the hash of the last commit
+# @example: git last-commit
+last-commit=log -1 HEAD --pretty='%h'
+
+# List branches with detailed information
+# @example: git b
+b=branch --verbose --verbose --color=always
+
+# List all branches with detailed information
+# @example: git bv
+bv=branch --verbose --verbose --color=always --list
+
+# List all branches (local and remote) with detailed information
+# @example: git ba
+ba=branch --verbose --verbose --color=always --list --all
+
+# Delete a specified branch
+# @example: git bd [branch-name]
+bd=branch --delete
+
+# Show multiple branches and their divergences
+# @example: git bs
+bs=show-branch
+
+# List branches that are merged into the current HEAD
+# @example: git merged
+merged=branch --no-color --merged
+
+# List all local branches except HEAD
+# @example: git branches
+branches = "!f() { git branch -vva --color=never  | grep -v 'HEAD' | sed -E -e 's/^[[:space:]]*\\* //g' -e 's/^[[:space:]]*//g' -e 's/remotes\\/origin\\///g' -e 's/^([^[:space:]]+).*/\\1/g' | sort -u | grep -v '^origin/' | grep -v '^>' | uniq; }; f"
+
+# Get the name of the current branch
+# @example: git current-branch
+current-branch=rev-parse --abbrev-ref HEAD
+
+# Get the default branch name (e.g., main or master)
+# @example: git main-branch
+main-branch=config init.defaultBranch
+
+# Delete branches that are merged, excluding main, master, and develop
+# @example: git clear-merged
+clear-merged=!git merged | grep -v '\\*\\|main\\|master\\|develop' | xargs git branch -D
+
+# List remote branches for a specified remote (default: origin)
+# @example: git remote-branches [remote-name]
+remote-branches=!git branch -a | grep remotes/${1:-origin}/ | cut -f 3 -d '/'
+
+# Deinitialize and remove a specified submodule
+# @example: git remove-submodule [submodule-path]
+remove-submodule=!git submodule deinit -f -- ${1} && rm -rf .git/modules/${1} ${1}
+
+# Synchronize and update all submodules recursively
+# @example: git update-submodules
+update-submodules=!git submodule sync && git submodule update --recursive
+
+# Switch to a specified branch or commit
+# @example: git co [branch-name]
+co=checkout
+
+# Create and switch to a new branch
+# @example: git cob [new-branch-name]
+cob=checkout -b
+
+# Guess and switch to a branch based on partial input
+# @example: git cog [partial-branch-name]
+cog=checkout --guess
+
+# Rebase the current branch with statistics
+# @example: git r [base-branch]
+r=rebase --stat
+
+# Abort an ongoing rebase
+# @example: git ra
+ra=rebase --abort
+
+# Continue a rebase after resolving conflicts
+# @example: git rc
+rc=rebase --continue
+
+# Skip a patch during a rebase
+# @example: git rs
+rs=rebase --skip
+
+# Start an interactive rebase
+# @example: git ri [base-branch]
+ri=rebase --interactive
+
+# Start an interactive rebase with automatic stash and apply
+# @example: git ris [base-branch]
+ris=rebase --interactive --autostash
+
+# Start an interactive rebase with automatic squash
+# @example: git risq [base-branch]
+risq=rebase --interactive --autosquash
+
+# Perform an interactive rebase with autostash and show stats, defaulting to HEAD
+# @example: git autosrebase [commit]
+autosrebase=rebase --autostash --interactive --stat ${1:-HEAD}
+
+# Perform an autosrebase starting from the parent of a specified commit
+# @example: git rebase-from [commit]
+rebase-from="!f() { COMMIT=$(git rev-parse ${1:-HEAD}); git autosrebase $COMMIT^; }; f"
+
+# Begin an autosrebase, setting the latest commit to be edited
+# @example: git edit [commit]
+edit="!f() { GIT_SEQUENCE_EDITOR='sed -i -e 1s/^pick/edit/' git autosrebase ${1:-HEAD}^; }; f"
+
+# Start an autosrebase, dropping the latest commit
+# @example: git drop [commit]
+drop="!f() { GIT_SEQUENCE_EDITOR='sed -i -e 1s/^pick/drop/' git autosrebase ${1:-HEAD}^; }; f"
+
+# Begin an autosrebase, rewording the latest commit
+# @example: git reword [commit]
+reword="!f() { GIT_SEQUENCE_EDITOR='sed -i -e 1s/^pick/reword/' git autosrebase ${1:-HEAD}^; }; f"
+
+# Return the root commit hash
+# @example: git root-commit
+root-commit=!git rev-parse $(git rev-list --max-parents=0 HEAD)
+
+# Create a fixup commit for the root commit and autosquash it
+# @example: git fix-root
+fix-root="!f() { COMMIT=$(git root-commit); git commit --no-verify --fixup $COMMIT; GIT_SEQUENCE_EDITOR=: git rebase --autosquash -i --root; }; f"
+
+# Create a fixup commit for a specified commit and autosquash it (including the root commit!)
+# @example: git fix [commit]
+# fix="!f() { COMMIT=$(git rev-parse ${1:-HEAD}); git commit --no-verify --fixup $COMMIT; GIT_SEQUENCE_EDITOR=: git rebase --autosquash -i $COMMIT^; }; f"
+fix="!f() { COMMIT=$(git rev-parse ${1:-HEAD}); if [ $COMMIT = $(git root-commit) ]; then git fix-root; else git commit --no-verify --fixup $COMMIT; GIT_SEQUENCE_EDITOR=: git rebase --autosquash -i $COMMIT^; fi; }; f"
+
+# Create a fixup commit for a specified commit - without autosquashing it
+# @example: git fixup [commit]
+fixup="!f() { COMMIT=$(git rev-parse ${1:-HEAD}); git commit --no-verify --fixup $COMMIT; }; f"
+
+# Create a squash commit for a specified commit
+# @example: git squash [commit]
+squash="!f() { git commit --squash ${1:-HEAD} --no-verify --no-post-rewrite; }; f"
+
+# Stage all changes and create a fixup commit for a specified commit
+# @example: git fix-all [commit]
+fix-all=!git add . && git fix ${1:-HEAD}
+
+# Stage all changes and create a squash commit for a specified commit
+# @example: git squash-all [commit]
+squash-all=!git add . && git squash ${1:-HEAD}
+
+# Cherry-pick a commit
+# @example: git cp [commit-hash]
+cp=cherry-pick
+
+# Abort an ongoing cherry-pick operation
+# @example: git cpa
+cpa=cherry-pick --abort
+
+# Continue a cherry-pick after resolving conflicts
+# @example: git cpc
+cpc=cherry-pick --continue
+
+# Skip a commit during a cherry-pick
+# @example: git cps
+cps=cherry-pick --skip
+
+# Stash current changes
+# @example: git s
+s=stash
+
+# Stash all changes, including untracked files and ignored files
+# @example: git saa
+saa=stash --all
+
+# Stash changes without stashing changes already added to the index
+# @example: git stsh
+stsh=stash --keep-index
+
+# Pop the top stash entry
+# @example: git sp
+sp=stash pop
+
+# Save changes in a new stash
+# @example: git ss [message]
+ss=stash save
+
+# Drop the top stash entry
+# @example: git sd
+sd=stash drop
+
+# Apply the top stash entry
+# @example: git sa
+sa=stash apply
+
+# List stashes in a pretty format
+# @example: git stashes
+stashes=stash list --pretty=format:%gd
+
+# Show the patch and statistics for the top stash entry
+# @example: git sst
+sst=stash show --patch --stat
+
+# Show the patch for a specified stash entry
+# @example: git ssw [stash-index]
+ssw=stash show -p stash@{${1:-0}}
+
+# Stash changes including untracked files
+# @example: git ssu
+ssu=stash save --include-untracked
+
+# Show patches for all stashes
+# @example: git patches
+patches="!f() { for s in $(git stashes); do git stash show -p $s; done; };f"
+
+# Fetch updates from the remote
+# @example: git f
+f=fetch
+
+# Fetch updates from all remotes
+# @example: git fa
+fa=fetch --all
+
+# Pull updates from the remote
+# @example: git u
+u=pull
+
+# Pull with fast-forward only, showing stats and pruning
+# @example: git uf
+uf=pull --ff-only --stat --prune
+
+# Pull with rebase
+# @example: git ur
+ur=pull --rebase
+
+# Pull with rebase from the origin remote for the current branch
+# @example: git up
+up=pull --rebase origin HEAD
+
+# Pull with rebase from the origin remote for the main branch
+# @example: git uu
+uu=!git pull --rebase origin $(git main-branch)
+
+# Pull with rebase from the upstream remote for the main branch
+# @example: git uup
+uup=!git pull --rebase upstream $(git main-branch)
+
+# Push the current branch to the origin remote with verbose output
+# @example: git p
+p=!git push --verbose origin $(git current-branch)
+
+# Force push (with lease) the current branch to the origin remote with verbose output
+# @example: git pf
+pf=!git push --verbose origin $(git current-branch) --force-with-lease
+
+# Push all branches to the origin remote with verbose output
+# @example: git pa
+pa=!git push --verbose origin $(git current-branch) --all
+
+# Push tags of the current branch to the origin remote with verbose output
+# @example: git pt
+pt=!git push --verbose origin $(git current-branch) --tags
+
+# Push the current branch to the origin remote and set it as upstream with verbose output
+# @example: git pc
+pc=!git push --verbose --set-upstream origin $(git current-branch)
+
+# Pull and then push the current branch to/from the origin remote with verbose output
+# @example: git pp
+pp=!git pull origin $(git current-branch) && git push --verbose origin $(git current-branch)
+
+# Show differences between commits, commit and working tree, etc.
+# @example: git d
+d=diff
+
+# Show differences made since midnight of the current day
+# @example: git today
+today=diff --stat 'HEAD@{midnight}'
+
+# Show differences made on the previous day
+# @example: git yesterday
+yesterday=diff --stat 'HEAD@{yesterday}' 'HEAD@{midnight}'
+
+# List remote repositories with detailed information
+# @example: git re
+re=remote --verbose --verbose
+
+# Prune all stale remote tracking branches
+# @example: git rep
+rep=remote prune
+
+# Update remote branches and prune any stale branches
+# @example: git reu
+reu=remote update --prune
+
+# Change a global configuration setting
+# @example: git cg [setting] [value]
+cg=config --global
+
+# List all global configuration settings
+# @example: git configs
+configs=config --global --list
+
+# List all configuration settings with their origin
+# @example: git cfgs
+cfgs=config --list --show-origin
+
+# Interactively search through all configuration settings and their origins
+# @example: git cfgz
+cfgz=!git cfgs | fzf --ansi
+
+# Get the top-level directory of the Git repository
+# @example: git root-dir
+root-dir=rev-parse --show-toplevel
+
+# Remove files from the repository that match a given pattern
+# @example: git remove-files '[pattern]'
+remove-files="!f(){ find . -name $1 -print0 | xargs -0 git rm -f --ignore-unmatch; }; f"
+
+# Get the configured pager used by Git
+# @example: git pager
+pager=config --get core.pager
+
+# Extract the first 7 characters of a commit hash
+# @example: git grep-commit
+grep-commit=!sh -c 'grep -o "[a-f0-9]{7}" | cut -d" " -f1 | tr -d "\n"'
+
+# Get the last word in a line, often used to get the last part of a branch name
+# @example: git tail
+tail=!rev | cut -d' ' -f 1 | rev
+
+# Extract the branch name from a string
+# @example: git grep-branch
+grep-branch=!sh -c 'sed "s/^..//g" | rev | cut -d" " -f 1 | rev'
+
+# Extract the branch name from a string, removing 'remotes/origin/' prefix
+# @example: git head-branch
+# head-branch=!sh -c 'sed "s/^..//g" | cut -d" " -f 1 | tr -d "\n" | sed "s@remotes/origin/@@"'
+# head-branch=!sh -c 'git branch | sed "s/^..//g" | cut -d" " -f 1 | tr -d "\n" | sed "s@remotes/origin/@@"'
+head-branch = "!f() { git rev-parse --abbrev-ref HEAD 2>/dev/null || git branches --show-current 2>/dev/null || git symbolic-ref --short HEAD 2>/dev/null | sed -E 's/^(remotes\\/origin\\/)?//'; }; f"
+
+# Extract the file name from a string, removing the status prefix
+# @example: git strip " M  file.txt" => "file.txt"
+# @example: git strip "??  file2.txt" => "file2.txt"
+strip="!f() { cut -d ' ' -f2 <<< $1 | tee; }; f"
+
+# Preview the diff of a modified file or the whole new file
+# preview="!f(){ FILE=$(cut -d ' ' -f3 <<<$1); tee $FILE; }; f"
+# preview="!f() { [[ $1 == ' M'* ]] && git diff $(cut -d ' ' -f3 <<<$1) --color=always -- $(cut -d ' ' -f3 <<<$1) || bat --color=always $(cut -d ' ' -f3 <<<$1); }; f"
+preview="!f() { FILE=$(cut -d ' ' -f2 <<<$1 | tee) && [[ $1 == ' M'* ]] && git diff --color=always $FILE || bat --color=always --style=numbers $FILE; }; f"
+
+# Interactive log view using fzf to select a commit
+# @example: git fzl
+fzl=!git log --color=always | fzf --ansi | git grep-commit
+
+# Shows the diff of the changes not staged for commit
+# @example: git fzdiff [options]
+fzdiff=!HASH=$(git diff $@ --name-only | fzf --multi --ansi --header=' git diff [ <pathspec>…​]' --preview='git preview {}')
+
+# Interactive add using fzf to select multiple files with changes
+# @example: git fza
+fza=!HASH=$(git changes | fzf --ansi -m --header=' git add <file>' --preview='git preview {}' --bind='tab:toggle+down' --bind='ctrl-x:reload(git restore $(cut -d " " -f2 <<<{}) 1>/dev/null && git changes)' --bind='ctrl-u:reload(git restore --staged $(cut -d " " -f2 <<<{}) 1>/dev/null && git changes)' | git tail) && git add $(echo $HASH | awk '{ print $0 }') && git status
+
+# Interactive unstage using fzf to select unstaged files
+# @example: git fzu
+fzu=!HASH=$(git unstaged | fzf --ansi -m --header=' git restore [ <pathspec>…​]' --preview='git preview {}' | git tail) && git restore -- $(echo $HASH | awk '{ print $0 }') && git st -b
+
+# Interactive unstage staged files using fzf
+# @example: git fzus
+fzus=!HASH=$(git staged | fzf --ansi -m --header=' git restore --staged [ <pathspec>…​]' --preview='git preview {}' | git tail) && git restore --staged -- $(echo $HASH | awk '{ print $0 }') && git st -b
+
+# Interactive checkout branch using fzf
+# @example: git fzc
+fzc=!BRANCH=$(git branches | fzf --ansi --header=' git checkout --guess [ <branch>]') && [[ -n "$BRANCH" ]] && git checkout --guess $(echo $BRANCH | awk '{ print $1 }')
+
+# Interactive delete branch using fzf
+# @example: git fzbd
+fzbd=!HASH=$(git branches | fzf --ansi -m --header=' git branch -d [ <branch>]' | git head-branch --preview='git branch -d $@ --color=always -- {-1}' | git tail) && [[ -n $HASH ]] && git branch -d $(echo $HASH | awk '{ print $1 }')
+
+# Interactive force delete branch using fzf
+# @example: git fzbx
+fzbx=!HASH=$(git branches | fzf --ansi -m --header=' git branch -D [ <branch>]' | git head-branch --preview='git branch -D $@ --color=always -- {-1}' | git tail) && [[ -n $HASH ]] && git branch -D $(echo $HASH | awk '{ print $1 }')
+
+# Interactive rebase using fzf to select a commit
+# @example: git fzr
+fzr=!HASH=$(git log --color=always | fzf --ansi --header=' git rebase --autostash --interactive --stat [ <options >]^\n' | git grep-commit) && [[ -n $HASH ]] && git rebase-from $(echo $HASH | awk '{ print $1 }')
+
+# Interactive fixup using fzf to select a commit
+# @example: git fzf
+fzf=!HASH=$(git log --color=always | fzf --ansi --header=' git fixup [ <pathspec>…​]' | git grep-commit) && [[ -n $HASH ]] && git fix $(echo $HASH | awk '{ print $1 }') && git st -b
+
+# Interactive reword using fzf to select a commit
+# @example: git fzw
+fzw=!HASH=$(git log --color=always | fzf --ansi --header=' git reword [ <options>]' | git grep-commit) && [[ -n $HASH ]] && git reword $(echo $HASH | awk '{ print $1 }')
+
+# Interactive edit using fzf to select a commit
+# @example: git fze
+fze=!HASH=$(git log --color=always | fzf --ansi --header=' git edit [ <options>]' | git grep-commit) && [[ -n $HASH ]] && git edit $(echo $HASH | awk '{ print $1 }')
+
+# Interactive drop commit using fzf
+# @example: git fzd
+fzd=!HASH=$(git log --color=always | fzf --ansi --header=' git drop [ <options>]' | git grep-commit) && [[ -n $HASH ]] && git drop $(echo $HASH | awk '{ print $1 }')
+
+# Interactive soft reset using fzf
+# @example: git fzhs
+fzhs=!HASH=$(git log --color=always | fzf --ansi --header=' git reset --soft [ <options>]' | git grep-commit) && [[ -n $HASH ]] && git reset --soft $(echo $HASH | awk '{ print $1\"^\" }') && git st -b
+
+# Interactive hard reset using fzf
+# @example: git fzhh
+fzhh=!HASH=$(git log --color=always | fzf --ansi --header=' git reset --hard [ <options>]' | git grep-commit) && [[ -n $HASH ]] && git reset --hard $(echo $HASH | awk '{ print $1\"^\" }') && git st -b
+
+# Interactive unstage files using fzf
+# @example: git fzunstage
+fzunstage=!HASH=$(git staged | sed -E 's/(M|A|D)  //' | fzf --ansi --header-lines=1 --multi --ansi --header=' git rm --cached <file>...' --prompt='Files to unstage ❯ ' --preview 'bat --color=always --style=numbers {}' | git tail) && [[ -n $HASH ]] && echo $HASH | tr '\n' ' ' | xargs git rm --cached
+
+[init]
+defaultBranch = main
+
+[checkout]
+defaultRemote = origin
+
+[fetch]
+prune = true
+
+[log]
+all = true
+oneline = true
+color = always
+date = relative
+
+[pull]
+rebase = true
+default = current
+
+[push]
+default = current
+followTags = true
+
+[rebase]
+autostash = true
+
+[branch]
+autosetuprebase = always
+
+[pretty]
+oneline-relative = "format:%C(auto)%h%C(auto)%d%C(reset) %s %C(yellow)(%cr)%Creset"
+
+[format]
+pretty = "%C(auto)%h%C(auto)%d%C(reset) %s %C(yellow)(%cr)%Creset"
+
+[apply]
+whitespace = fix # Detect whitespace errors when applying a patch
+
+[web]
+browser = open
+
+[advice]
+addEmptyPathspec = false
+
+[filter "lfs"]
+clean = git-lfs clean -- %f
+smudge = git-lfs smudge -- %f
+process = git-lfs filter-process
+required = true
+
+[status]
+submoduleSummary = true
+showUntrackedFiles = all
+
+[core]
+pager = delta --dark
+color = always
+autocrlf = input
+excludesfile = ~/.config/git/ignore
+quotepath = on # Output unicode characters (e.g. emoji).
+editor = /opt/homebrew/bin/nvim -c 'startinsert'
+
+[merge]
+ff = only
+conflictstyle = diff3
+
+[diff]
+colorMoved = default
+algorithm = patience       # Use the slower but better patience diff algorithm
+compactionheuristic = true # Use new diff algorithm to make e.g. function diffs look better.
+
+[tag]
+forceSignAnnotated = true
+gpgSign = true
+
+[commit]
+color = always
+verbose = true
+gpgsign = true
+
+[gpg]
+format = ssh
+
+[gpg "ssh"]
+allowedSignersFile = ~/.config/git/allowed_signers
+program = /usr/bin/ssh-keygen # Use system ssh-keygen for signing
+
+[user]
+name = roalcantara
+email = rogerio.alcantara@gmail.com
+signingkey = ~/.ssh/id_ed25519_github.pub
+
+[credential]
+helper = manager
+credentialStore = keychain
+
+[credential "https://dev.azure.com"]
+useHttpPath = true
