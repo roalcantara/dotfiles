@@ -3,6 +3,9 @@
 # Zim | The Zsh configuration framework with blazing speed and modular extensions (https://zimfw.sh)
 # Start configuration added by Zim install {{{
 
+# Essential Environment Variables
+export ZDOTDIR_OPT=${ZDOTDIR_OPT:=$HOME/.config/zsh/opt}
+
 # Essential settings first
 # zstyle ':zim' 'disable-version-check' 'true'                                                                 # [UNECESSARY] Disable zimfw version check
 # zstyle ':zim:input' double-dot-expand yes                                                                    # [BUGS the zim into reporting] Append `../` to your input for each `.` you type after an initial `..` | https://github.com/zimfw/input?tab=readme-ov-file#settings
@@ -34,7 +37,7 @@ zmodule completion # calls compinit and must be sourced after all modules that a
 #
 # Modules that must be initialized last
 #
-zmodule jscutlery/nx-completion --if-command nx
+zmodule "$ZDOTDIR_OPT" --fpath completions
 zmodule chrisands/zsh-yarn-completions --if-command yarn
 zmodule lukechilds/zsh-better-npm-completion --if-command npm
 zmodule MenkeTechnologies/zsh-cargo-completion --if-command cargo
@@ -53,3 +56,10 @@ zmodule zsh-users/zsh-history-substring-search
 zmodule zsh-users/zsh-autosuggestions
 
 # }}} End configuration added by Zim install
+
+# ZSH PLUGIN LOADING & Post-init ZIM module configuration {
+# Local configurations (local plugins)
+for custom_plugin in aliases keybindings plugins; do
+  zmodule "$ZDOTDIR_OPT/$custom_plugin"
+done
+# }

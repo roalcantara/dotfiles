@@ -1,0 +1,2 @@
+#compdef fabric
+compdef fabric=fabric-ai

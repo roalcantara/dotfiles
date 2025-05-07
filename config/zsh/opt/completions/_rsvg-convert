@@ -1,0 +1,74 @@
+#compdef rsvg-convert
+
+autoload -U is-at-least
+
+_rsvg-convert() {
+    typeset -A opt_args
+    typeset -a _arguments_options
+    local ret=1
+
+    if is-at-least 5.2; then
+        _arguments_options=(-s -S -C)
+    else
+        _arguments_options=(-s -C)
+    fi
+
+    local context curcontext="$curcontext" state line
+    _arguments "${_arguments_options[@]}" \
+'-d+[Pixels per inch]:number: ' \
+'--dpi-x=[Pixels per inch]:number: ' \
+'-p+[Pixels per inch]:number: ' \
+'--dpi-y=[Pixels per inch]:number: ' \
+'(-z --zoom)-x+[Horizontal zoom factor]:number: ' \
+'(-z --zoom)--x-zoom=[Horizontal zoom factor]:number: ' \
+'(-z --zoom)-y+[Vertical zoom factor]:number: ' \
+'(-z --zoom)--y-zoom=[Vertical zoom factor]:number: ' \
+'-z+[Zoom factor]:number: ' \
+'--zoom=[Zoom factor]:number: ' \
+'-w+[Width \[defaults to the width of the SVG\]]:length: ' \
+'--width=[Width \[defaults to the width of the SVG\]]:length: ' \
+'-h+[Height \[defaults to the height of the SVG\]]:length: ' \
+'--height=[Height \[defaults to the height of the SVG\]]:length: ' \
+'--top=[Distance between top edge of page and the image \[defaults to 0\]]:length: ' \
+'--left=[Distance between left edge of page and the image \[defaults to 0\]]:length: ' \
+'--page-width=[Width of output media \[defaults to the width of the SVG\]]:length: ' \
+'--page-height=[Height of output media \[defaults to the height of the SVG\]]:length: ' \
+'-f+[Output format]: :(png pdf pdf1.7 pdf1.6 pdf1.5 pdf1.4 ps eps svg)' \
+'--format=[Output format]: :(png pdf pdf1.7 pdf1.6 pdf1.5 pdf1.4 ps eps svg)' \
+'-o+[Output filename \[defaults to stdout\]]: :_files' \
+'--output=[Output filename \[defaults to stdout\]]: :_files' \
+'-i+[SVG id of object to export \[default is to export all objects\]]:object id: ' \
+'--export-id=[SVG id of object to export \[default is to export all objects\]]:object id: ' \
+'-l+[Languages to accept, for example "es-MX,de,en" \[default uses language from the environment\]]:languages: ' \
+'--accept-language=[Languages to accept, for example "es-MX,de,en" \[default uses language from the environment\]]:languages: ' \
+'-b+[Set the background color using a CSS color spec]:color: ' \
+'--background-color=[Set the background color using a CSS color spec]:color: ' \
+'-s+[Filename of CSS stylesheet to apply]:filename.css:_files' \
+'--stylesheet=[Filename of CSS stylesheet to apply]:filename.css:_files' \
+'--completion=[Output shell completion for the given shell]: :(bash elvish fish powershell zsh)' \
+'-?[Display the help]' \
+'--help[Display the help]' \
+'-v[Display the version information]' \
+'--version[Display the version information]' \
+'-a[Preserve the aspect ratio]' \
+'--keep-aspect-ratio[Preserve the aspect ratio]' \
+'-u[Allow huge SVG files]' \
+'--unlimited[Allow huge SVG files]' \
+'(--no-keep-image-data)--keep-image-data[Keep image data]' \
+'(--keep-image-data)--no-keep-image-data[Do not keep image data]' \
+'--testing[Render images for librsvg'\''s test suite]' \
+'*::FILE -- The input file(s) to convert, you can use - for stdin:' \
+&& ret=0
+}
+
+(( $+functions[_rsvg-convert_commands] )) ||
+_rsvg-convert_commands() {
+    local commands; commands=()
+    _describe -t commands 'rsvg-convert commands' commands "$@"
+}
+
+if [ "$funcstack[1]" = "_rsvg-convert" ]; then
+    _rsvg-convert "$@"
+else
+    compdef _rsvg-convert rsvg-convert
+fi
