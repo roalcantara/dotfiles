@@ -1,4 +1,4 @@
-# shellcheck disable=SC2086,SC2016,SC2206
+#!/usr/bin/env zsh
 
 # ~/.zshrc
 # Sourced on all invocations of the shell - unless the -f option is set

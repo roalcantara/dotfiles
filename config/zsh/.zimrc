@@ -1,5 +1,4 @@
 #!/usr/bin/env zsh
-# shellcheck disable=SC1071,SC1128,SC2148
 
 # Zim | The Zsh configuration framework with blazing speed and modular extensions (https://zimfw.sh)
 # Start configuration added by Zim install {{{
