@@ -1,0 +1,27 @@
+{
+  "Add cheat sheet snippet": {
+    "scope": "markdown,plaintext",
+    "prefix": ["ch", "cheat"],
+    "body": [
+      "---",
+      "syntax: markdown",
+      "tags: [ $1 ]",
+      "---",
+      "",
+      "# $2",
+      "",
+      "- $3",
+      "",
+      "\t`$4`",
+      "",
+      "## References",
+      "",
+      "- [$5][0]",
+      "",
+      "[0]: <$6> \"$5\"",
+      "",
+      "<!-- vim: set ft=markdown: -->"
+    ],
+    "description": "Add cheat snippet"
+  }
+}

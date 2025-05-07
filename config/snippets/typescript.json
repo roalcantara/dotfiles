@@ -1,0 +1,1209 @@
+{
+  "Print to console": {
+    "prefix": [
+      "l",
+      "cl"
+    ],
+    "body": [
+      "console.log('--------------------------------->', { $1 } );"
+    ],
+    "description": "Log to console"
+  },
+  "Jest: expect defined": {
+    "prefix": [
+      "jest:expect:defined",
+      "expect:defined",
+      "it:defined"
+    ],
+    "body": [
+      "it('is expected be defined', () => {",
+      "\texpect(${1:subject}).toBeDefined()",
+      "})$0"
+    ],
+    "description": "Jest: defined expectation"
+  },
+  "Type": {
+    "prefix": [
+      ":"
+    ],
+    "body": [
+      ": ${1|number[],number,string[],string,unknown,unknown[],any,any[],boolean,boolean[]|}$0"
+    ],
+    "description": "Select Type"
+  },
+  "Skip": {
+    "prefix": "skip",
+    "body": [
+      "// eslint-disable-next-line jest/no-disabled-tests",
+      "describe.skip('Skipps a test', () => {",
+      "\t$1",
+      "})"
+    ],
+    "description": "Skipps a test"
+  },
+  "Scrap": {
+    "prefix": "scrap",
+    "body": [
+      "/**",
+      "*  Scraps the title of a web page using curl and pup",
+      "*  @param {string} url",
+      "*  @return {Promise} which wraps the fs.readFile async call",
+      "*/",
+      "const scrap_title = url =>",
+      "new Promise((resolve, reject) => {",
+      "  const pup = spawn('pup', ['title text{}', '--color', '--plain'])",
+      "  spawn('curl', ['-s', url]).stdout.pipe(pup.stdin)",
+      "",
+      "  pup.stdout",
+      "    .on('data', title => resolve(String(title.toString()).replace(/\n/g, '')))",
+      "    .on('error', err => reject(err))",
+      "})",
+      "",
+      "scrap_title('$1').then(console.log)"
+    ],
+    "description": "Scrap a page title"
+  },
+  "read_json_sync": {
+    "prefix": "read_json_sync",
+    "body": [
+      "/**",
+      "*  Reads data from a file in a synchronous manner",
+      "*  @param {string} file file path",
+      "*  @return {Promise} which wraps the fs.readFileSync call",
+      "*/",
+      "const read_json_sync = file =>",
+      "  new Promise((resolve, _) => {",
+      "    const fs = require('fs')",
+      "    resolve(JSON.parse(fs.readFileSync(file)))",
+      "  })",
+      "",
+      "read_json_sync('$1').then(console.log)"
+    ],
+    "description": "Read Json Sync"
+  },
+  "read_json_async": {
+    "prefix": "read_json_async",
+    "body": [
+      "/**",
+      "*  Reads data from a file in an asynchronous manner",
+      "*  @param {string} file file path",
+      "*  @return {Promise} which wraps the fs.readFile call",
+      "*/",
+      "const read_json_async = file =>",
+      "  new Promise((resolve, reject) => {",
+      "    const fs = require('fs')",
+      "    fs.readFile(file, (err, data) => {",
+      "      if (err) reject(err)",
+      "      resolve(JSON.parse(data))",
+      "    })",
+      "  })",
+      "",
+      "read_json_async('$1').then(console.log)"
+    ],
+    "description": "Read Json Async"
+  },
+  "write_json_sync": {
+    "prefix": "read_json_async",
+    "body": [
+      "/**",
+      "*  Writes data to a file in a synchronous manner",
+      "*  @param {string} file file path",
+      "*/",
+      "const write_json_sync = (file, obj) => {",
+      "  const fs = require('fs')",
+      "  fs.writeFileSync(file, JSON.stringify(obj, null, 2))",
+      "}",
+      "",
+      "write_json_sync('$1').then(console.log)"
+    ],
+    "description": "Write Json Sync"
+  },
+  "write_json_async": {
+    "prefix": "read_json_async",
+    "body": [
+      "/**",
+      "*  Writes data to a file in a asynchronous manner",
+      "*  @param {string} file file path",
+      "*  @return {Promise} which wraps the fs.readFile call",
+      "*/",
+      "const write_json_async = (file, obj) =>",
+      " new Promise((resolve, reject) => {",
+      "   const fs = require('fs')",
+      "   fs.writeFile(file, JSON.stringify(obj, null, 2), err => {",
+      "     if (err) reject(er)",
+      "     resolve()",
+      "   })",
+      " })",
+      "",
+      "write_json_async('$1').then(console.log)"
+    ],
+    "description": "Write Json Async"
+  },
+  "desc-each": {
+    "prefix": "desc-each",
+    "body": [
+      "describe.each([",
+      "  [1, 1, 2],",
+      "  [1, 2, 3],",
+      "  [2, 1, 3],",
+      "])('.add(%i, %i)', (a, b, expected) => {",
+      "  it(`returns \\${expected}`, () => {",
+      "    expect(a + b).toBe(expected)",
+      "  })",
+      "})"
+    ],
+    "description": "Jest describe.each (hash)"
+  },
+  "desc-each-hash": {
+    "prefix": "desc-each",
+    "body": [
+      "describe.each([",
+      "  {a: 1, b: 1, expected: 2},",
+      "  {a: 1, b: 2, expected: 3},",
+      "  {a: 2, b: 1, expected: 3},",
+      "])('.add(\\$a, \\$b)', ({a, b, expected}) => {",
+      "  it(`returns \\${expected}`, () => {",
+      "    expect(a + b).toBe(expected)",
+      "  })",
+      "})"
+    ],
+    "description": "Jest describe.each (hash)"
+  },
+  "desc-each-tb": {
+    "prefix": "desc-each",
+    "body": [
+      "describe.each`",
+      "  a    | b    | expected",
+      "  \\${1} | \\${1} | \\${2}",
+      "  \\${1} | \\${2} | \\${3}",
+      "  \\${2} | \\${1} | \\${3}",
+      "`('$a + $b', ({ a, b, expected }) => {",
+      "  it(`returns ${expected}`, () => {",
+      "    expect(a + b).toBe(expected)",
+      "  })",
+      "})"
+    ],
+    "description": "Jest describe.each`table`"
+  },
+  "desc-concurrent": {
+    "prefix": "desc-concurrent",
+    "body": [
+      "test.concurrent.each([",
+      "  [1, 1, 2],",
+      "  [1, 2, 3],",
+      "  [2, 1, 3],",
+      "])('.add(%i, %i)', async (a, b, expected) => {",
+      "  expect(a + b).toBe(expected);",
+      "});"
+    ],
+    "description": "Jest test.concurrent.each(table)(name, fn, timeout)"
+  },
+  "desc-concurrent-tb": {
+    "prefix": "desc-concurrent",
+    "body": [
+      "test.concurrent.each`",
+      "  a    | b    | expected",
+      "  \\${1} | \\${1} | \\${2}",
+      "  \\${1} | \\${2} | \\${3}",
+      "  \\${2} | \\${1} | \\${3}",
+      "`('returns $expected when \\$a is added \\$b', async ({a, b, expected}) => {",
+      "  expect(a + b).toBe(expected);",
+      "});"
+    ],
+    "description": "Jest test.concurrent.each`table`(name, fn, timeout)"
+  },
+  "bcrypt": {
+    "prefix": "bcrypt",
+    "body": [
+      "// https://auth0.com/blog/hashing-in-action-understanding-bcrypt",
+      "// yarn add bcrypt && yarn add -D @types/bcrypt",
+      "// npm install bcrypt && npm install --save-dev @types/bcrypt",
+      "import * as bcrypt from 'bcrypt';",
+      "",
+      "const hash = (plainTextPassword1: string, saltRounds: number = 10) =>",
+      "  bcrypt.genSalt(saltRounds).then((salt) => {",
+      "    console.log(`Salt: \\${salt}`);",
+      "    return bcrypt.hash(plainTextPassword1, salt);",
+      "  });",
+      "",
+      "hash('${1:DFGh5546*%^__90}', ${2:10})",
+      "  .then((hash) => {",
+      "    console.log(`Hash: \\${hash}`);$0",
+      "  })",
+      "  .catch((err) => console.error(err.message));"
+    ],
+    "description": "Generate a salt and hash on separate function calls"
+  },
+  "bcrypt-auto": {
+    "prefix": "bcrypt",
+    "body": [
+      "// https://auth0.com/blog/hashing-in-action-understanding-bcrypt",
+      "// yarn add bcrypt && yarn add -D @types/bcrypt",
+      "// npm install bcrypt && npm install --save-dev @types/bcrypt",
+      "import * as bcrypt from 'bcrypt';",
+      "",
+      "const hash = (plainTextPassword: string, saltRounds: number = 10) =>",
+      "  bcrypt.hash(plainTextPassword, saltRounds);",
+      "",
+      "hash('${1:DFGh5546*%^__90}', ${2:10})",
+      "  .then((hash) => {",
+      "    console.log(`Hash: \\${hash}`);$0",
+      "  })",
+      "  .catch((err) => console.error(err.message));"
+    ],
+    "description": "Auto-generate a salt and a hash"
+  },
+  "bcrypt-test": {
+    "prefix": "bcrypt",
+    "body": [
+      "// https://auth0.com/blog/hashing-in-action-understanding-bcrypt",
+      "// yarn add bcrypt && yarn add -D @types/bcrypt",
+      "// npm install bcrypt && npm install --save-dev @types/bcrypt",
+      "import * as bcrypt from 'bcrypt';",
+      "",
+      "const plainTextPassword1 = '${1:DFGh5546*%^__90}';",
+      "for (let saltRounds = ${2:10}; saltRounds < ${3:21}; saltRounds++) {",
+      "  console.time(`bcrypt | cost: \\${saltRounds}, time to hash`);",
+      "  bcrypt.hashSync(plainTextPassword1, saltRounds);",
+      "  console.timeEnd(`bcrypt | cost: \\${saltRounds}, time to hash`);",
+      "}"
+    ],
+    "description": "Check how the time to hash a password grows exponentially as the cost is increased in the current hardware configuration"
+  },
+  "Add Jest bootstrap scenario": {
+    "prefix": "jest:bootstrap",
+    "body": [
+      "import { bootstrap } from './index'",
+      "",
+      "jest.spyOn(console, 'log').mockImplementation()",
+      "",
+      "describe('index', () => {",
+      "  describe('#bootatrap()', () => {",
+      "    it('is expected to exists', () => {",
+      "      expect(bootstrap).toBeDefined()",
+      "    })",
+      "",
+      "    it('is expected to log', () => {",
+      "      bootstrap()",
+      "      expect(console.log).toHaveBeenCalledWith('Hello World!')",
+      "    })",
+      "  })",
+      "})"
+    ],
+    "description": "Add Jest bootstrap scenario"
+  },
+  "Read file from path": {
+    "prefix": "file:read",
+    "body": [
+      "import fs from 'fs'",
+      "",
+      "export const read = (path: string) => fs.readFileSync(path, 'utf8')",
+      ""
+    ],
+    "description": "Read file from path"
+  },
+  "Load html from path": {
+    "prefix": [
+      "html:load",
+      "cheerio:load"
+    ],
+    "body": [
+      "import fs from 'fs';",
+      "import cheerio from 'cheerio'",
+      "",
+      "const load_html = (path: string)  => {",
+      "  return cheerio.load(fs.readFileSync(path)); ",
+      "}"
+    ],
+    "description": "Load html from path"
+  },
+  "Removing duplicates from array (ES6)": {
+    "prefix": [
+      "arr:dup",
+      "remove:dup",
+      "set:dups"
+    ],
+    "body": [
+      "const array = [1, 4, 99, 3, 1, 4, 15];",
+      "const noDups = Array.from(new Set(array));",
+      "console.log(noDups); //[1, 4, 99, 3, 15]  "
+    ],
+    "description": "Removing duplicates from an array using Set() (ES6)"
+  },
+  "Class Constructor": {
+    "prefix": "ctor",
+    "body": [
+      "constructor(args: Array<Partial<${TM_FILENAME/(.*)\\..+$/$1/}>) {",
+      "\tObject.assign(this, ...args)",
+      "}"
+    ],
+    "description": "Class Constructor with Object.assign"
+  },
+  "Export * from": {
+    "prefix": "export",
+    "body": [
+      "export * from './$CLIPBOARD'"
+    ],
+    "description": "Export * from clipboard"
+  },
+  "Wait for 1 second": {
+    "prefix": "wait:1sec",
+    "body": [
+      "const wait = (ms: number): Promise<void> =>",
+      "\tnew Promise((resolve) => setTimeout(resolve, ms));",
+      "",
+      "await wait(1000); // waiting 1 second",
+      ""
+    ],
+    "description": "Waiting for a specific amount of time in milliseconds"
+  },
+  "Check if a date is a weekday": {
+    "prefix": "isWeekday",
+    "body": [
+      "const isWeekday = (d: Date): boolean => d.getDay() % 6 !== 0;",
+      "",
+      "isWeekday(new Date(2022, 2, 21)); // -> true",
+      "isWeekday(new Date(2021, 2, 20)); // -> false"
+    ],
+    "description": "Check if a date is a weekday"
+  },
+  "Check if a number is even": {
+    "prefix": "isEven",
+    "body": [
+      "const isEven = (n: number): boolean => n % 2 === 0;",
+      "",
+      "isEven(2); // -> true",
+      "isEven(3); // -> false"
+    ],
+    "description": "Check if a number is even"
+  },
+  "Check if a number is odd": {
+    "prefix": "isOdd",
+    "body": [
+      "const isOdd = (n: number): boolean => n % 2 !== 0;",
+      "",
+      "isOdd(2); // -> false",
+      "isOdd(3); // -> true"
+    ],
+    "description": "Check if a number is odd"
+  },
+  "Capitalizing a string": {
+    "prefix": "capitalize",
+    "body": [
+      "const capitalize = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);",
+      "",
+      "capitalize('lorem ipsum'); // -> Lorem ipsum"
+    ],
+    "description": "Capitalizing a string"
+  },
+  "Check if an array is empty": {
+    "prefix": "isArrayEmpty",
+    "body": [
+      "const isArrayEmpty = <T = unknown>(arr: T[]): boolean => Array.isArray(arr) && !arr.length;",
+      "",
+      "isArrayEmpty([]); // -> true",
+      "isArrayEmpty([1, 2, 3]); // -> false"
+    ],
+    "description": "Check if an array is empty"
+  },
+  "Check if an object is empty": {
+    "prefix": "isObjectEmpty",
+    "body": [
+      "const isObjectEmpty = <T = unknown>(obj: T): boolean => obj && Object.keys(obj).length === 0;",
+      "",
+      "isObjectEmpty({}); // -> true",
+      "isObjectEmpty({ foo: 'bar' }); // -> false"
+    ],
+    "description": "Check if an object is empty"
+  },
+  "Generating a random integer based on two arguments": {
+    "prefix": "randomInteger",
+    "body": [
+      "const randomInteger = (min: number, max: number): number => Math.floor(Math.random() * (max - min + 1)) + min;",
+      "",
+      "randomInteger(1, 10); // -> 7"
+    ],
+    "description": "Generating a random integer based on two arguments"
+  },
+  "Generating a random boolean": {
+    "prefix": "randomBoolean",
+    "body": [
+      "const randomBoolean = (): boolean => Math.random() >= 0.5;",
+      "",
+      "randomBoolean(); // -> true"
+    ],
+    "description": "Generating a random boolean"
+  },
+  "Toggling a boolean. Turning a false to true and a true to false": {
+    "prefix": "toggleBoolean",
+    "body": [
+      "const toggleBoolean = (val: boolean): boolean => (val = !val);",
+      "",
+      "toggleBoolean(true); // -> false"
+    ],
+    "description": "Toggling a boolean. Turning a false to true and a true to false"
+  },
+  "Array concat": {
+    "prefix": "arr:concat",
+    "body": [
+      "const array1 = ['a', 'b', 'c'];",
+      "const array2 = ['d', 'e', 'f'];",
+      "console.log(array1.concat(array2)); // -> ['a', 'b', 'c', 'd', 'e', 'f']"
+    ],
+    "description": "Array.concat() method returns a new array comprised of this array joined with two or more arrays"
+  },
+  "Static Property Mixins": {
+    "prefix": "mixin:static",
+    "body": [
+      "const base = <T>() => {",
+      "  class Base {",
+      "    static prop: T;",
+      "  }",
+      "  return Base;",
+      "};",
+      "",
+      "const derived = <T>() =>",
+      "  class Derived extends base<T>() {",
+      "    static anotherProp: T;",
+      "  };",
+      "",
+      "class Spec extends derived<string>() {}",
+      "",
+      "Spec.prop; // string",
+      "Spec.anotherProp; // string"
+    ],
+    "description": "The class expression pattern creates singletons, so they can’t be mapped at the type system to support different variable types"
+  },
+  "Partial<Type>": {
+    "prefix": "util:partial",
+    "body": [
+      "type Todo = {",
+      "  title: string;",
+      "  description: string;",
+      "};",
+      "",
+      "const updateTodo = (todo: Todo, fieldsToUpdate: Partial<Todo>) => ({",
+      "  ...todo,",
+      "  ...fieldsToUpdate,",
+      "});",
+      "",
+      "const todo1 = {",
+      "  title: \"organize desk\",",
+      "  description: \"clear clutter\",",
+      "};",
+      "",
+      "const todo2 = updateTodo(todo1, {",
+      "  description: \"throw out trash\",",
+      "});"
+    ],
+    "description": "Constructs a type with all properties of Type set to optional. This utility will return a type that represents all subsets of a given type."
+  },
+  "Required<Type>": {
+    "prefix": "util:required",
+    "body": [
+      "type Props = {",
+      "  a?: number;",
+      "  b?: string;",
+      "};",
+      "",
+      "const obj: Props = { a: 5 };",
+      "",
+      "// Property 'b' is missing in type '{ a: number; }' but required in type 'Required<Props>'.",
+      "const obj2: Required<Props> = { a: 5 };",
+      ""
+    ],
+    "description": "Constructs a type consisting of all properties of Type set to required. The opposite of Partial."
+  },
+  "Readonly<Type>": {
+    "prefix": "util:readonly",
+    "body": [
+      "type Todo = {",
+      "  title: string;",
+      "}",
+      " ",
+      "const todo: Readonly<Todo> = {",
+      "  title: \"Delete inactive users\",",
+      "};",
+      " ",
+      "// Cannot assign to 'title' because it is a read-only property.",
+      "todo.title = \"Hello\";"
+    ],
+    "description": "Constructs a type with all properties of Type set to readonly, meaning the properties of the constructed type cannot be reassigned."
+  },
+  "Record<Keys, Type>": {
+    "prefix": "util:record",
+    "body": [
+      "type CatInfo = {",
+      "  age: number;",
+      "  breed: string;",
+      "};",
+      "",
+      "type CatName = \"miffy\" | \"boris\" | \"mordred\";",
+      "",
+      "const cats: Record<CatName, CatInfo> = {",
+      "  miffy: { age: 10, breed: \"Persian\" },",
+      "  boris: { age: 5, breed: \"Maine Coon\" },",
+      "  mordred: { age: 16, breed: \"British Shorthair\" },",
+      "};",
+      "",
+      "// const cats: Record<CatName, CatInfo>",
+      "cats.boris;",
+      ""
+    ],
+    "description": "Constructs an object type whose property keys are Keys and whose property values are Type. This utility can be used to map the properties of a type to another type."
+  },
+  "Pick<Type, Keys>": {
+    "prefix": "util:pick",
+    "body": [
+      "type Todo = {",
+      "  title: string;",
+      "  description: string;",
+      "  completed: boolean;",
+      "};",
+      "",
+      "type TodoPreview = Pick<Todo, \"title\" | \"completed\">;",
+      "",
+      "const todo: TodoPreview = {",
+      "  title: \"Clean room\",",
+      "  completed: false,",
+      "};",
+      "",
+      "// const todo: TodoPreview",
+      "todo;",
+      ""
+    ],
+    "description": "Constructs a type by picking the set of properties Keys (string literal or union of string literals) from Type"
+  },
+  "Omit<Type, Keys>": {
+    "prefix": "util:omit",
+    "body": [
+      "type Todo = {",
+      "  title: string;",
+      "  description: string;",
+      "  completed: boolean;",
+      "  createdAt: number;",
+      "}",
+      "",
+      "type TodoPreview = Omit<Todo, \"description\">;",
+      "",
+      "const todo: TodoPreview = {",
+      "  title: \"Clean room\",",
+      "  completed: false,",
+      "  createdAt: 1615544252770,",
+      "};",
+      "",
+      "// const todo: TodoPreview",
+      "todo;",
+      "",
+      "",
+      "type TodoInfo = Omit<Todo, \"completed\" | \"createdAt\">;",
+      "",
+      "const todoInfo: TodoInfo = {",
+      "  title: \"Pick up kids\",",
+      "  description: \"Kindergarten closes at 5pm\",",
+      "};",
+      "",
+      "// const todoInfo: TodoInfo",
+      "todoInfo;"
+    ],
+    "description": "Constructs a type by picking all properties from Type and then removing Keys (string literal or union of string literals)"
+  },
+  "Exclude<UnionType, ExcludedMembers>": {
+    "prefix": "util:exclude",
+    "body": [
+      "type T0 = Exclude<\"a\" | \"b\" | \"c\", \"a\">;",
+      "// type T0 = \"b\" | \"c\"",
+      "",
+      "type T1 = Exclude<\"a\" | \"b\" | \"c\", \"a\" | \"b\">;",
+      "// type T1 = \"c\"",
+      "",
+      "type T2 = Exclude<string | number | (() => void), Function>;",
+      "// type T2 = string | number",
+      ""
+    ],
+    "description": "Constructs a type by excluding from UnionType all union members that are assignable to ExcludedMembers"
+  },
+  "Extract<Type, Union>": {
+    "prefix": "util:extract",
+    "body": [
+      "type T0 = Extract<\"a\" | \"b\" | \"c\", \"a\" | \"f\">;",
+      "// type T0 = \"a\"",
+      "",
+      "type T1 = Extract<string | number | (() => void), Function>;",
+      "// type T1 = () => void"
+    ],
+    "description": "Constructs a type by extracting from Type all union members that are assignable to Union"
+  },
+  "NonNullable<Type>": {
+    "prefix": "util:nonNullable",
+    "body": [
+      "type T0 = NonNullable<string | number | undefined>;",
+      "// type T0 = string | number",
+      "",
+      "type T1 = NonNullable<string[] | null | undefined>;",
+      "// type T1 = string[]"
+    ],
+    "description": "Constructs a type by excluding null and undefined from Type."
+  },
+  "Parameters<Type>": {
+    "prefix": "util:parameters",
+    "body": [
+      "declare function f1(arg: { a: number; b: string }): void;",
+      " ",
+      "type T0 = Parameters<() => string>;",
+      "// type T0 = []",
+      "",
+      "type T1 = Parameters<(s: string) => void>;",
+      "// type T1 = [s: string]",
+      "",
+      "type T2 = Parameters<<T>(arg: T) => T>;",
+      "// type T2 = [arg: unknown]",
+      "",
+      "type T3 = Parameters<typeof f1>;",
+      "// type T3 = [arg: { a: number; b: string; }]",
+      "",
+      "type T4 = Parameters<any>;",
+      "// type T4 = unknown[]",
+      "",
+      "type T5 = Parameters<never>;",
+      "// type T5 = never",
+      "",
+      "type T6 = Parameters<string>;",
+      "// Type 'string' does not satisfy the constraint '(...args: any) => any'."
+    ],
+    "description": "Constructs a tuple type from the types used in the parameters of a function type Type."
+  },
+  "ReturnType<Type>": {
+    "prefix": "util:returnType",
+    "body": [
+      "declare function f1(): { a: number; b: string };",
+      " ",
+      "type T0 = ReturnType<() => string>;",
+      "// type T0 = string",
+      "",
+      "type T1 = ReturnType<(s: string) => void>;",
+      "// type T1 = void",
+      "",
+      "type T2 = ReturnType<<T>() => T>;",
+      "// type T2 = unknown",
+      "",
+      "type T3 = ReturnType<<T extends U, U extends number[]>() => T>;",
+      "// type T3 = number[]",
+      "",
+      "type T4 = ReturnType<typeof f1>;",
+      "// type T4 = { a: number; b: string; }",
+      "",
+      "type T5 = ReturnType<any>;",
+      "// type T5 = any",
+      "",
+      "type T6 = ReturnType<never>;",
+      "// type T6 = never",
+      "type T7 = ReturnType<string>;",
+      "// Type 'string' does not satisfy the constraint '(...args: any) => any'.",
+      "// type T7 = any",
+      "",
+      "type T8 = ReturnType<Function>;",
+      "// Type 'Function' does not satisfy the constraint '(...args: any) => any'.",
+      "  // Type 'Function' provides no match for the signature '(...args: any): any'.",
+      "// type T8 = any"
+    ],
+    "description": "Constructs a type consisting of the return type of function Type."
+  },
+  "InstanceType<Type>": {
+    "prefix": "util:instanceType",
+    "body": [
+      "class C {",
+      "  x = 0;",
+      "  y = 0;",
+      "}",
+      " ",
+      "type T0 = InstanceType<typeof C>;",
+      "// type T0 = C",
+      "",
+      "type T1 = InstanceType<any>;",
+      "// type T1 = any",
+      "",
+      "type T2 = InstanceType<never>;",
+      "// type T2 = never",
+      "",
+      "type T3 = InstanceType<string>;",
+      "// Type 'string' does not satisfy the constraint 'abstract new (...args: any) => any'.",
+      "// type T3 = any",
+      "",
+      "type T4 = InstanceType<Function>;",
+      "// Type 'Function' does not satisfy the constraint 'abstract new (...args: any) => any'.",
+      "  // Type 'Function' provides no match for the signature 'new (...args: any): any'.",
+      "// type T4 = any"
+    ],
+    "description": "Constructs a type consisting of the instance type of a constructor function in Type."
+  },
+  "Expect an Object to Contain Another Object": {
+    "prefix": "desc",
+    "body": [
+      "describe('object contains test', () => {",
+      "  it('should return true', () => {",
+      "    const myObject = { a: 1, b: 2, c: 3 }",
+      "    expect(myObject).toEqual(expect.objectContaining({ b: 2 }))",
+      "  })",
+      "})"
+    ],
+    "description": "Expect an Object to Contain Another Object"
+  },
+  "Expect an Array to Contain an Object (values only)": {
+    "prefix": "desc",
+    "body": [
+      "describe('Array Contains an Object', () => {",
+      "  it('contains', () => {",
+      "    const arr = [{ a: 1 }, { b: 2 }, { c: 3 }]",
+      "    expect(arr).toContainEqual({ b: 2 })",
+      "  })",
+      "})"
+    ],
+    "description": "Expect an Array to Contain an Object (values only)"
+  },
+  "Simple observable jest spec": {
+    "prefix": "desc",
+    "body": [
+      "import { interval, map, scan, take } from 'rxjs'",
+      "",
+      "describe('observable()', () => {",
+      "  const obs = interval(1000).pipe(",
+      "    map(x => x * 2),",
+      "    map(x => x - 1),",
+      "    scan((acc, x) => acc + x, 0),",
+      "    take(4)",
+      "  )",
+      "",
+      "  it('expectes to contain -1', done => {",
+      "    obs.subscribe(res => {",
+      "      expect(res).toEqual(-1)",
+      "      done()",
+      "    })",
+      "  })",
+      "})"
+    ],
+    "description": "Expect an Observable to return a value"
+  },
+  "A simple function Spec": {
+    "prefix": [
+      "spec:func"
+    ],
+    "body": [
+      "import { ${TM_FILENAME/^([^.]+).*/${1:/camelcase}/} } from './${TM_FILENAME_BASE/(.*)\\..+$/$1/}'",
+      "",
+      "describe('#${TM_FILENAME/^([^.]+).*/${1:/camelcase}/}()', () => {",
+      "  describe.each([",
+      "    { ${1:input}: '${2:foo}', ${3:expected}: '${4:bar}' },",
+      "    { $1: '$2', $3: '$4' }",
+      "  ])(\"When '$$1' is given\", ({ $1, $3 }) => {",
+      "    it(`returns '${$3}'`, () => {",
+      "      expect(${TM_FILENAME/^([^.]+).*/${1:/camelcase}/}($1)).toBe($3)",
+      "    })",
+      "  })",
+      "})$0"
+    ],
+    "description": "A simple function spec"
+  },
+  "A simple function Spec (with subject)": {
+    "prefix": [
+      "spec:subject"
+    ],
+    "body": [
+      "import { ${1:${TM_FILENAME/^([^.]+).*/${1:/camelcase}/}} as subject } from './${TM_FILENAME_BASE/(.*)\\..+$/$1/}'",
+      "",
+      "describe('#${TM_FILENAME/^([^.]+).*/${1:/camelcase}/}()', () => {",
+      "  describe.each([",
+      "    { ${2:input}: '${3:foo}', ${4:expected}: '${5:bar}' },",
+      "    { $2: '$3', $4: '$5' }",
+      "  ])(\"When '$$2' is given\", ({ $2, $4 }) => {",
+      "    it(`returns '${$4}'`, () => {",
+      "      expect(subject($2)).toBe($4)",
+      "    })",
+      "  })",
+      "})$0"
+    ],
+    "description": "A simple function spec (with subject)"
+  },
+  "A simple swap function": {
+    "prefix": [
+      "func",
+      "const",
+      "sort",
+      "swap"
+    ],
+    "body": [
+      "const swap = <T>(arr: T[], from: number, to: number) => {",
+      "\tlet tmp = arr[from]",
+      "\tarr[from] = arr[to]",
+      "\tarr[to] = tmp",
+      "",
+      "\treturn arr",
+      "}"
+    ],
+    "description": "Swap two elements in an array"
+  },
+  "Find next smallest index function": {
+    "prefix": [
+      "func",
+      "sort",
+      "smallest:index"
+    ],
+    "body": [
+      "const next_smallest_index = (array: number[], start_at: number, end_at: number) => {",
+      "  let i = start_at",
+      "  let j = i",
+      "",
+      "  while (i < end_at) {",
+      "    if (array[i] < array[j]) j = i",
+      "    i++",
+      "  }",
+      "  return j",
+      "}"
+    ],
+    "description": "Find the next smallest index"
+  },
+  "Bubble Sort asceing order": {
+    "prefix": [
+      "func",
+      "sort",
+      "bubble:asc"
+    ],
+    "body": [
+      "/**",
+      " * Bubble Sort asceing order",
+      " * ",
+      " * From the bottom up,",
+      " * the algorithm works by selecting the smallest",
+      " * element in the array and swapping it with the element at the current index.",
+      " *",
+      " * @param array",
+      " * @returns sorted array",
+      " * @example bubble_sort([2, 3, 1, 5]) => [1, 2, 3, 5]",
+      " * Complexity:",
+      " *    - O(n) time",
+      " *    - O(1) space",
+      " */",
+      "export const bubble_sort = (array: number[], n = array.length) => {",
+      "  let i = 0",
+      "  while (i < n - 1) {",
+      "    let j = n - 1",
+      "    while (j > 0) {",
+      "      if (array[j] < array[j - 1]) {",
+      "        const temp = array[j]",
+      "        array[j] = array[j - 1]",
+      "        array[j - 1] = temp",
+      "      }",
+      "      j--",
+      "    }",
+      "    i++",
+      "  }",
+      "  return array",
+      "}"
+    ],
+    "description": "Bubble Sort asceing order"
+  },
+  "Bubble Sort descending order": {
+    "prefix": [
+      "func",
+      "sort",
+      "bubble:desc"
+    ],
+    "body": [
+      "/**",
+      " * Bubble Sort descending order",
+      " * ",
+      " * From the bottom up,",
+      " * the algorithm works by selecting the smallest",
+      " * element in the array and swapping it with the element at the current index.",
+      " *",
+      " * @param array",
+      " * @returns sorted array",
+      " * @example bubble_sort([2, 3, 1, 5]) => [1, 2, 3, 5]",
+      " * Complexity:",
+      " *    - O(n) time",
+      " *    - O(1) space",
+      " */",
+      "export const bubble_sort = <T>(array: T[], n = array.length) => {",
+      "  let i = 0",
+      "  while (i < n - 1) {",
+      "    let j = n - 1",
+      "    while (j > 0) {",
+      "      if (array[j] > array[j - 1]) {",
+      "        const temp = array[j]",
+      "        array[j] = array[j - 1]",
+      "        array[j - 1] = temp",
+      "      }",
+      "      j--",
+      "    }",
+      "    i++",
+      "  }",
+      "  return array",
+      "}"
+    ],
+    "description": "Bubble Sort descending order"
+  },
+  "Get the Min value in an Array": {
+    "prefix": [
+      "func",
+      "arr",
+      "min:value"
+    ],
+    "body": "const findMinValue = <T>(arr: T[]) => Math.min(...arr)",
+    "description": "Get the Min value in an Array"
+  },
+  "Get the Index of the Min value in an Array": {
+    "prefix": [
+      "func",
+      "arr",
+      "min:value:index"
+    ],
+    "body": "const findMinValueIndex = <T>(arr: T[]) => arr.indexOf(Math.min(...arr))",
+    "description": "Get the Index of the Min value in an Array"
+  },
+  "Is Prime Function": {
+    "prefix": [
+      "func",
+      "func:prime",
+      "isPrime"
+    ],
+    "body": [
+      "function isPrime(value) {",
+      "  if (value == 1) return false;",
+      "  if (value == 2) return true;",
+      "  if (value % 2 == 0) return false;",
+      "",
+      "  for (let i = 3; i <= sqrt(value); i++) {",
+      "    if (value % i == 0) {",
+      "      return false;",
+      "    }",
+      "  }",
+      "  return true;",
+      "}"
+    ],
+    "description": "Is Prime Function"
+  },
+  "Global fech (node18)": {
+    "prefix": [
+      "fetch"
+    ],
+    "body": [
+      "/**",
+      " * Node18 global fetch",
+      " * @param {string} input - the resource that you wish to fetch",
+      " * @param {string} init - An object containing any custom settings that you want to apply to the request.",
+      " * @returns {Promise} - The fetch promise",
+      " * @link https://nodejs.org/en/blog/announcements/v18-release-announce",
+      " */",
+      "export const get = async (input: RequestInfo, init?: RequestInit | undefined) => {",
+      "  const res = await fetch(input, init);",
+      "  if (res.ok) return await res.json();",
+      "  throw Error(`${res.status} ${res.statusText}`)",
+      "}",
+      "",
+      "get('https://jsonplaceholder.typicode.com/todos/2')",
+      "  .then(console.log)",
+      "  .catch(console.error)",
+      ""
+    ],
+    "description": "Global a resource (node18)"
+  },
+  "node-fech": {
+    "prefix": [
+      "fetch:node:"
+    ],
+    "body": [
+      "import fetch from 'node-fetch';",
+      "",
+      "/**",
+      " * Node18 global fetch",
+      " * @param {string} input - the resource that you wish to fetch",
+      " * @param {string} init - An object containing any custom settings that you want to apply to the request.",
+      " * @returns {Promise} - The fetch promise",
+      " * @link https://nodejs.org/en/blog/announcements/v18-release-announce",
+      " */",
+      "export const get = async (input: RequestInfo, init?: RequestInit | undefined) => {",
+      "  const res = await fetch(input, init);",
+      "  if (res.ok) return await res.json();",
+      "  throw Error(`${res.status} ${res.statusText}`)",
+      "}",
+      "",
+      "get('https://jsonplaceholder.typicode.com/todos/2')",
+      "  .then(console.log)",
+      "  .catch(console.error)",
+      ""
+    ],
+    "description": "Node fetch"
+  },
+  "const function": {
+    "prefix": [
+      "export",
+      "const",
+      "exp:const"
+    ],
+    "body": [
+      "export const ${1:${TM_FILENAME/^([^.]+).*/${1:/camelcase}/}} = ($2) => {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Export a simple const function"
+  },
+  "eslint disable rule": {
+    "prefix": [
+      "eslint-disable:rule",
+      "disable:rule",
+      "dis:rule",
+      "/*"
+    ],
+    "body": [
+      "/* eslint-disable ${1,no-console} */"
+    ],
+    "description": "eslint-disable rule"
+  },
+  "eslint enable rule": {
+    "prefix": [
+      "eslint-enable:rule",
+      "enable:rule",
+      "ena:rule",
+      "/*"
+    ],
+    "body": [
+      "/* eslint-enable ${1,no-console} */"
+    ],
+    "description": "eslint-enable rule"
+  },
+  "eslint disable line (after)": {
+    "prefix": [
+      "eslint-disable:line",
+      "disable:line",
+      "dis:line"
+    ],
+    "body": [
+      "// eslint-disable-line"
+    ],
+    "description": "eslint-disable line (after the violation)"
+  },
+  "eslint disable all": {
+    "prefix": [
+      "eslint-disable",
+      "disable",
+      "/*"
+    ],
+    "body": [
+      "/* eslint-disable */"
+    ],
+    "description": "eslint disable all"
+  },
+  "eslint enable all": {
+    "prefix": [
+      "eslint-enable",
+      "enable",
+      "/*"
+    ],
+    "body": [
+      "/* eslint-enable */"
+    ],
+    "description": "eslint enable all"
+  },
+  "JSDoc": {
+    "prefix": [
+      "jsdoc",
+      "doc",
+      "/*"
+    ],
+    "body": [
+      "/**",
+      " * ${1:description}",
+      " */"
+    ],
+    "description": "JSDoc is a markup language used to annotate JavaScript source code files"
+  },
+  "Add Deno type": {
+    "prefix": [
+      "deno:types",
+      "@deno",
+      "// @deno"
+    ],
+    "body": "// @deno-types=\"npm:${1:@types/express@4}\"",
+    "description": "Deno type"
+  },
+  "Shebang: Deno": {
+    "prefix": [
+      "shebang:deno",
+      "bang:deno",
+      "!",
+      "#!"
+    ],
+    "body": "#!/usr/bin/env -S deno run --allow-write",
+    "description": "Shebang: Deno"
+  },
+  "REST API with Express and Deno": {
+    "prefix": [
+      "express:deno"
+    ],
+    "body": [
+      "// @deno-types=\"npm:@types/express@4\"",
+      "import express, { NextFunction, Request, Response } from \"npm:express\";",
+      "import demoData from \"./data_blob.json\" assert { type: \"json\" };",
+      "",
+      "const app = express();",
+      "const port: number = Number(Deno.env.get(\"PORT\")) || 3000;",
+      "",
+      "const reqLog = (req: Request, _res: Response, next: NextFunction) => {",
+      "  console.log(`${req.method} ${req.url} by ${req.hostname}`);",
+      "  next();",
+      "};",
+      "",
+      "app.use(reqLog);",
+      "app.get(\"/\", (_req: Request, res: Response) => {",
+      "  res.send(\"Hello World!\");",
+      "});",
+      "",
+      "app.get(\"/users\", (_req: Request, res: Response) => {",
+      "  res.json(demoData.users);",
+      "});",
+      "",
+      "app.get(\"/users/:id\", (req: Request, res: Response) => {",
+      "  const id = Number(req.params.id);",
+      "  const user = demoData.users.find((user) => user.id === id);",
+      "  if (user) {",
+      "    res.status(200).json(user);",
+      "  } else {",
+      "    res.status(404).send(\"User not found\");",
+      "  }",
+      "});",
+      "",
+      "app.listen(port, () => {",
+      "  console.log(`Listening on port ${port} ...`);",
+      "});",
+      ""
+    ],
+    "description": "REST API with Express and Deno"
+  },
+  "Bun Spec": {
+    "prefix": "bun:spec",
+    "body": [
+      "import { mock, expect, test } from 'bun:test';",
+      "",
+      "mock.module('•/module', () => {",
+      "  return { foo: 'bar' };",
+      "});",
+      "",
+      "test('it should be mocked', async () => {",
+      "  const esm = await import('./module');",
+      "  expect(esm.foo).toBe('bar');",
+      "  const cjs = require('./module');",
+      "  expect(cjs.foo).toBe('bar');",
+      "});",
+      ""
+    ],
+    "description": "Bun Spec"
+  },
+  "Trigger exports generation": {
+    "prefix": "ex",
+    "body": [
+      "// Auto-generated exports",
+      "$0"
+    ],
+    "description": "Insert export comment and prepare for running export generation command"
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "GET/POST/PUT/DELETE": {
+    "prefix": "rest",
+    "body": [
+      "# REST Client",
+      "# https://marketplace.visualstudio.com/items?itemName=humao.rest-client",
+      "",
+      "@protocol = ${1|http,https|}",
+      "@hostname = ${2:pokeapi.co}",
+      "@port = ${3:3000}",
+      "@endpoint = ${4:api/v2}",
+      "@resource = ${5:pokemon}",
+      "@host = {{protocol}}://{{hostname}}:{{port}}",
+      "@url = {{host}}/{{endpoint}}/{{resource}}",
+      "@id = ${6:1}",
+      "@token = ${7:1}",
+      "",
+      "### @name GET /$4",
+      "GET {{url}} HTTP/1.1",
+      "",
+      "### @name GET /$4/$5",
+      "GET {{url}}/{{id}} HTTP/1.1",
+      "",
+      "### @name POST /$4",
+      "POST {{url}} HTTP/1.1",
+      "Content-Type: application/json",
+      "",
+      "{",
+      "  \"${8:name}\": \"${9:Naruto}\",",
+      "  \"${10:email}\": \"${11:naruto@leaf.jp}\"",
+      "}",
+      "",
+      "### @name PUT /$4/$5",
+      "PUT {{url}}/{{id}} HTTP/1.1",
+      "Content-Type: application/json",
+      "",
+      "{",
+      "  \"${8:name}\": \"${12:Naruto}\"",
+      "}",
+      "",
+      "### @name DELETE /$4/$5",
+      "DELETE {{url}}/{{id}} HTTP/1.1",
+      "$0"
+    ],
+    "description": "file"
+  },
+  "VARIABLES": {
+    "prefix": "variables",
+    "body": [
+      "# REST Client",
+      "# https://marketplace.visualstudio.com/items?itemName=humao.rest-client",
+      "",
+      "@protocol = http${1:}",
+      "@hostname = ${2:pokeapi.co}",
+      "@port = ${3:3000}",
+      "@endpoint = ${4:api/v2}",
+      "@resource = ${5:pokemon}",
+      "@host = {{protocol}}://{{hostname}}:{{port}}",
+      "@url = {{host}}/{{endpoint}}/{{resource}}",
+      "@id = ${6:1}",
+      "@token = ${7:1}",
+      "$0"
+    ],
+    "description": "Rest variables"
+  },
+  "GET /{{url}}": {
+    "prefix": "get",
+    "body": ["\n### @name GET /{{url}}", "GET {{url}} HTTP/1.1", "$0"],
+    "description": "GET /url"
+  },
+  "GET /{{url}} (:token)": {
+    "prefix": "get",
+    "body": [
+      "\n### @name GET /{{url}} (${1:{{token\\}\\}})",
+      "GET {{url}} HTTP/1.1",
+      "Authorization: token $1",
+      "$0"
+    ],
+    "description": "GET /:res"
+  },
+  "GET /:res": {
+    "prefix": "get",
+    "body": [
+      "\n### @name GET ${1:{{hostname\\}\\}}:${2:{{port\\}\\}}/${3:{{endpoint\\}\\}}/${4:{{resource\\}\\}}",
+      "GET http://$1:$2/$3/$4 HTTP/1.1",
+      "$0"
+    ],
+    "description": "GET /:res"
+  },
+  "GET /:res (:token)": {
+    "prefix": "get",
+    "body": [
+      "\n### @name GET /${3:api}/${4:users}",
+      "GET http://{{${1:localhost}}}:{{${2:3000}}}/{{$3}}/{{$4}} HTTP/1.1",
+      "Authorization: token ${5:{{token}}}",
+      "$0"
+    ],
+    "description": "GET /:res"
+  }
+}

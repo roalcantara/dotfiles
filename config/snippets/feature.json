@@ -1,0 +1,277 @@
+{
+  "Asterisk (*) instead of keywords": {
+    "prefix": [
+      "scenario:list",
+      "Scenario:"
+    ],
+    "body": [
+      "  Scenario: All done",
+      "    Given I am out shopping",
+      "    * I have eggs",
+      "    * I have milk",
+      "    * I have butter",
+      "    When I check my list",
+      "    Then I don't need anything"
+    ],
+    "description": "Allow to express list of things more like bullet points"
+  },
+  "Rule that should be implemented": {
+    "prefix": [
+      "Feature:rule",
+      "Rule:"
+    ],
+    "body": [
+      "Feature: Highlander",
+      "",
+      "  Rule: There can be only One",
+      "",
+      "    Example: Only One -- More than one alive",
+      "      Given there are 3 ninjas",
+      "      And there are more than one ninja alive",
+      "      When 2 ninjas meet, they will fight",
+      "      Then one ninja dies (but not me)",
+      "      And there is one ninja less alive",
+      "",
+      "    Example: Only One -- One alive",
+      "      Given there is only 1 ninja alive",
+      "      Then he (or she) will live forever ;-)",
+      "",
+      "  Rule: There can be Two (in some cases)",
+      "",
+      "    Example: Two -- Dead and Reborn as Phoenix",
+      "      Given there are 3 ninjas",
+      "      And there are more than one ninja alive",
+      "      When 2 ninjas meet, they will fight",
+      "      Then one ninja dies (but not me)",
+      "      And there is one ninja less alive",
+      "      And the dead ninja is reborn as a Phoenix",
+      ""
+    ],
+    "description": "Rule keyword represents one business rule that should be implemented"
+  },
+  "Feature with 2 scenarios": {
+    "prefix": [
+      "Feature:scenarios",
+      "Feature:"
+    ],
+    "body": [
+      "Feature: Guess the word",
+      "",
+      "  # The first example has two steps",
+      "  Scenario: Maker starts a game",
+      "    When the Maker starts a game",
+      "    Then the Maker waits for a Breaker to join",
+      "",
+      "  # The second example has three steps",
+      "  Scenario: Breaker joins a game",
+      "    Given the Maker has started a game with the word \"silky\"",
+      "    When the Breaker joins the Maker's game",
+      "    Then the Breaker must guess a word with 5 characters",
+      ""
+    ],
+    "description": "Feature example with two scenarios"
+  },
+  "Feature with background": {
+    "prefix": [
+      "Feature:Background",
+      "Background:"
+    ],
+    "body": [
+      "Feature: Multiple site support",
+      "  Only blog owners can post to a blog, except administrators,",
+      "  who can post to all blogs.",
+      "",
+      "  Background:",
+      "    Given a global administrator named \"Greg\"",
+      "    And a blog named \"Greg's anti-tax rants\"",
+      "    And a customer named \"Dr. Bill\"",
+      "    And a blog named \"Expensive Therapy\" owned by \"Dr. Bill\"",
+      "",
+      "  Scenario: Dr. Bill posts to his own blog",
+      "    Given I am logged in as Dr. Bill",
+      "    When I try to post to \"Expensive Therapy\"",
+      "    Then I should see \"Your article was published.\"",
+      "",
+      "  Scenario: Dr. Bill tries to post to somebody else's blog, and fails",
+      "    Given I am logged in as Dr. Bill",
+      "    When I try to post to \"Greg's anti-tax rants\"",
+      "    Then I should see \"Hey! That's not your blog!\"",
+      "",
+      "  Scenario: Greg posts to a client's blog",
+      "    Given I am logged in as Greg",
+      "    When I try to post to \"Expensive Therapy\"",
+      "    Then I should see \"Your article was published.\"",
+      ""
+    ],
+    "description": "Background allows to add some context to the scenarios that follow it"
+  },
+  "Feature with Background and Rule": {
+    "prefix": [
+      "Feature:Background",
+      "Background:"
+    ],
+    "body": [
+      "Feature: Overdue tasks",
+      "  Let users know when tasks are overdue, even when using other",
+      "  features of the app",
+      "",
+      "  Rule: Users are notified about overdue tasks on first use of the day",
+      "    Background:",
+      "      Given I have overdue tasks",
+      "",
+      "    Example: First use of the day",
+      "      Given I last used the app yesterday",
+      "      When I use the app",
+      "      Then I am notified about overdue tasks",
+      "",
+      "    Example: Already used today",
+      "      Given I last used the app earlier today",
+      "      When I use the app",
+      "      Then I am not notified about overdue tasks",
+      ""
+    ],
+    "description": "Feature with Background and Rule"
+  },
+  "Scenario Outline": {
+    "prefix": [
+      "Scenario:Outline",
+      "Scenario:"
+    ],
+    "body": [
+      "  Scenario Outline: eating",
+      "    Given there are <start> cucumbers",
+      "    When I eat <eat> cucumbers",
+      "    Then I should have <left> cucumbers",
+      "",
+      "    Examples:",
+      "      | start | eat | left |",
+      "      | 12    | 5   | 7    |",
+      "      | 20    | 5   | 15   |",
+      ""
+    ],
+    "description": "Scenario outlines allow us to more concisely express these scenarios through the use of a template with < >-delimited parameters"
+  },
+  "Scenario with Data Tables": {
+    "prefix": [
+      "Scenario:Table",
+      "Scenario:DataTable",
+      "Scenario:"
+    ],
+    "body": [
+      "  Scenario: Correct non-zero number of books found by author",
+      "    Given I have the following books in the store",
+      "      | title                                | author      |",
+      "      | The Devil in the White City          | Erik Larson |",
+      "      | The Lion, the Witch and the Wardrobe | C.S. Lewis  |",
+      "      | In the Garden of Beasts              | Erik Larson |",
+      "    When I search for books by author Erik Larson",
+      "    Then I find 2 books",
+      ""
+    ],
+    "description": "Scenario with Data Tables"
+  },
+  "Feature: Login and LogOut": {
+    "prefix": [
+      "Feature:Login",
+      "Feature:"
+    ],
+    "body": [
+      "Feature: Login Action",
+      "",
+      "  Scenario: Successful Login with Valid Credentials",
+      "    Given User is on Home Page",
+      "    When User Navigate to LogIn Page",
+      "    And User enters Credentials to LogIn",
+      "      | testuser_1 | Test@153 |",
+      "    Then Message displayed Login Successfully",
+      "",
+      "  Scenario: Successful LogOut",
+      "    When User LogOut from the Application",
+      "    Then Message displayed LogOut Successfully",
+      ""
+    ],
+    "description": "Feature: Login and LogOut"
+  },
+  "Feature: Login with Examples": {
+    "prefix": [
+      "Feature:Login",
+      "Feature:"
+    ],
+    "body": [
+      "Feature: Login Action",
+      "",
+      "  Scenario Outline: Successful Login with Valid Credentials",
+      "    Given User is on Home Page",
+      "    When User Navigate to LogIn Page",
+      "    And User enters \"<username>\" and \"<password>\"",
+      "    Then Message displayed Login Successfully",
+      "    Examples:",
+      "      | username   | password |",
+      "      | testuser_1 | Test@153 |",
+      "      | testuser_2 | Test@153 |",
+      ""
+    ],
+    "description": "Feature: Login with Examples"
+  },
+  "Feature Withdraw": {
+    "prefix": [
+      "Feature:Withdraw",
+      "Feature:"
+    ],
+    "body": [
+      "Feature: Account Holder withdraws cash",
+      "",
+      "  Scenario: Account has sufficient funds",
+      "    Given The account balance is $100",
+      "    And the card is valid",
+      "    And the machine contains enough money",
+      "    When the Account Holder requests $20",
+      "    Then the ATM should dispense $20",
+      "    And the account balance should be $80",
+      "    And the card should be returned",
+      ""
+    ],
+    "description": "Feature: Account Holder withdraws cash"
+  },
+  "Feature: Listing Prospects": {
+    "prefix": [
+      "Feature:Prospects",
+      "Feature:"
+    ],
+    "body": [
+      "Feature: Listing Prospects",
+      "",
+      "  Background:",
+      "    Given a user is logged into the prospecting system",
+      "    And there are existing prospects in the system",
+      "",
+      "  Scenario: List all prospects",
+      "    Given the user is on the prospect listing page",
+      "    When the user requests to see all prospects",
+      "    Then the system should display a list of all prospects",
+      "    And the list should include the prospect names and contact details"
+    ],
+    "description": "Feature: Listing all Prospects"
+  },
+  "Scenario: Listing Prospects for B2B Matchmaking Service": {
+    "prefix": [
+      "Feature:Prospects:B2B",
+      "Feature:"
+    ],
+    "body": [
+      "Feature: B2B Matchmaking Prospects",
+      "",
+      "  Background:",
+      "    Given a user is logged into the B2B matchmaking service",
+      "    And there are existing prospects in the system",
+      "",
+      "  Scenario: List all prospects",
+      "    Given the user is on the prospect listing page",
+      "    When the user requests to see all prospects",
+      "    Then the system should display a list of all prospects",
+      "    And the list should include the prospect names, industries, and contact details",
+      ""
+    ],
+    "description": "Scenario: Listing Prospects for B2B Matchmaking Service"
+  }
+}

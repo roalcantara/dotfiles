@@ -1,0 +1,756 @@
+{
+  "String: slice": {
+    "prefix": ["str:slice", "slice"],
+    "body": [
+      "${1:h} := ${2:\"Hello there\"}",
+      "for _, v := range($1[${3:6}:${4:9}]) {",
+      "\t${5:fmt.Printf(\"%c\", v)}",
+      "}"
+    ],
+    "description": "String: slice"
+  },
+  "String: printf": {
+    "prefix": ["str:printf", "printf"],
+    "body": ["fmt.Printf(\"%${1|v,s,d,g,b,o,f|}\", ${2:value})"],
+    "description": "String: printf"
+  },
+  "String: printf: string": {
+    "prefix": ["printf:s", "printf:string"],
+    "body": ["fmt.Printf(\"%s\", ${1:\"Naruto\"})"],
+    "description": "String: printf string"
+  },
+  "String: printf: decimal": {
+    "prefix": ["printf:d", "printf:decimal"],
+    "body": ["fmt.Printf(\"%d\", ${1:64})"],
+    "description": "String: printf decimal"
+  },
+  "String: printf: floating-point": {
+    "prefix": ["printf:f", "printf:float"],
+    "body": ["fmt.Printf(\"%g\", ${1:3.142})"],
+    "description": "String: printf floating-point"
+  },
+  "String: printf: binary": {
+    "prefix": ["printf:b", "printf:binary"],
+    "body": ["fmt.Printf(\"%b\", ${1:3.142})"],
+    "description": "String: printf binary representation"
+  },
+  "A simple if": {
+    "prefix": "if",
+    "body": [
+      "if ${1:8%4} == ${2:0) {",
+      "\t${3:fmt.Println(\"8 is divisible by 4\")}",
+      "}$0"
+    ],
+    "description": "A simple if"
+  },
+  "A simple if-else": {
+    "prefix": "if:else",
+    "body": [
+      "if ${1:7%2} == ${2:0) {",
+      "\t${3:fmt.Println(\"7 is even\")}",
+      "} else {",
+      "\t${4:fmt.Println(\"7 is odd\")}",
+      "}$0"
+    ],
+    "description": "A simple if-else"
+  },
+  "if-else with scoped variable": {
+    "prefix": "if:else:var",
+    "body": [
+      "if ${1:num} := ${2:9}; $1 ${3:<} ${4:0} {",
+      "\t${3:fmt.Println($1, \"is negative\")}",
+      "} else if $1 ${5:<} ${6:10} {",
+      "\t${7:fmt.Println($1, \"has 1 digit\")}",
+      "} else {",
+      "\t${8:fmt.Println($1, \"has multiple digits\")}",
+      "}$0"
+    ],
+    "description": "Any variables declared in this statement are available in all branches"
+  },
+  "For statemant": {
+    "prefix": "for",
+    "body": [
+      "for ${1:i} := ${2:0}; ${3:i} < ${4:5}; $3++ {",
+      "\t${5:fmt.Println($3)}",
+      "}$0"
+    ],
+    "description": "A classic initial/condition/after for loop"
+  },
+  "For with break/continue": {
+    "prefix": "for:break:continue",
+    "body": [
+      "for ${1:n} := ${2:0}; n <= ${3:5}; $1++ {",
+      "\tif ${4:$1%2} == ${5:0} { continue }",
+      "\tif ${6:$1} == ${7:4} { break }",
+      "\t${8:fmt.Println($1)}",
+      "}"
+    ],
+    "description": "A classic for with break/continue"
+  },
+  "For with a single condition": {
+    "prefix": "for:while",
+    "body": [
+      "${1:i} := ${2:1}",
+      "for $1 < ${3:100} {",
+      "\t${4:fmt.Println($1)}",
+      "\t${5:$1 = $1 * 2}",
+      "}$0"
+    ],
+    "description": "(while loop)"
+  },
+  "For an infinite Loop": {
+    "prefix": "for:infinite",
+    "body": ["for {", "\t${1:fmt.Println(\"loop\")}", "\t${2:break}", "}$0"],
+    "description": "Loops until break or return from enclosing function"
+  },
+  "Function with For and goto": {
+    "prefix": ["for:goto", "func:goto"],
+    "body": [
+      "func gotoer() {",
+      "\tgoto done",
+      "\tfor { fmt.Println(\"Skip the infinite loop\") }",
+      "done:",
+      "\tfmt.Println(\"Done\")",
+      "}"
+    ],
+    "description": "Function with For and goto"
+  },
+  "Function generic": {
+    "prefix": ["func", "func:generic"],
+    "body": [
+      "func ${1:PrintAnything}[T any](${2:thing} T) {",
+      "\tfmt.Println($2)",
+      "}",
+      "",
+      "$1[int](5) // => 5",
+      "$1[string](\"Hello\") // => \"Hello\"",
+      "$1[float64](3.14) // => 3.14",
+      "$0"
+    ],
+    "description": "Generic function"
+  },
+  "Function identity": {
+    "prefix": ["func", "func:identity"],
+    "body": [
+      "func ${1:Identity}[T any](${2:v} T) T {",
+      "\treturn $2",
+      "}",
+      "",
+      "fmt.Println($1(\"Hello\")) // => Hello",
+      "0$"
+    ],
+    "description": "Identity function"
+  },
+  "Function constrainted": {
+    "prefix": ["func", "func:join"],
+    "body": [
+      "type Stringer interface {",
+      "    String() string",
+      "}",
+      "",
+      "func Join[E Stringer](things []E) (result string) {",
+      "\tfor _, v := range things {",
+      "\t\tresult += v.String()",
+      "\t}",
+      "\treturn result",
+      "}",
+      "",
+      "output := Join([]string{\"a\", \"b\", \"c\"}) // => \"abc\"",
+      "0$"
+    ],
+    "description": "Function constrainted"
+  },
+  "Function Equal": {
+    "prefix": ["func", "func:join"],
+    "body": [
+      "func Equal[T comparable]T any](a, b T) bool {",
+      "\treturn a == b",
+      "}",
+      "fmt.Println(Equal(1, 1))",
+      "0$"
+    ],
+    "description": "To constrain `T` to only types that work with the `==` or `!=` operators use `comparable constraint`"
+  },
+  "Generic type": {
+    "prefix": "type:generic",
+    "body": [
+      "// For any type E, a Bunch[E] is a slice of E",
+      "type Bunch[E any] []E",
+      "",
+      "x := Bunch[int]{1, 2, 3}",
+      "0$"
+    ],
+    "description": "Create a `type` that contains any type"
+  },
+  "Generic method": {
+    "prefix": "func:generic",
+    "body": [
+      "// For any type E, a Bunch[E] is a slice of E.",
+      "type Bunch[E any] []E",
+      "",
+      "func (b Bunch[E]) Print() {",
+      "\tfor _, v := range b {",
+      "\t\tfmt.Println(v)",
+      "\t}",
+      "}"
+    ],
+    "description": "Generic methods that take generic types"
+  },
+  "Generic function mapping a function over a generic type": {
+    "prefix": ["func:generic", "func:map"],
+    "body": [
+      "type Bunch[E any] []E",
+      "",
+      "func Map[E, F any](f func(E) F, b Bunch[E]) Bunch[F] {",
+      "\tresult := make(Bunch[F], len(b))",
+      "\tfor i, v := range b {",
+      "\t\tresult[i] = f(v)",
+      "\t}",
+      "\treturn result",
+      "}0$"
+    ],
+    "description": "Generic function mapping a function over a generic type"
+  },
+  "A function in which its parameter will always be a slice of something": {
+    "prefix": ["func", "func:len"],
+    "body": [
+      "// For any type E, Len[E] takes a slice of E, and returns int.",
+      "func Len[E any](s []E) int {",
+      "\tfor _, v := range s {",
+      "\t\tfmt.Println(v)",
+      "\t}",
+      "}$0"
+    ],
+    "description": "A function in which its parameter will always be a slice of something"
+  },
+  "A variadic function, it would take a variable number of channels of E": {
+    "prefix": ["func", "func:merge"],
+    "body": [
+      "// For any type E,",
+      "// Merge[E] takes any number of receive-only channels of E,",
+      "// and returns a receive-only channel of E.",
+      "func Merge[E any](chs ...<-chan E) <-chan E {}"
+    ],
+    "description": "A variadic function, it would take a variable number of channels of E"
+  },
+  "A generic function on a channel of some element type E": {
+    "prefix": ["func", "func:drain"],
+    "body": [
+      "// For any type E",
+      "// Drain[E] takes a receive-only channel of E",
+      "// and returns nothing",
+      "func Drain[E any](ch <-chan E) {}"
+    ],
+    "description": "A generic function on a channel of some element type E"
+  },
+  "Switch Case": {
+    "prefix": ["switch"],
+    "body": [
+      "switch n := rand.Intn(10); {",
+      "\tcase n == 0:",
+      "\t\tfmt.Println(\"That's too low\")",
+      "\tcase n > 5:",
+      "\t\tfmt.Println(\"That's bigger\")",
+      "\tdefault:",
+      "\t\tfmt.Println(\"Cool one\")",
+      "}$0"
+    ],
+    "description": "Switch Case"
+  },
+  "Switch Case: inside loop": {
+    "prefix": ["switch:loop"],
+    "body": [
+      "words := []string{\"a\", \"cow\", \"smile\", \"gopher\", \"octopus\", \"anthropologist\"}",
+      "for _, word := range words {",
+      "  switch size := len(word); size {",
+      "    case 1, 2, 3, 4:",
+      "      fmt.Println(word, \"is a short word!\")",
+      "    case 5:",
+      "      wordLen := len(word)",
+      "      fmt.Println(word, \"is exactly the right length:\", wordLen)",
+      "    case 6, 7, 8, 9:",
+      "    default:",
+      "      fmt.Println(word, \"is a long word!\")",
+      "  }",
+      "}"
+    ],
+    "description": "Switch Case: inside loop"
+  },
+  "Switch Case: Break inside loop": {
+    "prefix": ["switch:loop:break"],
+    "body": [
+      "func looper() {",
+      "loop:",
+      "  for i := 0; i < 10; i++ {",
+      "    switch {",
+      "    case i%2 == 0:",
+      "      fmt.Println(i, \"is even\")",
+      "    case i%3 == 0:",
+      "      fmt.Println(i, \"is divisible by 3 but not 2\")",
+      "    case i%7 == 0:",
+      "      fmt.Println(\"exit the loop!\")",
+      "      break loop",
+      "    default:",
+      "      fmt.Println(i, \"is boring\")",
+      "    }",
+      "  }",
+      "}$0"
+    ],
+    "description": "Switch Case: Break inside loop"
+  },
+  "Map: empty": {
+    "prefix": ["map", "map:empty"],
+    "body": "${1:m} := make(map[${2:string}]${3:int})",
+    "description": "Map: empty"
+  },
+  "Map: with initial values": {
+    "prefix": ["map", "map:filled"],
+    "body": "${1:m} := map[${2:string}]${3:int}{${4:\"foo\"}: ${5:1}, ${6:\"bar\"}: ${7:2}}",
+    "description": "Map: with initial values"
+  },
+  "Map: length": {
+    "prefix": ["map", "map:len"],
+    "body": [
+      "${1:m} := map[${2:string}]${3:int}{${4:\"foo\"}: ${5:1}, ${6:\"bar\"}: ${7:2}}",
+      "delete($1, \"James\")"
+    ],
+    "description": "Map: get the length of a map"
+  },
+  "Map: delete": {
+    "prefix": ["map", "map:delete"],
+    "body": [
+      "${1:m} := map[${2:string}]${3:int}{${4:\"foo\"}: ${5:1}, ${6:\"bar\"}: ${7:2}}",
+      "fmt.Println(len($1))"
+    ],
+    "description": "Map: delete a key/value pair"
+  },
+  "Map: haskey": {
+    "prefix": ["map", "map:has"],
+    "body": [
+      "${1:m} := map[${2:string}]${3:int}{${4:\"foo\"}: ${5:1}, ${6:\"bar\"}: ${7:2}}",
+      "v, ok := $1[\"Orcas\"]",
+      "if(ok) {",
+      "\t${8:fmt.Println(v)}",
+      "}"
+    ],
+    "description": "Map: Check if the key exists"
+  },
+  "Map: set": {
+    "prefix": ["map", "map:has"],
+    "body": [
+      "m := map[string]int{}",
+      "m[\"James\"] = 32",
+      "m[\"Miss Moneypenny\"] = 27"
+    ],
+    "description": "Map: To Set key/value pairs"
+  },
+  "Main function": {
+    "prefix": "main",
+    "body": [
+      "package main",
+      "",
+      "import \"fmt\"",
+      "",
+      "func main() {  ",
+      " var ${1:age} ${2|int,string,bool|} = ${3:29}",
+      " fmt.Println(\"${4:My age is}\", $1)$0",
+      "}"
+    ],
+    "description": "Declare a main function"
+  },
+  "Declare variable, initialize it": {
+    "prefix": "var",
+    "body": ["var ${1:foo} $0"],
+    "description": "Declare and initialize it"
+  },
+  "Declare variable, initialize and inferrig the type": {
+    "prefix": ["var", "var:infer"],
+    "body": ["${1:foo} := $0"],
+    "description": "Declare variable with inferred typed"
+  },
+  "Declare inline variables, initialize and inferrig the type": {
+    "prefix": ["var", "var:infer", "var:infer:inline"],
+    "body": ["${1:name}, ${2:age} := ${3:\"naveen\"}, ${4:29}$0"],
+    "description": "Declare variable with inferred typed"
+  },
+  "Declare variable with explicit type": {
+    "prefix": "var",
+    "body": ["var ${1:foo} ${2|int,string,bool,float64|}$0"],
+    "description": "Declare variable with explicit type"
+  },
+  "Declare variable of different types": {
+    "prefix": "var",
+    "body": [
+      "var (",
+      "  ${1:name}   = ${2:\"naveen\"}",
+      "  ${3:age}    = ${4:29}",
+      "  ${5:height} ${5:int}",
+      ")"
+    ],
+    "description": "Declare variables of different types"
+  },
+  "Multiple inferred type variable declaration": {
+    "prefix": "var",
+    "body": ["var ${1:width}, ${2:height} = ${3:100}, ${4:50}$0"],
+    "description": "Multiple inferred type variable declaration"
+  },
+  "Declare constants": {
+    "prefix": "const",
+    "body": ["const ${1:foo} ${2|int,string,bool,float64|} = ${2:5}$0"],
+    "description": "Declare a constant"
+  },
+  "Declaring a group of constants": {
+    "prefix": "const",
+    "body": [
+      "const (",
+      "   ${1:name} = \"${2:John}\"",
+      "   ${3:age} = ${4:50}",
+      "   ${5:country} = \"${6:Canada}\"",
+      " )",
+      "// fmt.Println($1, $3, $5)"
+    ],
+    "description": "Declaring a group of constants"
+  },
+  "Declare an array": {
+    "prefix": "arr:int",
+    "body": [
+      "var ${1:a} [${2:1}]${3|int,string,bool,float64|{${4|1,\"foo\", true, false,2|}"
+    ],
+    "description": "Declare an inline array"
+  },
+  "Declare an array with no type": {
+    "prefix": "arr:int",
+    "body": ["${1:a} := [${2:1}]${3|int,string|{${4|1,\"foo\"|}"],
+    "description": "Declare an inline array with no type"
+  },
+  "Declare a multidimensional array": {
+    "prefix": ["array", "array:multi"],
+    "body": ["${1:arr} := [2][4]int{}", "\tfmt.Println(e)", "$0"],
+    "description": "Declare a multi-dimensional data structure"
+  },
+  "Declare a multi-dimensional data structure": {
+    "prefix": ["array", "array:multi"],
+    "body": [
+      "${1:f} := [2][4]int{",
+      "\t{1, 2, 3, 4},",
+      "\t{5, 6, 7, 8},",
+      "}$0"
+    ],
+    "description": "Declare a multi-dimensional data structure"
+  },
+  "Fill a multi-dimensional data structure": {
+    "prefix": ["array", "array:multi:fill"],
+    "body": [
+      "var twoD [2][3]int",
+      "for i := 0; i < 2; i++ {",
+      "\t\tfor j := 0; j < 3; j++ {",
+      "\t\t\ttwoD[i][j] = i + j",
+      "\t\t}",
+      "}",
+      "fmt.Println(\"2d: \", twoD)$0"
+    ],
+    "description": "Fill a multi-dimensional data structure"
+  },
+  "Function that returns a single value": {
+    "prefix": "func",
+    "body": [
+      "func ${1:calculate}(${2:var1}, ${3:var2} ${4|int,string,bool,float64|}) ${5|int,string,bool,float64|} {",
+      "  return $2 * $3",
+      "}$0"
+    ],
+    "description": "Function that returns a single value"
+  },
+  "Function that returns multiple values": {
+    "prefix": "func",
+    "body": [
+      "func ${1:calculate}(${2:length}, ${3:width} ${4|float64,int,string,bool})(${5|float64,int,string,bool}, ${6|float64,int,string,bool}) {",
+      "  var area = $2 * $3",
+      "  var perimeter = ($2 + $3) * 2",
+      "  return area, perimeter",
+      "}$0"
+    ],
+    "description": "Function that returns multiple values"
+  },
+  "Function that returns named values": {
+    "prefix": "func",
+    "body": [
+      "func ${1:rectProps}(length, width float64)(area, perimeter float64) {  ",
+      "  area = length * width",
+      "  perimeter = (length + width) * 2",
+      "  return // with no explicit values",
+      "}",
+      "a, b := $1()",
+      "fmt.Println(a)",
+      "fmt.Println(b)",
+      "$0"
+    ],
+    "description": "Function that returns named values"
+  },
+  "Method Expression": {
+    "prefix": "func",
+    "body": ["f2 := Adder.AddTo", "fmt.Println(f2(myAdder, 15))$0"],
+    "description": "Method Expression"
+  },
+  "Colly Scrapper: Basic": {
+    "prefix": ["colly:basic", "scrap:basic"],
+    "body": [
+      "package main",
+      "",
+      "import (",
+      "  \"fmt\"",
+      "",
+      "  \"github.com/gocolly/colly\"",
+      ")",
+      "",
+      "func main() {",
+      "  // Instantiate default collector",
+      "  c := colly.NewCollector(",
+      "    // Visit only domains: hackerspaces.org, wiki.hackerspaces.org",
+      "    colly.AllowedDomains(\"hackerspaces.org\", \"wiki.hackerspaces.org\"),",
+      "  )",
+      "",
+      "  // On every a element which has href attribute call callback",
+      "  c.OnHTML(\"a[href]\", func(e *colly.HTMLElement) {",
+      "    link := e.Attr(\"href\")",
+      "    // Print link",
+      "    fmt.Printf(\"Link found: %q -> %s\\n\", e.Text, link)",
+      "    // Visit link found on page",
+      "    // Only those links are visited which are in AllowedDomains",
+      "    c.Visit(e.Request.AbsoluteURL(link))",
+      "  })",
+      "",
+      "  // Before making a request print \"Visiting ...\"",
+      "  c.OnRequest(func(r *colly.Request) {",
+      "    fmt.Println(\"Visiting\", r.URL.String())",
+      "  })",
+      "",
+      "  // Start scraping on https://hackerspaces.org",
+      "  c.Visit(\"https://hackerspaces.org/\")",
+      "}"
+    ],
+    "description": "Colly Scrapper: Basic"
+  },
+  "Colly Scrapper: Basic Function": {
+    "prefix": ["func:colly:basic", "func:scrap:basic"],
+    "body": [
+      "func ${1:main}() {",
+      "  // Instantiate default collector",
+      "  c := colly.NewCollector(",
+      "    // Visit only domains: hackerspaces.org, wiki.hackerspaces.org",
+      "    colly.AllowedDomains(\"hackerspaces.org\", \"wiki.hackerspaces.org\"),",
+      "  )",
+      "",
+      "  // On every a element which has href attribute call callback",
+      "  c.OnHTML(\"a[href]\", func(e *colly.HTMLElement) {",
+      "    link := e.Attr(\"href\")",
+      "    // Print link",
+      "    fmt.Printf(\"Link found: %q -> %s\\n\", e.Text, link)",
+      "    // Visit link found on page",
+      "    // Only those links are visited which are in AllowedDomains",
+      "    c.Visit(e.Request.AbsoluteURL(link))",
+      "  })",
+      "",
+      "  // Before making a request print \"Visiting ...\"",
+      "  c.OnRequest(func(r *colly.Request) {",
+      "    fmt.Println(\"Visiting\", r.URL.String())",
+      "  })",
+      "",
+      "  // Start scraping on https://hackerspaces.org",
+      "  c.Visit(\"https://hackerspaces.org/\")",
+      "}"
+    ],
+    "description": "Function: Colly Scrapper: Basic"
+  },
+  "Colly Scrapper: Err Handling": {
+    "prefix": ["colly:errhandling", "scrap:errhandling"],
+    "body": [
+      "package main",
+      "",
+      "import (",
+      "  \"fmt\"",
+      "",
+      "  \"github.com/gocolly/colly\"",
+      ")",
+      "",
+      "func main() {",
+      "  // Create a collector",
+      "  c := colly.NewCollector()",
+      "",
+      "  // Set HTML callback that won't be called if error occurs",
+      "  c.OnHTML(\"*\", func(e *colly.HTMLElement) {",
+      "    fmt.Println(e)",
+      "  })",
+      "",
+      "  // Set error handler",
+      "  c.OnError(func(r *colly.Response, err error) {",
+      "    fmt.Println(\"Request URL:\", r.Request.URL, \"failed with response:\", r, \"\\nError:\", err)",
+      "  })",
+      "",
+      "  // Start scraping",
+      "  c.Visit(\"https://definitely-not-a.website/\")",
+      "}"
+    ],
+    "description": "Colly Scrapper: Err Handling"
+  },
+  "Colly Scrapper: Err Handling Function": {
+    "prefix": ["func:colly:errhandling", "func:scrap:errhandling"],
+    "body": [
+      "func ${1:main}() {",
+      "  // Create a collector",
+      "  c := colly.NewCollector()",
+      "",
+      "  // Set HTML callback that won't be called if error occurs",
+      "  c.OnHTML(\"*\", func(e *colly.HTMLElement) {",
+      "    fmt.Println(e)",
+      "  })",
+      "",
+      "  // Set error handler",
+      "  c.OnError(func(r *colly.Response, err error) {",
+      "    fmt.Println(\"Request URL:\", r.Request.URL, \"failed with response:\", r, \"\\nError:\", err)",
+      "  })",
+      "",
+      "  // Start scraping",
+      "  c.Visit(\"https://definitely-not-a.website/\")",
+      "}"
+    ],
+    "description": "Colly Scrapper: Err Handling Function"
+  },
+  "Colly Scrapper: Login": {
+    "prefix": ["colly:login", "scrap:login"],
+    "body": [
+      "package main",
+      "",
+      "import (",
+      " \"log\"",
+      "",
+      " \"github.com/gocolly/colly\"",
+      ")",
+      "",
+      "func main() {",
+      " // create a new collector",
+      " c := colly.NewCollector()",
+      "",
+      " // authenticate",
+      " err := c.Post(\"http://example.com/login\", map[string]string{\"username\": \"admin\", \"password\": \"admin\"})",
+      " if err != nil {",
+      "  log.Fatal(err)",
+      " }",
+      "",
+      " // attach callbacks after login",
+      " c.OnResponse(func(r *colly.Response) {",
+      "  log.Println(\"response received\", r.StatusCode)",
+      " })",
+      "",
+      " // start scraping",
+      " c.Visit(\"https://example.com/\")",
+      "}"
+    ],
+    "description": "Colly Scrapper: Login"
+  },
+  "Colly Scrapper: Login function": {
+    "prefix": ["func:colly:login", "func:scrap:login"],
+    "body": [
+      "func ${1:main}() {",
+      " // create a new collector",
+      " c := colly.NewCollector()",
+      "",
+      " // authenticate",
+      " err := c.Post(\"http://example.com/login\", map[string]string{\"username\": \"admin\", \"password\": \"admin\"})",
+      " if err != nil {",
+      "  log.Fatal(err)",
+      " }",
+      "",
+      " // attach callbacks after login",
+      " c.OnResponse(func(r *colly.Response) {",
+      "  log.Println(\"response received\", r.StatusCode)",
+      " })",
+      "",
+      " // start scraping",
+      " c.Visit(\"https://example.com/\")",
+      "}"
+    ],
+    "description": "Colly Scrapper: Login function"
+  },
+  "Colly Scrapper: Parallel": {
+    "prefix": ["colly:parallel", "scrap:parallel"],
+    "body": [
+      "package main",
+      "",
+      "import (",
+      " \"fmt\"",
+      "",
+      " \"github.com/gocolly/colly\"",
+      ")",
+      "",
+      "func main() {",
+      " // Instantiate default collector",
+      " c := colly.NewCollector(",
+      "  // MaxDepth is 2, so only the links on the scraped page",
+      "  // and links on those pages are visited",
+      "  colly.MaxDepth(2),",
+      "  colly.Async(true),",
+      " )",
+      "",
+      " // Limit the maximum parallelism to 2",
+      " // This is necessary if the goroutines are dynamically",
+      " // created to control the limit of simultaneous requests.",
+      " //",
+      " // Parallelism can be controlled also by spawning fixed",
+      " // number of go routines.",
+      " c.Limit(&colly.LimitRule{DomainGlob: \"*\", Parallelism: 2})",
+      "",
+      " // On every a element which has href attribute call callback",
+      " c.OnHTML(\"a[href]\", func(e *colly.HTMLElement) {",
+      "  link := e.Attr(\"href\")",
+      "  // Print link",
+      "  fmt.Println(link)",
+      "  // Visit link found on page on a new thread",
+      "  e.Request.Visit(link)",
+      " })",
+      "",
+      " // Start scraping on https://en.wikipedia.org",
+      " c.Visit(\"https://en.wikipedia.org/\")",
+      " // Wait until threads are finished",
+      " c.Wait()",
+      "}"
+    ],
+    "description": "Colly Scrapper: Parallel"
+  },
+  "Colly Scrapper: Parallel function": {
+    "prefix": ["func:colly:parallel", "func:scrap:parallel"],
+    "body": [
+      "func ${1:main}() {",
+      " // Instantiate default collector",
+      " c := colly.NewCollector(",
+      "  // MaxDepth is 2, so only the links on the scraped page",
+      "  // and links on those pages are visited",
+      "  colly.MaxDepth(2),",
+      "  colly.Async(true),",
+      " )",
+      "",
+      " // Limit the maximum parallelism to 2",
+      " // This is necessary if the goroutines are dynamically",
+      " // created to control the limit of simultaneous requests.",
+      " //",
+      " // Parallelism can be controlled also by spawning fixed",
+      " // number of go routines.",
+      " c.Limit(&colly.LimitRule{DomainGlob: \"*\", Parallelism: 2})",
+      "",
+      " // On every a element which has href attribute call callback",
+      " c.OnHTML(\"a[href]\", func(e *colly.HTMLElement) {",
+      "  link := e.Attr(\"href\")",
+      "  // Print link",
+      "  fmt.Println(link)",
+      "  // Visit link found on page on a new thread",
+      "  e.Request.Visit(link)",
+      " })",
+      "",
+      " // Start scraping on https://en.wikipedia.org",
+      " c.Visit(\"https://en.wikipedia.org/\")",
+      " // Wait until threads are finished",
+      " c.Wait()",
+      "}"
+    ],
+    "description": "Colly Scrapper: Parallel"
+  }
+}

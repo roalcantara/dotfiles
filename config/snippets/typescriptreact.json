@@ -1,0 +1,299 @@
+{
+  "Simple Raycast List": {
+    "prefix": [
+      "ray:list"
+    ],
+    "body": [
+      "    <List>",
+      "      {results?.map((item) => (",
+      "        <List.Item key={item.id} title={item.name} />",
+      "      ))}",
+      "    </List>"
+    ],
+    "description": "Simple Raycast List"
+  },
+  "Simple Raycast Detail": {
+    "prefix": [
+      "ray:detail"
+    ],
+    "body": "<Detail isLoading={isLoading} markdown={data} />",
+    "description": "Simple Raycast Detail"
+  },
+  "Command: List": {
+    "prefix": [
+      "ray:command:list"
+    ],
+    "body": [
+      "import { List } from \"@raycast/api\";",
+      "",
+      "export default function Command() {",
+      "  return (",
+      "    <List navigationTitle=\"Search Beers\" searchBarPlaceholder=\"Search your favorite beer\">",
+      "      <List.Item title=\"Augustiner Helles\" />",
+      "      <List.Item title=\"Camden Hells\" />",
+      "      <List.Item title=\"Leffe Blonde\" />",
+      "      <List.Item title=\"Sierra Nevada IPA\" />",
+      "    </List>",
+      "  );",
+      "}"
+    ],
+    "description": "The list uses built-in filtering by indexing the title of list items and additionally keywords"
+  },
+  "Command: List: Dropdown": {
+    "prefix": [
+      "ray:command:list:dropdown"
+    ],
+    "body": [
+      "import { List } from \"@raycast/api\";",
+      "",
+      "export default function Command() {",
+      "  return (",
+      "    <List",
+      "      searchBarAccessory={",
+      "        <List.Dropdown tooltip=\"Dropdown With Items\">",
+      "          <List.Dropdown.Item title=\"One\" value=\"one\" />",
+      "          <List.Dropdown.Item title=\"Two\" value=\"two\" />",
+      "          <List.Dropdown.Item title=\"Three\" value=\"three\" />",
+      "        </List.Dropdown>",
+      "      }",
+      "    >",
+      "      <List.Item title=\"Item in the Main List\" />",
+      "    </List>",
+      "  );",
+      "}"
+    ],
+    "description": "A dropdown item in a List.Dropdown"
+  },
+  "Command: List: Dropdown Section": {
+    "prefix": [
+      "ray:command:list:dropdown:section"
+    ],
+    "body": [
+      "import { List } from \"@raycast/api\";",
+      "",
+      "export default function Command() {",
+      "  return (",
+      "    <List",
+      "      searchBarAccessory={",
+      "        <List.Dropdown tooltip=\"Dropdown With Sections\">",
+      "          <List.Dropdown.Section title=\"First Section\">",
+      "            <List.Dropdown.Item title=\"One\" value=\"one\" />",
+      "          </List.Dropdown.Section>",
+      "          <List.Dropdown.Section title=\"Second Section\">",
+      "            <List.Dropdown.Item title=\"Two\" value=\"two\" />",
+      "          </List.Dropdown.Section>",
+      "        </List.Dropdown>",
+      "      }",
+      "    >",
+      "      <List.Item title=\"Item in the Main List\" />",
+      "    </List>",
+      "  );",
+      "}"
+    ],
+    "description": "Visually separated group of dropdown items"
+  },
+  "Command: List: Detail: Metadata": {
+    "prefix": [
+      "ray:command:list:detail:metadata"
+    ],
+    "body": [
+      " <List.Item",
+      "   title=\"Bulbasaur\"",
+      "   detail={",
+      "     <List.Item.Detail",
+      "       markdown={markdown}",
+      "       metadata={",
+      "         <List.Item.Detail.Metadata>",
+      "           <List.Item.Detail.Metadata.Label title=\"Types\" />",
+      "           <List.Item.Detail.Metadata.Label title=\"Grass\" icon=\"pokemon_types/grass.svg\" />",
+      "           <List.Item.Detail.Metadata.Separator />",
+      "           <List.Item.Detail.Metadata.Label title=\"Poison\" icon=\"pokemon_types/poison.svg\" />",
+      "           <List.Item.Detail.Metadata.Separator />",
+      "           <List.Item.Detail.Metadata.Label title=\"Chracteristics\" />",
+      "           <List.Item.Detail.Metadata.Label title=\"Height\" text=\"70cm\" />",
+      "           <List.Item.Detail.Metadata.Separator />",
+      "           <List.Item.Detail.Metadata.Label title=\"Weight\" text=\"6.9 kg\" />",
+      "           <List.Item.Detail.Metadata.Separator />",
+      "           <List.Item.Detail.Metadata.Label title=\"Abilities\" />",
+      "           <List.Item.Detail.Metadata.Label title=\"Chlorophyll\" text=\"Main Series\" />",
+      "           <List.Item.Detail.Metadata.Separator />",
+      "           <List.Item.Detail.Metadata.Label title=\"Overgrow\" text=\"Main Series\" />",
+      "           <List.Item.Detail.Metadata.Separator />",
+      "         </List.Item.Detail.Metadata>",
+      "       }",
+      "     />",
+      "   }",
+      " />;"
+    ],
+    "description": "Use it to display additional structured data about the content of the List.Item"
+  },
+  "Command: Detail": {
+    "prefix": [
+      "ray:command:detail"
+    ],
+    "body": [
+      "import { Detail } from \"@raycast/api\";",
+      "",
+      "export default function Command() {",
+      "  return <Detail markdown=\"**Hello** _World_!\" />;",
+      "}"
+    ],
+    "description": "Renders a markdown (CommonMark) string with an optional metadata pane"
+  },
+  "Detail component": {
+    "prefix": [
+      "ray:command:detail",
+      "<Detail"
+    ],
+    "body": [
+      "<Detail markdown=\"**Hello** _World_!\" />;"
+    ],
+    "description": "Typically used as a standalone view or when navigating from a List"
+  },
+  "eslint disable rule": {
+    "prefix": [
+      "eslint-disable:rule",
+      "disable:rule",
+      "dis:rule",
+      "/*"
+    ],
+    "body": [
+      "/* eslint-disable ${1,no-console} */"
+    ],
+    "description": "eslint-disable rule"
+  },
+  "eslint enable rule": {
+    "prefix": [
+      "eslint-enable:rule",
+      "enable:rule",
+      "ena:rule",
+      "/*"
+    ],
+    "body": [
+      "/* eslint-enable ${1,no-console} */"
+    ],
+    "description": "eslint-enable rule"
+  },
+  "eslint disable line (after)": {
+    "prefix": [
+      "eslint-disable:line",
+      "disable:line",
+      "dis:line"
+    ],
+    "body": [
+      "// eslint-disable-line"
+    ],
+    "description": "eslint-disable line (after the violation)"
+  },
+  "eslint disable all": {
+    "prefix": [
+      "eslint-disable",
+      "disable",
+      "/*"
+    ],
+    "body": [
+      "/* eslint-disable */"
+    ],
+    "description": "eslint disable all"
+  },
+  "eslint enable all": {
+    "prefix": [
+      "eslint-enable",
+      "enable",
+      "/*"
+    ],
+    "body": [
+      "/* eslint-enable */"
+    ],
+    "description": "eslint enable all"
+  },
+  "JSDoc": {
+    "prefix": [
+      "jsdoc",
+      "doc",
+      "/*"
+    ],
+    "body": [
+      "/**",
+      " * ${1:description}",
+      " */"
+    ],
+    "description": "JSDoc is a markup language used to annotate JavaScript source code files"
+  },
+  "read_json_sync": {
+    "prefix": "read_json_sync",
+    "body": [
+      "/**",
+      "*  Reads data from a file in a synchronous manner",
+      "*  @param {string} file file path",
+      "*  @return {Promise} which wraps the fs.readFileSync call",
+      "*/",
+      "const read_json_sync = file =>",
+      "  new Promise((resolve, _) => {",
+      "    const fs = require('fs')",
+      "    resolve(JSON.parse(fs.readFileSync(file)))",
+      "  })",
+      "",
+      "read_json_sync('$1').then(console.log)"
+    ],
+    "description": "Read Json Sync"
+  },
+  "read_json_async": {
+    "prefix": "read_json_async",
+    "body": [
+      "/**",
+      "*  Reads data from a file in an asynchronous manner",
+      "*  @param {string} file file path",
+      "*  @return {Promise} which wraps the fs.readFile call",
+      "*/",
+      "const read_json_async = file =>",
+      "  new Promise((resolve, reject) => {",
+      "    const fs = require('fs')",
+      "    fs.readFile(file, (err, data) => {",
+      "      if (err) reject(err)",
+      "      resolve(JSON.parse(data))",
+      "    })",
+      "  })",
+      "",
+      "read_json_async('$1').then(console.log)"
+    ],
+    "description": "Read Json Async"
+  },
+  "write_json_sync": {
+    "prefix": "write_json_sync",
+    "body": [
+      "/**",
+      "*  Writes data to a file in a synchronous manner",
+      "*  @param {string} file file path",
+      "*/",
+      "const write_json_sync = (file, obj) => {",
+      "  const fs = require('fs')",
+      "  fs.writeFileSync(file, JSON.stringify(obj, null, 2))",
+      "}",
+      "",
+      "write_json_sync('$1').then(console.log)"
+    ],
+    "description": "Write Json Sync"
+  },
+  "write_json_async": {
+    "prefix": "write_json_async",
+    "body": [
+      "/**",
+      "*  Writes data to a file in a asynchronous manner",
+      "*  @param {string} file file path",
+      "*  @return {Promise} which wraps the fs.readFile call",
+      "*/",
+      "const write_json_async = (file, obj) =>",
+      " new Promise((resolve, reject) => {",
+      "   const fs = require('fs')",
+      "   fs.writeFile(file, JSON.stringify(obj, null, 2), err => {",
+      "     if (err) reject(er)",
+      "     resolve()",
+      "   })",
+      " })",
+      "",
+      "write_json_async('$1').then(console.log)"
+    ],
+    "description": "Write Json Async"
+  }
+}

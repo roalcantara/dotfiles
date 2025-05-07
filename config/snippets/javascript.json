@@ -1,0 +1,68 @@
+{
+  "For Loop": {
+    "prefix": ["for", "for-const"],
+    "body": ["for (const ${2:element} of ${1:array}) {", "\t$0", "}"],
+    "description": "A for loop."
+  },
+  "fetch a given url (Node18)": {
+    "prefix": ["fetch"],
+    "body": [
+      "/**",
+      " * Node18 global fetch",
+      " * @param {string} url - The url to fetch",
+      " * @returns {Promise} - The fetch promise",
+      " * @link https://nodejs.org/en/blog/announcements/v18-release-announce",
+      " */",
+      "const get = async (url, params) => {",
+      "  const res = await fetch(url, params);",
+      "  if (res.ok) return await res.json();",
+      "  throw Error(`${res.status} ${res.statusText}`)",
+      "}",
+      "",
+      "get('https://jsonplaceholder.typicode.com/todos/2')",
+      "  .then(console.log)",
+      "  .catch(console.error)"
+    ],
+    "description": "fetch a given url (only Node18)"
+  },
+  "Create new VSCode macro": {
+    "prefix": ["vscmacro", "macro"],
+    "body": [
+      "const vscode = require('vscode');",
+      "",
+      "/**",
+      " * Macro configuration settings",
+      " * { [name: string]: {              ... Name of the macro",
+      " *    no: number,                   ... Order of the macro",
+      " *    func: ()=> string | undefined ... Name of the body of the macro function",
+      " *  }",
+      " * }",
+      " */",
+      "module.exports.macroCommands = {",
+      "  $1: {",
+      "    no: 1,",
+      "    func: $2,",
+      "  },",
+      "};",
+      "",
+      "/**",
+      " * Hello world",
+      " */",
+      "async function $2() {",
+      "  const editor = vscode.window.activeTextEditor;",
+      "  if (!editor) {",
+      "    // Return an error message if necessary.",
+      "    return 'Active text editor not found.';",
+      "  }",
+      "  const document = editor.document;",
+      "  const selection = editor.selection;",
+      "  const text = document.getText(selection);",
+      "",
+      "  editor.edit((editBuilder) => {",
+      "    editBuilder.replace(selection, `Hello world! \\${text}`);",
+      "  });",
+      "}"
+    ],
+    "description": "VSCode Macros Template"
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "ASDF envrc content": {
+    "prefix": "envrc",
+    "body": ["use asdf"],
+    "description": ".envrc file content"
+  },
+  "Direnv tool-versions": {
+    "prefix": "tool-versions",
+    "body": ["direnv 2.31.0", "ruby 3.0.3", "nodejs 16.15.0", "python 3.1.0"],
+    "description": "Direnv tool versions"
+  },
+  "Direnv tool-versions:nodejs": {
+    "prefix": "tool-versions",
+    "body": ["direnv 2.31.0", "nodejs 16.15.0"],
+    "description": "Direnv tool versions:nodejs"
+  },
+  "Direnv tool-versions:ruby": {
+    "prefix": "tool-versions",
+    "body": ["direnv 2.31.0", "ruby 3.0.3"],
+    "description": "Direnv tool versions:ruby"
+  },
+  "Direnv tool-versions:python": {
+    "prefix": "tool-versions",
+    "body": ["direnv 2.31.0", "python 3.1.0"],
+    "description": "Direnv tool versions:python"
+  },
+  "Prettier config file": {
+    "prefix": "prettierrc",
+    "body": [
+      "---",
+      "semi: false",
+      "tabWidth: 2",
+      "useTabs: false",
+      "singleQuote: true",
+      "bracketSpacing: true",
+      "trailingComma: 'none'",
+      "arrowParens: 'avoid'"
+    ],
+    "description": "Prettier config file"
+  },
+  "Prettier ignore config file": {
+    "prefix": "prettierignore",
+    "body": [
+      "Makefile",
+      "node_modules",
+      "artifacts",
+      "cache",
+      "coverage*",
+      "gasReporterOutput.json"
+    ],
+    "description": "Prettier ignore config file"
+  },
+  "ESLint config file": {
+    "prefix": "eslintrc",
+    "body": [],
+    "description": "ESLint config file"
+  },
+  "Release config file": {
+    "prefix": "releaserc",
+    "body": [
+      "---",
+      "branches:",
+      "  - '+([0-9])?(.{+([0-9]),x}).x'",
+      "  - name: main",
+      "    main: true",
+      "    channel: stable",
+      "  - name: next",
+      "    prerelease: beta",
+      "    channel: canary",
+      "plugins:",
+      "  - '@semantic-release/commit-analyzer'",
+      "  - '@semantic-release/release-notes-generator'",
+      "  - '@semantic-release/changelog'",
+      "  - - '@semantic-release/git'",
+      "    - assets:",
+      "        - CHANGELOG.md",
+      "      message: |-",
+      "        chore(release): ${nextRelease.version} [skip ci]",
+      "        ${nextRelease.notes}",
+      "  - '@semantic-release/github'"
+    ],
+    "description": ".releaserc.yml config file"
+  },
+  "Sequelize config file": {
+    "prefix": "sequelizerc",
+    "body": [
+      "var path = require('path')",
+      "",
+      "module.exports = {",
+      "  'config':           path.resolve('src', 'db', 'config.json'),",
+      "  'migrations-path':  path.resolve('src', 'db', 'migrations'),",
+      "  'models-path':      path.resolve('src', 'db', 'models'),",
+      "  'seeders-path':     path.resolve('src', 'db', 'seeders')",
+      "}"
+    ],
+    "description": ".sequelizerc config file"
+  },
+  "Jest config file": {
+    "prefix": "jest.config.js",
+    "body": [
+      "/** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */",
+      "module.exports = {",
+      "  preset: 'ts-jest',",
+      "  testEnvironment: 'node',",
+      "  roots: ['<rootDir>/src'],",
+      "  testMatch: [",
+      "    '**/__tests__/**/*.+(ts|tsx|js)',",
+      "    '**/?(*.)+(spec|test).+(ts|tsx|js)'",
+      "  ],",
+      "  moduleNameMapper: {",
+      "    '^@env$': '<rootDir>/src/env.ts',",
+      "  }",
+      "}"
+    ],
+    "description": "jest.config.js config file"
+  },
+  ".editorconfig": {
+    "prefix": [".editorconfig", "editorconfig"],
+    "body": [
+      "# EditorConfig is awesome: https://EditorConfig.org",
+      "",
+      "# top-most EditorConfig file",
+      "root = true",
+      "",
+      "[*]",
+      "indent_style = space",
+      "indent_size = 2",
+      "end_of_line = lf",
+      "charset = utf-8",
+      "trim_trailing_whitespace = true",
+      "insert_final_newline = true",
+      "",
+      "[*.md]",
+      "max_line_length = off",
+      "trim_trailing_whitespace = false",
+      "",
+      "[Makefile]",
+      "indent_style = tab",
+      "indent_size = 4",
+      ""
+    ],
+    "description": ".editorconfig"
+  }
+}

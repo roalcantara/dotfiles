@@ -1,0 +1,660 @@
+{
+  "makefile-shell": {
+    "prefix": ["make:shell", "shell", "SHELL"],
+    "body": ["#!/usr/bin/env ${1|bash,sh,zsh|}", "SHELL := /bin/$1", "$0"],
+    "description": "Add shell"
+  },
+  "makefile-task": {
+    "prefix": ["make:task", "make:rule", ".PHONY"],
+    "body": [".PHONY: ${1:task}", "$1: ## RUN $1", "\t@echo ${0:$1}"],
+    "description": "Add a simple task/rule"
+  },
+  "makefile-namespaced-task": {
+    "prefix": [
+      "make:task:namespaced",
+      "make:rule:namespaced",
+      ".PHONY:namespaced"
+    ],
+    "body": [
+      ".PHONY: ${1:namespace}/${2:task}",
+      "$1/$2: ## RUN $1",
+      "\t@echo ${0:$1}"
+    ],
+    "description": "Add a simple task/rule namespaced"
+  },
+  "makefile-task-build": {
+    "prefix": ["make:task", "make:task:build", "build"],
+    "body": [".PHONY: build", "build: ## RUN build", "\t@echo ${0:build}"],
+    "description": "Add a simple build task/rule"
+  },
+  "makefile-task-install": {
+    "prefix": ["make:task", "make:install", "install"],
+    "body": [
+      ".PHONY: install",
+      "install: ## RUN install",
+      "\t@echo ${0:install}"
+    ],
+    "description": "Add a simple install task/rule"
+  },
+  "makefile-rule": {
+    "prefix": ["make:rule", "make:task", "rule", "task", ".PHONY"],
+    "body": [
+      ".PHONY: ${1|default,help,deps,build,install,setup,purge,prune,clear,start,stop,run,lint,all|}",
+      "$2: ## ${2}s",
+      "\t@echo $0"
+    ],
+    "description": "Add a simple suggested task/rule"
+  },
+  "makefile-rule-namespaced": {
+    "prefix": [
+      "make:rule:namespaced",
+      "make:task:namespaced",
+      "rule:namespaced",
+      "task:namespaced",
+      ".PHONY"
+    ],
+    "body": [
+      ".PHONY: ${1:namespace}/${2|default,help,deps,build,install,setup,purge,prune,clear,start,stop,run,lint,all|}",
+      "$1/$2: ## ${2}s",
+      "\t@echo $0"
+    ],
+    "description": "Add a simple namespaced task/rule"
+  },
+  "makefile-help": {
+    "prefix": ["make:help", "help"],
+    "body": [
+      "#!/usr/bin/env bash",
+      "SHELL := /bin/bash",
+      "",
+      "default:",
+      "\t@make -s all",
+      "",
+      "all:",
+      "\t@awk 'BEGIN {FS = \":.*?## \"} /^[a-zA-Z\\-_0-9%:\\/]+:.*?## / {printf \"\\033[36m%-30s→\\033[0m %s\\n\", \\$\\$1, \\$\\$2}' $(MAKEFILE_LIST) | sed s/://",
+      "",
+      ".PHONY: help",
+      "help: ## (Fuzzy) Display available tasks",
+      "\t@make -s all | fzf --cycle --ansi | cut -d ' ' -f1 | xargs -r make"
+      "$0"
+    ],
+    "description": "Add help rule"
+  },
+  "makefile-default": {
+    "prefix": ["make:default", "default"],
+    "body": [".DEFAULT: ${1:task}", "default: $1", "$0"],
+    "description": "Add default rule"
+  },
+  "makefile-default-namespaced": {
+    "prefix": ["make:default:namespaced", "default:namespaced"],
+    "body": [".DEFAULT: ${1:task}", "default: ${2:namespace}/$1", "$0"],
+    "description": "Add default rule"
+  },
+  "makefile-target-deps": {
+    "prefix": ["make:target:deps", "make:deps"],
+    "body": [
+      ".PHONY: deps",
+      "deps:",
+      "\t@echo deps",
+      "",
+      ".PHONY: ${1:build}",
+      "$1: deps",
+      "\t@echo $1"
+    ],
+    "description": "Use target dependencies"
+  },
+  "makefile-include": {
+    "prefix": ["make:include", "include"],
+    "body": ["-include ${1:path}/Makefile"],
+    "description": "Add include"
+  },
+  "makefile-single-space-var": {
+    "prefix": ["make:single:space", "make:nullstring"],
+    "body": ["${1:name} = $(nullstring)$0"],
+    "description": "Add single_space variable"
+  },
+  "makefile-define-directive": {
+    "prefix": ["make:define:directive", "make:define", "define"],
+    "body": ["define ${1:name}", "@echo ${0:recipe}", "endef"],
+    "description": "Add define directive"
+  },
+  "makefile-if-else": {
+    "prefix": ["make:if:else", "if:else", "if"],
+    "body": [
+      "ifeq (\\$(${1:var}), ${2:value})",
+      "\techo '$1 equals $2'",
+      "else",
+      "\techo ${0:else}",
+      "endif"
+    ],
+    "description": "Add if/else directive"
+  },
+  "makefile-is-empty": {
+    "prefix": ["make:if:eq", "make:ifeq", "ifeq", "if"],
+    "body": ["ifeq (\\$(strip \\$(${1:var})),)", "\techo $1 is empty", "endif"],
+    "description": "Check if a variable is empty"
+  },
+  "makefile-is-def": {
+    "prefix": ["make:if:def", "make:ifdef", "ifdef", "if"],
+    "body": ["ifdef ${1:var}", "\techo $1 is defined$0", "endif"],
+    "description": "check if a variable is defined"
+  },
+  "makefile-flags": {
+    "prefix": ["make:flags", "make:flag"],
+    "body": [
+      "# look for '${1:flag}' in this case",
+      "ifneq (,$(findstring $1, $(MAKEFLAGS)))",
+      "\techo $1 was passed to MAKEFLAGS",
+      "endif"
+    ],
+    "description": "Use flags with `$(MAKEFLAGS)`"
+  },
+  "makefile-subst-gist": {
+    "prefix": ["make:subst:gist", "subst:gist"],
+    "body": [
+      "${1:var} := \\${subst \\$(${2:pattern}),\\$(${3:replacement}), \\$(${0:string})}",
+      "",
+      "usage:",
+      "\t@echo \\$($1)"
+    ],
+    "description": "Replace variables in a string gist"
+  },
+  "makefile-replace": {
+    "prefix": ["make:subst", "make:replace", "replace", "subst"],
+    "body": [
+      "\\${subst \\$(${1:pattern}),\\$(${2:replacement}), \\$(${0:string})}"
+    ],
+    "description": "Replace variables in a string"
+  },
+  "makefile-strip": {
+    "prefix": ["make:strip", "strip"],
+    "body": ["\\$(strip \\$(${0:string}))"],
+    "description": "Removes leading and trailing whitespace from string"
+  },
+  "makefile-findstring": {
+    "prefix": ["make:string:trim", "string:trim", "trim"],
+    "body": ["\\$(strip \\$(${0:string}))"],
+    "description": "Removes leading and trailing whitespace from string"
+  },
+  "makefile-func-gist": {
+    "prefix": ["make:func"],
+    "body": [
+      "# this is a function that returns a string",
+      "${1:fn} := \\${subst \\$(${2:pattern}),\\$(${3:replacement}), \\$(${4:string})}",
+      "",
+      "# this is a variable that contains a function",
+      "${5:bar} := \\$(call $1, \\$(${0:foo}))",
+      "",
+      "all: # this uses a function in a variable",
+      "\t@echo \\$($5)"
+    ],
+    "description": "Uses a function in a variable gist"
+  },
+  "makefile-foreach-inline": {
+    "prefix": ["make:foreach:inline", "foreach:inline"],
+    "body": ["\t@\\$(foreach ${1:var}, \\$(${0:source}), echo \\$($1);)"],
+    "description": "Add foreach inline"
+  },
+  "makefile-foreach-multiline": {
+    "prefix": ["make:foreach:multiline", "foreach:multiline"],
+    "body": [
+      "\t@\\$(foreach ${1:var}, $(${2:source}),\\",
+      "\t\t@echo \\$($1); \\",
+      "\t\t@echo \\$($1); \\",
+      "\t)"
+    ],
+    "description": "Add foreach multiline"
+  },
+  "makefile-for-inline": {
+    "prefix": ["make:for:inline", "for:inline"],
+    "body": ["\t@for ${1:var} in \\$(${0:source}); do echo \\$\\$$1; done"],
+    "description": "Add for inline"
+  },
+  "makefile-for-multiline": {
+    "prefix": ["make:for:multiline", "for:multiline"],
+    "body": [
+      "\t@for ${1:var} in \\$(${0:source}); do\\",
+      "\t\t@echo \\$($1); \\",
+      "\t\t@echo \\$($1); \\",
+      "\tdone"
+    ],
+    "description": "Add for multiline"
+  },
+  "makefile-read-env-vars": {
+    "prefix": ["make:read:env:vars", "read:env:vars", "env:vars"],
+    "body": [
+      ".PHONY: show",
+      "show: ## READ from environment variables",
+      "$(foreach ${1:var}, \\$(${0:source}),\"  \\$($1): \\${\\$($1)}\\n\")"
+    ],
+    "description": "Read from environment variables"
+  },
+  "makefile-log": {
+    "prefix": ["make:log", "make:info", "make:debug", "make:warn", "make:err"],
+    "body": ["\t\\$(${1|info,warning,error|} ${0:message})"],
+    "description": "Add log function"
+  },
+  "makefile-filter": {
+    "prefix": ["make:filter", "filter"],
+    "body": ["\t\\$(filter ${1:pattern}, \\$(0:SOURCE))"],
+    "description": "Add filter function"
+  },
+  "makefile-sort": {
+    "prefix": ["make:sort", "sort"],
+    "body": ["\t\\$(sort \\$(0:SOURCE))"],
+    "description": "Add sort function"
+  },
+  "makefile-word": {
+    "prefix": ["make:word", "word"],
+    "body": ["\t\\$(word ${1|nth},\\$(0:SOURCE))"],
+    "description": "Returns the nth word of text"
+  },
+  "makefile-firstword": {
+    "prefix": ["make:firstword", "firstword", "first"],
+    "body": ["\t\\$(firstword \\$(0:SOURCE))"],
+    "description": "Returns the first word separated by whitespace"
+  },
+  "makefile-lastword": {
+    "prefix": ["make:lastword", "lastword", "last"],
+    "body": ["\t\\$(lastword ${1|nth},\\$(0:SOURCE))"],
+    "description": "Returns the last word separated by whitespace"
+  },
+  "makefile-filename": {
+    "prefix": ["make:filename", "filename"],
+    "body": ["\t\\$@"],
+    "description": "The file name of the target of the rule"
+  },
+  "makefile-membername": {
+    "prefix": ["make:membername", "membername"],
+    "body": ["\t\\$%"],
+    "description": "The target member name, when the target is an archive member"
+  },
+  "makefile-prerequisites": {
+    "prefix": ["make:prerequisites", "prerequisites"],
+    "body": ["\t\\$?"],
+    "description": "The names of all the prerequisites that are newer than the target, with spaces between them."
+  },
+  "makefile-first-prerequisite": {
+    "prefix": ["make:prerequisite:first", "prerequisite:first"],
+    "body": ["\t\\$<"],
+    "description": "The name of the first prerequisite"
+  },
+  "makefile-dirname": {
+    "prefix": ["make:dirname", "dirname"],
+    "body": ["\t\\$(@D)"],
+    "description": "The directory part of the file name of the target, with the trailing slash removed"
+  },
+  "makefile-file-within-directory": {
+    "prefix": "make:file:within:directory",
+    "body": ["\t\\$(@F)"],
+    "description": "The file-within-directory part of the file name of the target"
+  },
+  "makefile": {
+    "prefix": ["make:file:make", "makefile"],
+    "body": [
+      "#!/usr/bin/env bash",
+      "SHELL := /bin/bash",
+      "",
+      "default:",
+      "\t@make -s all",
+      "",
+      "all:",
+      "\t@awk 'BEGIN {FS = \":.*?## \"} /^[a-zA-Z\\-_0-9%:\\/]+:.*?## / {printf \"\\033[36m%-30s→\\033[0m %s\\n\", \\$\\$1, \\$\\$2}' $(MAKEFILE_LIST) | sed s/://",
+      "",
+      ".PHONY: help",
+      "help: ## (Fuzzy) Display available tasks",
+      "\t@make -s all | fzf --cycle --ansi | cut -d ' ' -f1 | xargs -r make"
+      "",
+      ".PHONY: install",
+      "install: ## Install dependencies",
+      "\t@echo 'install'",
+      "",
+      ".PHONY: build",
+      "build: ## Build the project",
+      "\t@echo 'build'",
+      "",
+      ".PHONY: lint",
+      "lint: ## Run Linters",
+      "\t@echo 'lint'",
+      "",
+      ".PHONY: test",
+      "test: ## Run Tests",
+      "\t@echo 'tests'",
+      "$0"
+    ],
+    "description": "Add simple Makefile"
+  },
+  "makefile-sample": {
+    "prefix": ["makefile:sample", "makefile:sample"],
+    "body": [
+      "#!/usr/bin/env bash",
+      "SHELL := /bin/bash",
+      "",
+      "default:",
+      "\t@make -s all",
+      "",
+      "all:",
+      "\t@awk 'BEGIN {FS = \":.*?## \"} /^[a-zA-Z\\-_0-9%:\\/]+:.*?## / {printf \"\\033[36m%-30s→\\033[0m %s\\n\", \\$\\$1, \\$\\$2}' $(MAKEFILE_LIST) | sed s/://",
+      "",
+      ".PHONY: help",
+      "help: ## (Fuzzy) Display available tasks",
+      "\t@make -s all | fzf --cycle --ansi | cut -d ' ' -f1 | xargs -r make"
+      "",
+      "foo = Hey",
+      "",
+      "# ?= only sets variables if they have not yet been set",
+      "foo ?= will not be set",
+      "",
+      ".PHONY: all",
+      "all: one go  ## Show all available tasks",
+      "",
+      ".PHONY: one",
+      "one: ## Run task one",
+      "\t@echo one",
+      "",
+      ".PHONY: two",
+      "two: ## Run task two",
+      "\t@echo two",
+      "",
+      ".PHONY: three",
+      "three: ## Run task three",
+      "\t@echo \"$(foo) HO!\"",
+      "",
+      ".PHONY: go",
+      "go: three ## Run task go",
+      "\t@echo \"Let's GO!\"",
+      "$0"
+    ],
+    "description": "Add Makefile Sample"
+  },
+  "makefile-golang": {
+    "prefix": ["make:file:go", "makefile:go"],
+    "body": [
+      "#!/usr/bin/env bash",
+      "SHELL := /bin/bash",
+      "",
+      "default:",
+      "\t@make -s all",
+      "",
+      "all:",
+      "\t@awk 'BEGIN {FS = \":.*?## \"} /^[a-zA-Z\\-_0-9%:\\/]+:.*?## / {printf \"\\033[36m%-30s→\\033[0m %s\\n\", \\$\\$1, \\$\\$2}' $(MAKEFILE_LIST) | sed s/://",
+      "",
+      ".PHONY: help",
+      "help: ## (Fuzzy) Display available tasks",
+      "\t@make -s all | fzf --cycle --ansi | cut -d ' ' -f1 | xargs -r make"
+      "",
+      ".PHONY: main",
+      "main: ## Runs the main.go",
+      "\tgo run main.go",
+      "",
+      ".PHONY: build",
+      "build: vet ## Build compiles the packages named by the import paths, along with their dependencies, but it does not install the results.",
+      "\tgo build ./...",
+      "",
+      ".PHONY: run/all",
+      "run/all: ## Runs all go files (*.go)",
+      "\tgo run *.go",
+      "",
+      ".PHONY: test",
+      "test: ## Tests and prints a result summary",
+      "\tgo test ./...",
+      "",
+      ".PHONY: fmt",
+      "fmt: ## Runs 'gofmt -l -w' and prints modified files",
+      "\tgo fmt ./...",
+      "",
+      ".PHONY: lint",
+      "lint: fmt ## Runs GolangCI-Lint recursively",
+      "\tgolangci-lint run ./...",
+      "",
+      ".PHONY: vet",
+      "vet: fmt ## Examines Go source code and reports suspicious constructs",
+      "\tgo vet ./...",
+      "",
+      ".PHONY: vet/checks",
+      "vet/checks: fmt ## List the available checks",
+      "\tgo tool vet help",
+      "",
+      ".PHONY: test/benchmark",
+      "test/benchmark: ## Runs all tests and benchmarks it",
+      "\tgo test -bench=./...",
+      "",
+      ".PHONY: test/race",
+      "test/race: ## Runs all tests and identifies race conditions for goroutines",
+      "\tgo test -race=./...",
+      "",
+      ".PHONY: test/coverage",
+      "test/coverage: ## Runs all tests with coverage reporting",
+      "\tgo test -cover ./...",
+      "",
+      ".PHONY: env",
+      "env: ## Shows environment variables about the current Go environment",
+      "\tgo env",
+      "",
+      ".PHONY: env/root",
+      "env/root: ## Shows the root of the Go tree",
+      "\tgo env GOROOT",
+      "",
+      ".PHONY: env/arch",
+      "env/arch: ## Shows the target architecture for the build",
+      "\tgo env GOARCH",
+      "",
+      ".PHONY: env/docs",
+      "env/docs: ## Show the documentation for each of the environment variables",
+      "\tgo help environmental",
+      "",
+      ".PHONY: deps",
+      "deps: ## List the complete set of transitive dependencies",
+      "\tgo list -f \"{{ .Imports }}\"",
+      "",
+      ".PHONY: deps/transitives",
+      "deps/transitives: ## List the complete set of transitive dependencies",
+      "\tgo list -f \"{{ .Deps }}\"",
+      "",
+      ".PHONY: deps/check",
+      "deps/check: ## Checks for updates to dependencies and subdependencies",
+      "\tgo list -m -u all",
+      ""
+    ],
+    "description": "A simple makefile for go projects"
+  },  
+  "makefile-gradle": {
+    "prefix": ["make:file:gradle", "makefile:gradle", "makegradle"],
+    "body": [
+      "#!/usr/bin/env bash",
+      "SHELL := /bin/bash",
+      "",
+      "default:",
+      "\t@make -s all",
+      "",
+      "all:",
+      "\t@awk 'BEGIN {FS = \":.*?## \"} /^[a-zA-Z\\-_0-9%:\\/]+:.*?## / {printf \"\\033[36m%-30s→\\033[0m %s\\n\", \\$\\$1, \\$\\$2}' $(MAKEFILE_LIST) | sed s/://",
+      "",
+      ".PHONY: help",
+      "help: ## (Fuzzy) Display available tasks",
+      "\t@make -s all | fzf --cycle --ansi | cut -d ' ' -f1 | xargs -r make"
+      "",
+      ".PHONY: build",
+      "build: ## Build the application",
+      "\t./gradlew build",
+      "",
+      ".PHONY: stop",
+      "stop: ## Stop all gradle deamons",
+      "\t./gradlew --stop",
+      "",
+      ".PHONY: cache/clear",
+      "cache/clear: ## Delete global cache dir",
+      "\trm -R ~/.gradle",
+      "",
+      ".PHONY: git/clear",
+      "git/clear: ## Clean working dir (if using git)",
+      "\tgit clean -xfd",
+      "",
+      ".PHONY: assemble",
+      "assemble: ## Assemble the application",
+      "\t./gradlew assemble",
+      "",
+      "# https://github.com/realm/realm-java/issues/5508#issuecomment-342124882",
+      ".PHONY: reset",
+      "reset: stop cache/clear git/clear assemble ## Reset the dependencies",
+      "",
+      ".PHONY: run",
+      "run: ## Run the application",
+      "\t./gradlew run",
+      "",
+      ".PHONY: start",
+      "start: build run ## Run the application",
+      "",
+      ".PHONY: scan",
+      "scan: ## Publish a Build Scan",
+      "\t./gradlew build --scan",
+      "$0"      
+    ],
+    "description": "A simple makefile for gradle projects"
+  },
+  "makefile-rust-cargo": {
+    "prefix": [
+      "make:file:rust",
+      "makefile:rust",
+      "makerust",
+      "make:file:cargo",
+      "makefile:cargo",
+      "makecargo"
+    ],
+    "body": [
+      "#!/usr/bin/env bash",
+      "SHELL := /bin/bash",
+      "",
+      "default:",
+      "\t@make -s all",
+      "",
+      "all:",
+      "\t@awk 'BEGIN {FS = \":.*?## \"} /^[a-zA-Z\\-_0-9%:\\/]+:.*?## / {printf \"\\033[36m%-30s→\\033[0m %s\\n\", \\$\\$1, \\$\\$2}' $(MAKEFILE_LIST) | sed s/://",
+      "",
+      ".PHONY: help",
+      "help: ## (Fuzzy) Display available tasks",
+      "\t@make -s all | fzf --cycle --ansi | cut -d ' ' -f1 | xargs -r make"
+      "",
+      ".PHONY: build",
+      "build: ## Build the project",
+      "\tcargo build",
+      "",
+      ".PHONY: release",
+      "release: ## Build the project in release mode",
+      "\tcargo build --release",
+      "",
+      ".PHONY: run",
+      "run: ## Runs the project",
+      "\tcargo run",
+      "",
+      ".PHONY: lint",
+      "lint: ## Run clippy linters",
+      "\tcargo clippy",
+      "$0"
+    ],
+    "description": "A simple Makefile for Rust (Cargo) projects"
+  },  
+  "makefile-android": {
+    "prefix": ["make:file:android", "makefile:android", "makeandroid"],
+    "body": [
+      "#!/usr/bin/env bash",
+      "SHELL := /bin/bash",
+      "",
+      "default:",
+      "\t@make -s all",
+      "",
+      "all:",
+      "\t@awk 'BEGIN {FS = \":.*?## \"} /^[a-zA-Z\\-_0-9%:\\/]+:.*?## / {printf \"\\033[36m%-30s→\\033[0m %s\\n\", \\$\\$1, \\$\\$2}' $(MAKEFILE_LIST) | sed s/://",
+      "",
+      ".PHONY: help",
+      "help: ## (Fuzzy) Display available tasks",
+      "\t@make -s all | fzf --cycle --ansi | cut -d ' ' -f1 | xargs -r make"
+      "",
+      ".PHONY: tasks",
+      "tasks: ## Displays the tasks of a project ':app'",
+      "\tgradle :app:tasks",
+      "",
+      ".PHONY: projects",
+      "projects: ## Displays the sub-projects of project ':app'",
+      "\tgradle projects",
+      "",
+      ".PHONY: deps",
+      "deps: ## Displays all dependencies declared in project ':app'",
+      "\tgradle dependencies",
+      "",
+      ".PHONY: clear",
+      "clear: ## Cleans up the app",
+      "\t./gradlew clean",
+      "",
+      ".PHONY: clear_cache",
+      "clear_cache: ## Delete global cache dir",
+      "\trm -R ~/.gradle",
+      "",
+      ".PHONY: clear_all",
+      "clear_all: clear clear_cache ## Cleans up the app and the cache",
+      "",
+      ".PHONY: build",
+      "build: ## Build the application",
+      "\t./gradlew build",
+      "",
+      ".PHONY: rebuild",
+      "rebuild: ## Build project complete from scratch",
+      "\t./gradlew clean build",
+      "",
+      ".PHONY: assemble",
+      "assemble: ## Assemble the application",
+      "\t./gradlew assemble",
+      "",
+      ".PHONY: run",
+      "run: ## Run the application",
+      "\t./gradlew run",
+      "",
+      ".PHONY: start",
+      "start: build run ## Run the application",
+      "",
+      ".PHONY: scan",
+      "scan: ## Publish a Build Scan",
+      "\t./gradlew build --scan",
+      "",
+      ".PHONY: test",
+      "test: ## Run all of the unit tests in the project",
+      "\t./gradlew test --continue",
+      "",
+      ".PHONY: instrumentation",
+      "instrumentation: ## Run the instrumentation tests https://t.ly/388J",
+      "\t./gradlew connectedAndroidTest --continue",
+      "",
+      ".PHONY: e2e",
+      "e2e: ## Build and start your instrumented tests on your Android device",
+      "\t./gradlew connectedCheck",
+      "",
+      ".PHONY: stop",
+      "stop: ## Stop all gradle Daemons",
+      "\t./gradlew --stop",
+      "",
+      ".PHONY: signing",
+      "signing: ## Generate signing report",
+      "\t./gradlew signingReport --warning-mode all",
+      "",
+      ".PHONY: reset",
+      "reset: stop clear_all assemble ## Reset the dependencies https://is.gd/6GHdhj",
+      "",
+      ".PHONY: markdownlint",
+      "markdownlint: ## Lints all markdown files",
+      "\tnpx markdownlint-cli2 \"**/*.md\" \"#node_modules\" \"#CHANGELOG.md\"",
+      "",
+      ".PHONY: markdownlint_fix",
+      "markdownlint_fix: ## Fix all markdown lint violations",
+      "\tnpx markdownlint-cli2 \"**/*.md\" \"#node_modules\" \"#CHANGELOG.md\"",
+      "",
+      ".PHONY: lint",
+      "lint: markdownlint ## Runs the linters",
+      "\t./gradlew lint --stacktrace --continue",
+      "",
+      ".PHONY: lint_fix",
+      "lint_fix: markdownlint ## Fix lint violations",
+      "\t./gradlew lintFix",
+      "$0"
+    ],
+    "description": "Simple Makefile for Android projects"
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "Import from langs from lodash": {
+    "prefix": [
+      "import:lodash:lang",
+      "import:lang",
+      "imp:lang"
+    ],
+    "body": [
+      "\timport ${1|cast,gt,iif,is_bool,is_empty,is_func,is_list,is_map,is_nil,is_null,is_num,is_str,is_table,is_type,lt,to_args,to_bool,to_func,to_int,to_num,to_str,to_table|} from require 'neo/lib/lodash/lang/$1'",
+      "$0"
+    ],
+    "description": "Import lang from lodash"
+  },
+  "Import from tables from lodash": {
+    "prefix": [
+      "import:lodash:tables",
+      "import:tables",
+      "imp:tb"
+    ],
+    "body": [
+      "\timport ${1|case,compact,concat,each,entries,extend,flat_entries,flat_map,flatten,iter,iterate_collection,iterate,join,keys,map,merge,push,reduce,values|} from require 'neo/lib/lodash/tables/$1'",
+      "$0"
+    ],
+    "description": "Import tables from lodash"
+  },
+  "Import from str from lodash": {
+    "prefix": [
+      "import:lodash:str",
+      "import:str",
+      "imp:str"
+    ],
+    "body": [
+      "\timport ${1|db_quote,ends_with,lpad,matches,pad,rpad,split,starts_with,trim|} from require 'neo/lib/lodash/strings/$1'",
+      "$0"
+    ],
+    "description": "Import str from lodash"
+  },
+  "Import from funcs from lodash": {
+    "prefix": [
+      "import:lodash:func",
+      "import:func",
+      "imp:func"
+    ],
+    "body": [
+      "\timport ${1|equals,extract,get,has,set,try-catch|} from require 'neo/lib/lodash/functions/$1'",
+      "$0"
+    ],
+    "description": "Import func from lodash"
+  },
+  "Encapsulates import from lib/lodash": {
+    "prefix": [
+      "import:lodash",
+      "imp:lib"
+    ],
+    "body": "${TM_SELECTED_TEXT/[import]/\timport from require/}",
+    "description": "Encapsulates import from lib/lodash"
+  },
+  "Add `from require`": {
+    "prefix": [
+      "from:require",
+      "from:req"
+    ],
+    "body": " from require",
+    "description": "Add `from require`"
+  }
+}

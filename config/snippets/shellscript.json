@@ -1,0 +1,753 @@
+{
+  "Print message": {
+    "prefix": ["print", "echo"],
+    "body": ["print \"$1\" ;"]
+  },
+  "Echo message": {
+    "prefix": ["cons", "print", "echo"],
+    "body": ["echo \"$1\" ;"]
+  },
+  "Printf message": {
+    "prefix": ["cons", "echo", "printf"],
+    "body": ["printf \"%s %s\", \"$1\" \"$2\" ;"]
+  },
+  "Debug log level 1 (DEBUG)": {
+    "prefix": ["log", "printf", "print", "echo", "debug"],
+    "body": ["print \"[${1:DEBUG}] -> '${2:message}'\";"]
+  },
+  "Debug log level 2 (WARN)": {
+    "prefix": ["log", "printf", "print", "echo", "debug"],
+    "body": ["print \"[${1:WARN}] ---> '${2:message}'\";"]
+  },
+  "Debug log level 3 (ALERT)": {
+    "prefix": ["log", "printf", "print", "echo", "debug"],
+    "body": ["print \"[${1:ALERT}] ------> '${2:message}'\";"]
+  },
+  "Cat to file": {
+    "prefix": "cat",
+    "body": ["cat <<-EOF ${1:>/path/to/file}", "\t$2", "EOF"]
+  },
+  "Function": {
+    "prefix": "function",
+    "body": [
+      "#",
+      "# TODO function description",
+      "# @param\tTODO The first parameter",
+      "# @return",
+      "#",
+      "${1:function_name}() {",
+      "\tlocal ${2:param}=\\$1; shift",
+      "\t${3:echo \"TODO !\"}",
+      "}"
+    ]
+  },
+  "Getopts simple": {
+    "prefix": ["getopts", "opts"],
+    "body": [
+      "while getopts :${1:?}h arg",
+      "do",
+      "\tcase \\$arg in",
+      "\t\t${1})",
+      "\t\t\t${0:: #statements}",
+      "\t\t\t;;",
+      "\t\t:|?|h)",
+      "\t\t\t[[ \\$arg == \\? ]] && print_error \"L'option -\\$OPTARG n'est pas prise en charge !\"",
+      "\t\t\t[[ \\$arg == : ]] && print_error \"L'option -\\$OPTARG requiert un argument !\"",
+      "\t\t\tusage",
+      "\t\t\texit \\$([[ \\$arg == h ]] && echo 0 || echo 2)",
+      "\t\t\t;;",
+      "\tesac",
+      "done"
+    ]
+  },
+  "Getopts full": {
+    "prefix": "getopts",
+    "body": [
+      "while getopts :${1:?}a-:fqvh arg",
+      "do",
+      "\tcase \\$arg in",
+      "\t\t-)",
+      "\t\t\tif [[ \\${!OPTIND} == -* ]]; then",
+      "\t\t\t\tunset -v value",
+      "\t\t\telse",
+      "\t\t\t\tvalue=\"\\${!OPTIND}\"",
+      "\t\t\t\t((OPTIND++))",
+      "\t\t\tfi",
+      "\t\t\tcase \\$OPTARG in",
+      "\t\t\t\thost)",
+      "\t\t\t\t\tHOST=\\$value",
+      "\t\t\t\t\t;;",
+      "\t\t\t\tport)",
+      "\t\t\t\t\tif [[ ! \\$value =~ ^[0-9]+\\$ ]]; then",
+      "\t\t\t\t\t\tprint_error \"L'option --\\$OPTARG a besoin d'un entier en parametre. \\\"\\$value\\\" n'est pas un entier.\"",
+      "\t\t\t\t\t\tusage",
+      "\t\t\t\t\t\texit 2",
+      "\t\t\t\t\tfi",
+      "\t\t\t\t\t;;",
+      "\t\t\t\t*)",
+      "\t\t\t\t\tprint_error \"Le parametre '--\\$OPTARG' n'est pas reconnu !\"",
+      "\t\t\t\t\tusage",
+      "\t\t\t\t\texit 2",
+      "\t\t\t\t\t;;",
+      "\t\t\t\tesac",
+      "\t\t\t;;",
+      "\t\ta)",
+      "\t\t\t[[ \\$OPTARG == -* ]] && print_error \"L'option -\\$arg requiert un argument !\" && usage && exit 2",
+      "\t\t\t;;",
+      "\t\t${1})",
+      "\t\t\t${0:: #statements}",
+      "\t\t\t;;",
+      "\t\tf) FORCE=1 ;;",
+      "\t\tq) QUIET=1 ;;",
+      "\t\tv) VERBOSE=1 ;;",
+      "\t\t:|?|h)",
+      "\t\t\t[[ \\$arg == \\? ]] && print_error \"L'option -\\$OPTARG n'est pas prise en charge !\"",
+      "\t\t\t[[ \\$arg == : ]] && print_error \"L'option -\\$OPTARG requiert un argument !\"",
+      "\t\t\tusage",
+      "\t\t\texit \\$([[ \\$arg == h ]] && echo 0 || echo 2)",
+      "\t\t\t;;",
+      "\tesac",
+      "done"
+    ]
+  },
+  "header": {
+    "prefix": "#!",
+    "body": [
+      "#!/bin/bash",
+      "#",
+      "# @version \t\t18.6.0-SNAPSHOT",
+      "# @script\t\tt_${1:TODO}.sh",
+      "# @description\t${2:TODO : Script detailed description}",
+      "#",
+      "##"
+    ]
+  },
+  "heredoc2var": {
+    "prefix": "read",
+    "body": [
+      "read -r -d '' ${1:variableName} <<-EOF",
+      "${2:Content to assign to ${1}}",
+      "EOF",
+      "echo \"\\$${1}\"",
+      "$3"
+    ]
+  },
+  "mktemp": {
+    "prefix": "mktemp",
+    "body": [
+      "${1:tmpFile}=\\$(mktemp --tmpdir tmpPGIH${2:-pgihadmin}.XXXXXXXXXX) || \\",
+      "\tprint_error_and_exit \"Impossible de creer un fichier temporaire dans \\$TMPDIR !\"",
+      "trap \"rm -f \\${${1}:-/tmp/dummy}\" 0 1 2 3 15"
+    ]
+  },
+  "New task": {
+    "prefix": "newtask",
+    "body": [
+      "#!/bin/bash",
+      "#",
+      "# @version \t\t14.4.0-SNAPSHOT",
+      "# @script\t\tt_${1:TODO}.sh",
+      "# @description\t${2:TODO : Description detaillee du script}",
+      "#",
+      "##",
+      "source p_common.sh",
+      "usage() {",
+      "\tcat <<-EOF",
+      "\tUsage: pgihadmin ${1} <CIBLE> [-f] [-q] [-h]",
+      "\tCette tache permet de ${2}",
+      "\tPARAMETRES:",
+      "\t===========",
+      "\t    CIBLE    Serveur cible : <vide> ou all, aps, ts, lb, ord, apsN, tsN, lbN, ordN (avec N un nombre)",
+      "\tOPTIONS:",
+      "\t========",
+      "\t    -f    Mode force",
+      "\t    -q    Mode silencieux",
+      "\t    -h    Affiche ce message",
+      "\tEOF",
+      "}",
+      "#   __             _   _",
+      "#  / _|___ _ _  __| |_(_)___ _ _  ___",
+      "# |  _/ _ \\ ' \\/ _|  _| / _ \\ ' \\(_-<",
+      "# |_| \\___/_||_\\__|\\__|_\\___/_||_/__/",
+      "#",
+      "#",
+      "# TODO Function '${5}' description",
+      "# @param\tTODO The first parameter",
+      "# @return\tTODO",
+      "#",
+      "${5:function_name}() {",
+      "\tlocal firstParam=\\$1; shift",
+      "\tlocal secondParam=\\$1; shift",
+      "\t${6:echo \"Function '${5}' not yet implemented!\" # TODO}",
+      "}",
+      "#             _",
+      "#  _ __  __ _(_)_ _",
+      "# | '  \\/ _` | | ' \\",
+      "# |_|_|_\\__,_|_|_||_|",
+      "#",
+      "main() {",
+      "\twhile getopts :${3:?}a-:fqvh arg",
+      "\tdo",
+      "\t\tcase \\$arg in",
+      "\t\t\t-)",
+      "\t\t\t\tif [[ \\${!OPTIND} == -* ]]; then",
+      "\t\t\t\t\tunset -v value",
+      "\t\t\t\telse",
+      "\t\t\t\t\tvalue=\"\\${!OPTIND}\"",
+      "\t\t\t\t\t((OPTIND++))",
+      "\t\t\t\tfi",
+      "\t\t\t\tcase \\$OPTARG in",
+      "\t\t\t\t\thost)",
+      "\t\t\t\t\t\tHOST=\\$value",
+      "\t\t\t\t\t\t;;",
+      "\t\t\t\t\tport)",
+      "\t\t\t\t\t\tif [[ ! \\$value =~ ^[0-9]+\\$ ]]; then",
+      "\t\t\t\t\t\t\tprint_error \"L'option --\\$OPTARG a besoin d'un entier en parametre. \\\"\\$value\\\" n'est pas un entier.\"",
+      "\t\t\t\t\t\t\tusage",
+      "\t\t\t\t\t\t\texit 2",
+      "\t\t\t\t\t\tfi",
+      "\t\t\t\t\t\t;;",
+      "\t\t\t\t\t*)",
+      "\t\t\t\t\t\tprint_error \"Le parametre '--\\$OPTARG' n'est pas reconnu !\"",
+      "\t\t\t\t\t\tusage",
+      "\t\t\t\t\t\texit 2",
+      "\t\t\t\t\t\t;;",
+      "\t\t\t\t\tesac",
+      "\t\t\t\t;;",
+      "\t\t\ta)",
+      "\t\t\t\t[[ \\$OPTARG == -* ]] && print_error \"L'option -\\$arg requiert un argument !\" && usage && exit 2",
+      "\t\t\t\t;;",
+      "\t\t\t${3})",
+      "\t\t\t\t${4:: #statements}",
+      "\t\t\t\t;;",
+      "\t\t\tf) FORCE=1 ;;",
+      "\t\t\tq) QUIET=1 ;;",
+      "\t\t\tv) VERBOSE=1 ;;",
+      "\t\t\t:|?|h)",
+      "\t\t\t\t[[ \\$arg == \\? ]] && print_error \"L'option -\\$OPTARG n'est pas prise en charge !\"",
+      "\t\t\t\t[[ \\$arg == : ]] && print_error \"L'option -\\$OPTARG requiert un argument !\"",
+      "\t\t\t\tusage",
+      "\t\t\t\texit \\$([[ \\$arg == h ]] && echo 0 || echo 2)",
+      "\t\t\t\t;;",
+      "\t\tesac",
+      "\tdone",
+      "\t$7",
+      "}",
+      "main \"\\$@\""
+    ]
+  },
+  "stderr to /dev/null": {
+    "prefix": "2",
+    "body": "2>/dev/null"
+  },
+  "stdout to /dev/null": {
+    "prefix": "1",
+    "body": ">/dev/null"
+  },
+  "stdout & stderr to /dev/null": {
+    "prefix": "12",
+    "body": ">/dev/null 2>&1"
+  },
+  "stdout to file": {
+    "prefix": ">",
+    "body": ">${1:file}"
+  },
+  "stdout & stderr to file": {
+    "prefix": ">2",
+    "body": ">${1:file} 2>&1"
+  },
+  "stderr to file": {
+    "prefix": "2>",
+    "body": "2>${1:file}"
+  },
+  "stderr & stdout to file": {
+    "prefix": "2>&1",
+    "body": "2>&1 >${1:file}"
+  },
+  "stdout & stderr to file & stdout to file": {
+    "prefix": ">2>",
+    "body": ">${1:file} 2>&1 >${2:file}"
+  },
+  "Usage function": {
+    "prefix": "usage",
+    "body": [
+      "usage() {",
+      "\tcat <<-EOF",
+      "\tUsage: pgihadmin ${1:tache} <CIBLE> [-f] [-q] [-h]",
+      "\tCette tache permet de ${2:bla bla}",
+      "\tPARAMETRES:",
+      "\t===========",
+      "\t    CIBLE    Serveur cible : <vide> ou all, aps, ts, lb, ord, apsN, tsN, lbN, ordN (avec N un nombre)",
+      "\tOPTIONS:",
+      "\t========",
+      "\t    -f    Mode force",
+      "\t    -q    Mode silencieux",
+      "\t    -h    Affiche ce message",
+      "\tEOF",
+      "}"
+    ]
+  },
+  "while read < file": {
+    "prefix": "while",
+    "body": [
+      "while read -r line; do",
+      "\techo \"\\$line\"",
+      "done < ${1:/path/to/file}"
+    ]
+  },
+  "disable shellcheck": {
+    "prefix": "dis",
+    "body": ["# shellcheck disable=$2"]
+  },
+  "add shellcheck": {
+    "prefix": ["check", "shell", "shellcheck"],
+    "body": "${1|# shellcheck shell=bash,shellcheck shell=sh|}\n"
+  },
+  "Shebang": {
+    "prefix": ["shebang", "bang", "!", "#!"],
+    "body": ["#!/bin/${1|sh,bash,zsh|}", "$0"],
+    "description": "Shebang"
+  },
+  "Shebang: Deno": {
+    "prefix": ["shebang:deno", "bang:deno", "!", "#!"],
+    "body": "#!/usr/bin/env -S deno run --allow-write",
+    "description": "Shebang: Deno"
+  },
+  "which": {
+    "prefix": "whi ",
+    "body": ["\"$(which \"$2\")\""]
+  },
+  "whoami": {
+    "prefix": "who ",
+    "body": ["\"$(whoami)\""]
+  },
+  "if..then..else": {
+    "prefix": "ite",
+    "body": "[[ ${1:condition} ]] && ${2:echo \"true\"} || ${3:echo \"false\"}"
+  },
+  "if null": {
+    "prefix": "if",
+    "body": ["if [ -z \"$2\" ]; then", "\techo \"$3\"", "fi"]
+  },
+  "if not null": {
+    "prefix": "if",
+    "body": ["if [ -n \"$2\" ]; then", "\techo \"$3\"", "fi"]
+  },
+  "if command exists inline": {
+    "prefix": "if",
+    "body": ["if [[ -n \"$(command -v $2)\" ]]; then", "\techo \"$3\"", "fi"]
+  },
+  "if command exists": {
+    "prefix": "if",
+    "body": ["if type ${1:command} >/dev/null 2>&1; then", "   ${2:then}", "fi"]
+  },
+  "if regex": {
+    "prefix": "if",
+    "body": ["if [[ \"$2\" =~ $3 ]]; then", "\techo \"$4\"", "fi"]
+  },
+  "if null else (inline)": {
+    "prefix": "if",
+    "body": ["[ -z \"$1\" ] && echo \"$2\" || echo \"$3\""]
+  },
+  "if not null else (inline)": {
+    "prefix": "if",
+    "body": ["[ -n \"$1\" ] && echo \"$2\" || echo \"$3\""]
+  },
+  "if regex else (inline)": {
+    "prefix": "if",
+    "body": ["[[ \"$1\" =~ $2 ]] && echo \"$3\" || echo \"$4\""]
+  },
+  "if not regex else (inline)": {
+    "prefix": "if",
+    "body": ["[[ \"$1\" =~ $2 ]] && echo \"$3\" || echo \"$4\""]
+  },
+  "if OSTYPE": {
+    "prefix": "if",
+    "body": [
+      "if [[ \"${${OSTYPE}}\" =~ ${1|darwin,linux|}* ]]; then",
+      "\techo \"$2\"",
+      "fi"
+    ]
+  },
+  "if OSTYPE NOT": {
+    "prefix": "if",
+    "body": [
+      "if [[ ! \"${${OSTYPE}}\" =~ ${1|darwin,linux|}* ]]; then",
+      "\techo \"$2\"",
+      "fi"
+    ]
+  },
+  "export env var": {
+    "prefix": "export",
+    "body": ["export $1='$2'"]
+  },
+  "alias": {
+    "prefix": "alias",
+    "body": ["alias $1='$2'"]
+  },
+  "comment (foldable region)": {
+    "prefix": "#c",
+    "body": ["# $1 {", " $2", "# }"]
+  },
+  "comment (gist)": {
+    "prefix": "#g",
+    "body": ["# $1", "# http://$2"]
+  },
+  "case OSTYPE": {
+    "prefix": "case",
+    "body": [
+      "case \"${${OSTYPE}}\" in",
+      "\tlinux*) echo 'linux';;",
+      "\tdarwin*) echo 'darwin';;",
+      "\tcygwin) echo 'POSIX compatibility layer and Linux environment emulation for Windows';;",
+      "\tmsys) echo 'Lightweight shell and GNU utilities compiled for Windows (part of MinGW)';;",
+      "\twin32) echo 'win32';;",
+      "\tfreebsd*) echo 'freebsd';;",
+      "\t*) echo 'Unknown';;",
+      "esac"
+    ]
+  },
+  "XDG": {
+    "prefix": ["$XDG["],
+    "body": [
+      "$${XDG[${1|home,cache,data,autoload,bin,local,lib,opt,share,run,desktop,documents,download,music,pictures,public,templates,videos,work|}]}"
+    ]
+  },
+  "NVIM": {
+    "prefix": ["$NVIM"],
+    "body": ["${{NVIM[${1|home,data,cache,rc,lua,plugin|}]}"]
+  },
+  "ZDOT": {
+    "prefix": ["$ZDOT"],
+    "body": [
+      "$${ZDOT[${1|home,history,history_dir,data,cache,zcompcache,compdump,cache_startup,recent_dirs_file,recent_dirs_max,conf,autoload,opt,lib,share,include,completions,hooks,keybindings,stats_statup_file,stats_benchmark_dir|}]}"
+    ]
+  },
+  "docopt": {
+    "prefix": ["docopt"],
+    "body": [
+      "docopt ${1|get_help_string,get_version_string,get_values,get_eval_array,auto_parse,get_raw_value,print_ARGS|}"
+    ]
+  },
+  "pick": {
+    "prefix": ["pick"],
+    "body": ["pick -f '${1:ichi ni san}' -x ${2:echo} ${3:-m}"]
+  },
+  "puts": {
+    "prefix": ["puts"],
+    "body": [
+      "puts \"${1:message}\" ${2:|--desc,--trace|} ${3:|--green,--blue,--red|} ${4:|--bold,--dim|}"
+    ]
+  },
+  "puts trace": {
+    "prefix": ["puts", "puts trace", "trace"],
+    "body": [
+      "puts \"${1:message}\" --trace ${2:|--green,--blue,--red|} ${3:|--bold,--dim|}"
+    ]
+  },
+  "puts description": {
+    "prefix": ["puts", "puts desc", "desc"],
+    "body": [
+      "puts \"${1:message}\" \"${2:message}\" --desc ${3:|--green,--blue,--red|} ${4:|--bold,--dim|}"
+    ]
+  },
+  "timestamp": {
+    "prefix": ["echo", "puts desc", "timestamp"],
+    "body": ["echo \"$(date +%s) $1 ✔✔\" >> \"${2:timestamp}.log\""]
+  },
+  "Script Templete": {
+    "prefix": "script-template",
+    "body": [
+      "#!/usr/bin/env bash",
+      "",
+      "set -Eeuo pipefail",
+      "",
+      "# Define variables",
+      "readonly dir=\"$(dirname \"$0\")\" ",
+      "",
+      "# Usage or Help message",
+      "usage() {",
+      "  cat <<EOF >&2",
+      "Usage: $(basename \"$0\") OPTION...",
+      "Description:",
+      "Options:",
+      "  -v  Verbose",
+      "EOF",
+      "  exit 1",
+      "}",
+      "",
+      "# Parse options",
+      "verbose=\"\"",
+      "id=\"\"",
+      "debug=",
+      "while getopts h?v:id OPT; do",
+      "  case \"${OPT}\" in",
+      "    h|\\?)",
+      "        usage",
+      "        exit 0 ;;",
+      "    v) verbose=\"${OPTARG}\" ;;",
+      "    i) id=\"${OPTARG}\" ;;",
+      "    d) debug=true ;;",
+      "    *) usage ;;",
+      "  esac",
+      "done",
+      "",
+      "# Define function",
+      "func1() {",
+      "# check params, size, null and exit 1 when needed",
+      "",
+      "# logic for-loop",
+      "  for projectName in \"${projectNames[@]}\"  # array len, both ${#array[*]} and ${#array[@]} ok",
+      "  # more array ${array[@]:position:length}, unset array",
+      "do",
+      "  func2 $projectName ",
+      "  # test experessions, most common, for file(-a, -e, -d, -s) , string (-n, -z), int(-eq, -lt), expr, [[ ]]",
+      "  if [ \"$verbose\" = \"1\" ]; then  ",
+      "  # elif commands; then",
+      "    echo -n . 1>&2",
+      "  else ",
+      "    echo \"xx\"",
+      "  fi",
+      "done",
+      "",
+      "# read files",
+      "# read -t timeout, -p prompt -a array, -n number of characters, -e auto completion, -d,  -s hide, etc.",
+      "# while also support test expr",
+      "  while IFS= read -r -d '' FILE  # IFS default is space(\" \"), IFS=\":\" to change it. ",
+      "do",
+      "    case $FILE in",
+      "        * ) FILENAME=$(basename \"$FILE\")",
+      "            echo \"processing file: $FILENAME \"",
+      "            # handle file",
+      "            ;;",
+      "    esac",
+      "done < <(find \"$DIRECTORY\" -type f -name \"*.yaml\" -print0)",
+      "",
+      "}",
+      "",
+      "# Verify options len",
+      "if [ $# -lt 1 ]; then",
+      "  usage()",
+      "fi",
+      "",
+      "# Invoke cmd directly",
+      "projectNames=$(gcloud projects list | grep name | cut -d' ' -f2)",
+      "",
+      "# Call logic ",
+      "func1 id projectNames",
+      "",
+      "# verify func1 result",
+      "if [ \"$?\" = \"1\" ]; then",
+      "  echo \"func1 failed\"",
+      "  exit 1",
+      "fi",
+      "",
+      "# Next"
+    ]
+  },
+  "forIn": {
+    "prefix": ["for"],
+    "body": [
+      "for ${2:i} in \"\\${${1:array}[@]}\"; do",
+      "\techo \"\\$$2\"",
+      "done$0"
+    ]
+  },
+  "forInRange": {
+    "prefix": ["for"],
+    "body": ["for ${3:i} in {${1:0}..${2:9}}; do", "\techo \"\\$$3\"", "done$0"]
+  },
+  "forInStrings": {
+    "prefix": ["for"],
+    "body": [
+      "for ${4:i} in \"${1:one}\" \"${2:two}\" \"${3:three}\"; do",
+      "\techo \"\\$$4\"",
+      "done$0"
+    ]
+  },
+  "Docopt script": {
+    "prefix": ["bin", "docopt"],
+    "body": [
+      "#!/usr/bin/env bash",
+      "# shellcheck shell=bash",
+      "",
+      "#? ${1:$TM_FILENAME} 0.1.0",
+      "#? License RIT (Robot Institute of Technology)",
+      "#? This is free software: you are free to change and redistribute it.",
+      "#? There is NO WARRANTY, to the extent permitted by law.",
+      "#? This program uses http://docopt.org",
+      "",
+      "##? ${2:Description}",
+      "##?",
+      "##? Usage:",
+      "##?      $1 [ options ]",
+      "##?",
+      "##? Options:",
+      "##?     --version             Show version.",
+      "##?     -h, --help            Show this screen.",
+      "##?",
+      "##? Examples:",
+      "##?      $1 --help",
+      "##?      $1 -v",
+      "",
+      "$1() {",
+      "  if eval \"\\$(\\${DOC_OPTS:?} \"\\$0\" \"\\$@\")\"; then",
+      "    echo '$1: executed successfully'",
+      "  fi",
+      "}",
+      "",
+      "$1 \"\\$@\"$0"
+    ],
+    "description": "Docopt script template"
+  },
+  "Case statement": {
+    "prefix": ["case"],
+    "body": [
+      "case \"${@}\" in",
+      "'') pick --from=\"--version --help\" -x 'f' ;;",
+      "*) puts \"f: No such command: ${@}\" --red ;;",
+      "esac\n$0"
+    ],
+    "description": "Case statement template"
+  },
+  "If docopt statement": {
+    "prefix": ["if", "docopt:if"],
+    "body": [
+      "if [[ ${args['--flag']} == 'true' ]]; then",
+      "\tputs \"f: --flag is 'true'\" --red",
+      "fi$0"
+    ],
+    "description": "If docopt statement template"
+  },
+  "Declare local docopt variable": {
+    "prefix": ["docopt:local", "docopt:var", "local"],
+    "body": ["local ${1:flag}=\\${args['${2:--flag}']}$0"],
+    "description": "Local docopt variable"
+  },
+  "Docopt option": {
+    "prefix": ["docopt:doc:option", "doc:option", "##?"],
+    "body": "##?     -${1:f}, --${2:flag}            ${3:A boolean flag}.$0",
+    "description": "Docopt flag option"
+  },
+  "Docopt option with argument": {
+    "prefix": ["docopt:doc:arg", "doc:arg", "##?"],
+    "body": "##?     -${1:x} <${2:cmd}>, --${3:exec}=<$2>            ${4:Execute a command}.$0",
+    "description": "Docopt flag option with argument"
+  },
+  "Raycast Script Command": {
+    "prefix": [
+      "raycast:script-command",
+      "raycast:command",
+      "rc:script-command",
+      "rc:command"
+    ],
+    "body": [
+      "#!/bin/bash",
+      "",
+      "# Required parameters:",
+      "# @raycast.schemaVersion ${2|1,2,3,4,5|}",
+      "# @raycast.title ${3:My First Script}",
+      "# @raycast.mode ${4|fullOutput,compact,silent,inline|}",
+      "# @raycast.refreshTime ${5|1,2,3,4,5|}${6|d,s,m,h,d|}",
+      "#",
+      "# Optional parameters:",
+      "# @raycast.icon 🤖",
+      "# @raycast.packageName ${6:Raycast Scripts}",
+      "# @raycast.currentDirectoryPath ${7:~}",
+      "# @raycast.needsConfirmation ${8|false,true|}",
+      "# @raycast.argument1 { \"type\": \"text\", \"placeholder\": \"from city\", \"percentEncoded\": true }",
+      "# @raycast.argument2 { \"type\": \"text\", \"placeholder\": \"to city\", \"optional\": true, \"percentEncoded\": true, \"secure\": false }",
+      "#",
+      "# Documentation:",
+      "# @raycast.description ${1:Command summary}",
+      "# @raycast.author ${9:roalcantara}",
+      "# @raycast.authorURL ${10:http://github.com/roalcantara}",
+      "",
+      "echo \"Hello World arg1: \\$1 arg2: \\$2\"",
+      ""
+    ],
+    "description": "Raycast Script Command"
+  },
+  "Raycast Script Command with 2 arguments": {
+    "prefix": [
+      "raycast:script-command:args",
+      "raycast:command:args",
+      "rc:script-command:args",
+      "rc:command:args"
+    ],
+    "body": [
+      "#!/bin/bash",
+      "",
+      "# Required parameters:",
+      "# @raycast.schemaVersion 1",
+      "# @raycast.title Search Flights",
+      "# @raycast.mode silent",
+      "",
+      "# Optional parameters:",
+      "# @raycast.icon 🛩",
+      "# @raycast.packageName Web Searches",
+      "# @raycast.argument1 { \"type\": \"text\", \"placeholder\": \"from city\", \"percentEncoded\": true }",
+      "# @raycast.argument2 { \"type\": \"text\", \"placeholder\": \"to city\", \"optional\": true, \"percentEncoded\": true, \"secure\": false }",
+      "",
+      "open \"https://google.com/search?q=flights%20from%20$1%20to%20$2\""
+    ],
+    "description": "Raycast Script Command google search with 2 arguments"
+  },
+  "Array Assoc": {
+    "prefix": ["array:assoc"],
+    "body": [
+      "declare -A ${1:FG}=(",
+      "  [black]='30'",
+      "  [red]='31'",
+      "  [green]='32'",
+      "  [yellow]='33'",
+      "  [blue]='34'",
+      "  [magenta]='35'",
+      "  [cyan]='36'",
+      "  [white]='97'",
+      "  [none]='\\033[0m'",
+      ")"
+    ],
+    "description": "Array Associative"
+  },
+  "echo Array keys": {
+    "prefix": ["array:keys:echo", "echo"],
+    "body": ["echo \"${${1:ARR}[@]}\""],
+    "description": "echo Array keys"
+  },
+  "for each value": {
+    "prefix": ["array:values", "for"],
+    "body": ["for val in \"${${1:ARR}[@]}\"; do echo \\$val; done"],
+    "description": "for each value in Array"
+  },
+  "for each key": {
+    "prefix": ["array:keys:for", "for"],
+    "body": "for key in \"${!${1:ARR}[@]}\"; do echo \\$key; done",
+    "description": "for each key in Array"
+  },
+  "for each key value": {
+    "prefix": ["array:keys:for", "for"],
+    "body": "for key in \"${!${1:ARR}[@]}\"; do echo \"\\$key => ${${1:ARR}[\\$key]}\"; done",
+    "description": "for each key value in Array"
+  },
+  "if key exists in Array": {
+    "prefix": ["array:keys:if", "if"],
+    "body": "if [ ${${1:ARR}[${2:key}]+_} ]; then echo \"Found\"; else echo \"Not found\"; fi",
+    "description": "if key exists in Array"
+  },
+  "unset key from array": {
+    "prefix": [
+      "array:key:unset",
+      "array:key:delete",
+      "array:key:remove",
+      "unset"
+    ],
+    "body": "unset ${1:ARR}[${2:key}]",
+    "description": "Delete key from array"
+  },
+  "unset array": {
+    "prefix": ["array:unset", "array:delete", "array:remove", "unset"],
+    "body": "unset ${1:ARR}",
+    "description": "Delete the entire array"
+  }
+}

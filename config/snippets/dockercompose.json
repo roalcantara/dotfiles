@@ -1,0 +1,26 @@
+{
+	"Short Description": {
+    "prefix": ["yacht:dockercompose:dashboard", "yacht:dashboard", "yacht"],
+    "body": [
+      "version: '3'",
+      "services:",
+      "  yacht:",
+      "    container_name: yacht",
+      "    restart: unless-stopped",
+      "    ports:",
+      "      - 8888:8000",
+      "    volumes:",
+      "      - yacht:/config",
+      "      - /var/run/docker.sock:/var/run/docker.sock",
+      "      - /Users/$USER/Development/Docker/compose:/compose",
+      "    environment:",
+      "      - PUID=0",
+      "      - PGID=0",
+      "      - COMPOSE_DIR=/compose",
+      "    image: selfhostedpro/yacht",
+      "volumes:",
+      "  yacht:"
+    ],
+    "description": "Yacht: A container management UI docker compose"
+  }
+}

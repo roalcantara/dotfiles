@@ -1,0 +1,691 @@
+{
+  "Add ESLint": {
+    "prefix": "ch:eslint",
+    "body": [
+      "chore(codestyle): Add eslint and dependencies",
+      "",
+      "And Setup minimal rules",
+      "",
+      "More:",
+      "- https://npmjs.com/package/eslint-config-airbnb-typescript",
+      "- https://npmjs.com/package/eslint-plugin-import"
+    ],
+    "description": "Commit add Eslint"
+  },
+  "Bootstrap a new project": {
+    "prefix": "new:hope",
+    "body": ["chore(bootstrap): A new hope..", "", "Bootstrap a new project."],
+    "description": "Commit add Eslint"
+  },
+  "Migrate to gradle 7.5": {
+    "prefix": "gradle:migrate",
+    "body": [
+      "build(gradle): Migrate to gradle 7.5",
+      "",
+      "By running `./gradlew wrapper --gradle-version=7.5`.$0"
+    ],
+    "description": "Migrate to gradle 7.5"
+  },
+  "Add ktlint": {
+    "prefix": "ch:ktlint",
+    "body": [
+      "chore(codestyle): Apply ktlint rules",
+      "",
+      "By running `ktlint --android applyToIDEAProject -y`",
+      "An anti-bikeshedding Kotlin linter with built-in formatter.",
+      "",
+      "More: ktlint.github.io$0"
+    ],
+    "description": "Add and apply ktlint"
+  },
+  "Add Code-scanner dependency": {
+    "prefix": "ch:android:codescan",
+    "body": [
+      "chore(deps): Add code-scanner",
+      "",
+      "Code scanner library for Android, based on ZXing.",
+      "",
+      "More:",
+      "- https://github.com/yuriy-budiyev/code-scanner",
+      "- https://youtu.be/drH63NpSWyk",
+      ""
+    ],
+    "description": "Add Code-scanner dependency (Android)"
+  },
+  "Add editorconfig": {
+    "prefix": "ch:editorconfig",
+    "body": [
+      "chore(codestyle): Add editorconfig",
+      "",
+      "Which helps maintain consistent coding styles for multiple developers",
+      "working on the same project across various editors and IDEs.",
+      "",
+      "More: https://editorconfig.org"
+    ],
+    "description": "Commit editorconfig file"
+  },
+  "Add Semantic Release": {
+    "prefix": "ch:semantic-release",
+    "body": [
+      "chore(ci): Add semantic-release",
+      "",
+      "Which uses semantic-release to automate the whole workflow including:",
+      "",
+      "- Determining the next version number;",
+      "- Generating the release notes;",
+      "- Generating a release on GitHub;",
+      "",
+      "More: https://semantic-release.gitbook.io/semantic-release/usage/workflow-configuration"
+    ],
+    "description": "Commit Semantic Release"
+  },
+  "Add Jest and Dependencies": {
+    "prefix": "ch:jest",
+    "body": [
+      "chore(tests): Add jest and dependencies",
+      "",
+      "A delightful JavaScript Testing Framework with a focus on simplicity.",
+      "",
+      "Also:",
+      " - Run `npx ts-jest config:init` to setup jest properly.",
+      "",
+      "More:",
+      "- https://jestjs.io",
+      "- https://kulshekhar.github.io/ts-jest"
+    ],
+    "description": "Commit Jest and Dependencies"
+  },
+  "Add Prettier": {
+    "prefix": "ch:prettier",
+    "body": [
+      "chore(codestyle): Add prettier config and package",
+      "",
+      "An opinionated code formatter.",
+      "",
+      "More:",
+      "- https://prettier.io",
+      "- https://npmjs.com/package/prettier"
+    ],
+    "description": "Commit Prettier"
+  },
+  "Add sequelize": {
+    "prefix": "ft:sequelize",
+    "body": [
+      "feat(db): Add sequelize",
+      "",
+      "Also:",
+      "- Configure sqlite",
+      "",
+      "More:",
+      "- https://sequelize.org/",
+      "- https://stackabuse.com/using-sequelize-js-and-sqlite-in-an-express-js-app",
+      "- https://nimamovic9.medium.com/memory-storage-for-test-environment-with-fastify-sequelize-and-sqlite-1aaab68a1c31"
+    ],
+    "description": "Commit sequelize"
+  },
+  "Add typescript": {
+    "prefix": "ch:typescript",
+    "body": [
+      "chore(deps): Add typescript and dependencies",
+      "",
+      "A strongly typed programming language that builds on JavaScript.",
+      "",
+      "More:",
+      "- https://typescriptlang.org",
+      "- https://khalilstemmler.com/blogs/typescript/node-starter-project",
+      "- https://metachris.com/2021/04/starting-a-typescript-project-in-2021",
+      "- https://dev.to/avalon-lab/setting-up-a-typescript-project-in-2021-4cfg",
+      "- https://dev.to/craigaholliday/how-to-start-a-typescript-project-2021-2h6l"
+    ],
+    "description": "Add typescript"
+  },
+  "Add conventional commits": {
+    "prefix": "ch:precommit",
+    "body": [
+      "chore(codestyle): Set up conventional commits",
+      "",
+      "A git commit message linter that checks commit messages style.",
+      "",
+      "Also:",
+      "- Add links to README;",
+      "- Add directions about the time spent on the assignment to the README;",
+      "- Add conventional commits badge;",
+      "- Add commitlint confit file;",
+      "- Add precommit config file;",
+      "",
+      "More:",
+      "- https://pre-commit.com",
+      "- https://conventionalcommits.org",
+      "- https://jorisroovers.com/gitlint/latest/commit_hooks",
+      ""
+    ],
+    "description": "Add conventional commits"
+  },
+  "Add gitlint and pre-commit hook": {
+    "prefix": "ch:gitlint",
+    "body": [
+      "chore(codestyle): Add precommit and gitlint config files",
+      "",
+      "Precommit: Multi-language pre-commit hooks.",
+      "GitLint: A linter that checks commit messages style.",
+      "",
+      "Also:",
+      "- Add commitlint confit file;",
+      "- Add precommit config file;",
+      "",
+      "More:",
+      "- https://pre-commit.com",
+      "- https://jorisroovers.com/gitlint/latest/commit_hooks",
+      ""
+    ],
+    "description": "Add conventional commits"
+  },
+  "Add .envrc": {
+    "prefix": "ch:ignore:envrc",
+    "body": [
+      "chore(git): Ignore .envrc direnv file",
+      "",
+      "A bash code that is going to be loaded by direnv.",
+      "",
+      "More:",
+      "- http://direnv.net",
+      "- https://asdf-vm.com"
+    ],
+    "description": "Add .envrc"
+  },
+  "Add vercel": {
+    "prefix": "ci:vercel",
+    "body": [
+      "ci(deployment): Add workflow to dxeploy on vercel",
+      "",
+      "After each release.",
+      "",
+      "More:",
+      "- https://github.com/marketplace/actions/vercel-action",
+      "- https://dev.to/chuddyjoachim/nextjs-ci-cd-on-vercel-with-github-actions-7g7"
+    ],
+    "description": "Add vercel"
+  },
+  "Bump node": {
+    "prefix": "ch:bump:node",
+    "body": [
+      "chore(env): Bump nodejs to latest LTS",
+      "",
+      "Which is recommended for most users.",
+      "",
+      "More: https://nodejs.org"
+    ],
+    "description": "Bump node"
+  },
+  "Add ci/verify workfow": {
+    "prefix": "ci:verify",
+    "body": [
+      "ci(verify): Add verify workflow",
+      "",
+      "Which checks the code before releasing it.",
+      "",
+      "closes #"
+    ],
+    "description": "Add ci/verify workfow"
+  },
+  "Add ci/preview workfow": {
+    "prefix": "ci:preview",
+    "body": [
+      "ci(preview): Add preview workflows",
+      "",
+      "Which is triggered for pull requests to the main branch",
+      "after the verify workflow success.",
+      "",
+      "More:",
+      "- http://t.ly/CRqj",
+      "",
+      "closes #"
+    ],
+    "description": "Add ci/preview workfow"
+  },
+  "Add nx react app": {
+    "prefix": "nx:add:react",
+    "body": [
+      "chore(apps): Add ${1:app} react app",
+      "",
+      "By running `nx generate @nrwl/react:app $1`",
+      "",
+      "More: ",
+      "- https://nx.dev/react/overview",
+      "- https://nx.dev/react-tutorial/01-create-application"
+    ],
+    "description": "Add nx react app"
+  },
+  "Add makefile": {
+    "prefix": "ch:make",
+    "body": [
+      "chore(deps): Add Makefile",
+      "",
+      "More: https://gnu.org/software/make/manual/make.html"
+    ],
+    "description": "Add makefile"
+  },
+  "Create Nx workspace react": {
+    "prefix": "nx:create:react",
+    "body": [
+      "chore(bootstrap): Initialize Nx workspace",
+      "",
+      "Smart, Fast and Extensible Build System.",
+      "",
+      "By running `npx create-nx-workspace@latest --preset=react`",
+      "",
+      "Which adds:",
+      "  - /apps/front react project;",
+      "  - eslint dependencies;",
+      "  - prettier dependencies;",
+      "  - jest dependencies and tests;",
+      "  - cypress dependencies and tests;",
+      "",
+      "More:",
+      "  - https://nx.dev",
+      "  - https://nx.dev/react-tutorial/01-create-application"
+    ],
+    "description": "Create Nx workspace react"
+  },
+  "Add .envrc and .tool-versions": {
+    "prefix": "ch:asdf:direnv",
+    "body": [
+      "chore(deps): Add asdf/direnv files",
+      "",
+      "Add .tool-versions, which declares the project dependencies locally;",
+      "Add .envrc, which will be loaded by direnv.",
+      "",
+      "More:",
+      "- http://direnv.net",
+      "- https://asdf-vm.com/manage/configuration.html#tool-versions"
+    ],
+    "description": "Add .envrc and .tool-versions"
+  },
+  "Add standard-readme and contributor-covenant": {
+    "prefix": "add:stand-readme-and-contrib-covenant",
+    "body": [
+      "docs(README): Add standard-readme badge",
+      "",
+      "A standard style for README files.",
+      "",
+      "Also:",
+      "- Adjusts README followig the standard-readme style;",
+      "- Add contributor-covenant badge;",
+      "",
+      "More:",
+      "- https://contributor-covenant.org ",
+      "- https://github.com/RichardLitt/standard-readme"
+    ],
+    "description": "Add standard-readme and contributor-covenant"
+  },
+  "Add @tsconfig/recommended": {
+    "prefix": "add:tsconfig:recommended",
+    "body": [
+      "chore(deps): Add @tsconfig/recommended",
+      "",
+      "Hosts TSConfigs to extend in a TypeScript app,",
+      "tuned to a particular runtime environment.",
+      "",
+      "More: https://github.com/tsconfig/bases",
+      ""
+    ],
+    "description": "Add @tsconfig/recommended"
+  },
+  "Add data-access library": {
+    "prefix": "add:lib:data",
+    "body": [
+      "feat(libs): Add data-access library",
+      "",
+      "Which contains objects shared among the projects.",
+      "",
+      "More: https://nx.dev/structure/library-types#data-access-libraries",
+      ""
+    ],
+    "description": "Add data-access library"
+  },
+  "Bump nx": {
+    "prefix": "ch:bump:nx",
+    "body": [
+      "chore(deps): Bump nx to latest",
+      "",
+      "Which a few bug fixes.",
+      "",
+      "- Update schemas with missing changes from previous versions",
+      "- Add missing swc/core-linux-* as optional dependencies",
+      "",
+      "More: https://github.com/nrwl/nx/releases/tag/13.7.3",
+      ""
+    ],
+    "description": "Bump nx"
+  },
+  "Bump dependencies": {
+    "prefix": "ch:bump",
+    "body": [
+      "chore(deps): Bump dependencies to latest",
+      "",
+      "To keep uptodate with the latest fixes and features."
+    ],
+    "description": "Bump dependencies"
+  },
+  "Add preact app": {
+    "prefix": "ch:add:preact",
+    "body": [
+      "chore(bootstrap): Initialize preact project",
+      "",
+      "Fast 3kB alternative to React with the same modern API.",
+      "",
+      "By running `npx preact-cli create typescript my-app`",
+      "",
+      "More:",
+      "  - https://preactjs.com",
+      ""
+    ],
+    "description": "Add preact app"
+  },
+  "Add spotless": {
+    "prefix": "ch:spotless",
+    "body": [
+      "chore(codestyle): Add spotless",
+      "",
+      "A linter to keep code spotless.",
+      "",
+      "More:",
+      "- https://github.com/diffplug/spotless",
+      "- https://plugins.jetbrains.com/plugin/18321-spotless-gradle",
+      "- https://marketplace.visualstudio.com/items?itemName=richardwillis.vscode-spotless-gradle"
+    ],
+    "description": "Add spotless dependency"
+  },
+  "Bump gradle": {
+    "prefix": "build:gradle:bump",
+    "body": [
+      "build(gradle): Bump to ${1:7.4.2}",
+      "",
+      "By running `./gradlew wrapper --gradle-version=$1`",
+      "To keep uptodate with the latest fixes and features.",
+      "",
+      "More:",
+      "- https://docs.gradle.org/$1/userguide/userguide.html",
+      "- https://docs.gradle.org/$1/release-notes.html"
+    ],
+    "description": "Bump gradle"
+  },
+  "Create vite project": {
+    "prefix": "ch:create:vite",
+    "body": [
+      "chore(vite): Scaffold ${1|vanilla,vanilla-ts,vue,vue-ts,react,react-ts,react-swc,react-swc-ts,preact,preact-ts,lit,lit-ts,svelte,svelte-ts|} project",
+      "",
+      "`${2|pnpm,yarn|} create vite app --template $1`",
+      "",
+      "More: https://vitejs.dev/guide/#scaffolding-your-first-vite-project"
+    ],
+    "description": "Create vite project"
+  },
+  "Create vite project: vanilla": {
+    "prefix": "ch:create:vite:vanilla",
+    "body": [
+      "chore(vite): Scaffold vanilla project",
+      "",
+      "`pnpm create vite app --template vanilla`",
+      "",
+      "More: https://vitejs.dev/guide/#scaffolding-your-first-vite-project"
+    ],
+    "description": "Create vite project: vanilla"
+  },
+  "Create vite project: vanilla-ts": {
+    "prefix": "ch:create:vite:vanilla-ts",
+    "body": [
+      "chore(vite): Scaffold vanilla-ts project",
+      "",
+      "`pnpm create vite app --template vanilla-ts`",
+      "",
+      "More: https://vitejs.dev/guide/#scaffolding-your-first-vite-project"
+    ],
+    "description": "Create vite project: vanilla-ts"
+  },
+  "Create vite project: vue": {
+    "prefix": "ch:create:vite:vue",
+    "body": [
+      "chore(vite): Scaffold vue project",
+      "",
+      "`pnpm create vite app --template vue`",
+      "",
+      "More: https://vitejs.dev/guide/#scaffolding-your-first-vite-project"
+    ],
+    "description": "Create vite project: vue"
+  },
+  "Create vite project: vue-ts": {
+    "prefix": "ch:create:vite:vue-ts",
+    "body": [
+      "chore(vite): Scaffold vue-ts project",
+      "",
+      "`pnpm create vite app --template vue-ts`",
+      "",
+      "More: https://vitejs.dev/guide/#scaffolding-your-first-vite-project"
+    ],
+    "description": "Create vite project: vue-ts"
+  },
+  "Create vite project: react": {
+    "prefix": "ch:create:vite:react",
+    "body": [
+      "chore(vite): Scaffold react project",
+      "",
+      "`pnpm create vite app --template react`",
+      "",
+      "More: https://vitejs.dev/guide/#scaffolding-your-first-vite-project"
+    ],
+    "description": "Create vite project: react"
+  },
+  "Create vite project: react-ts": {
+    "prefix": "ch:create:vite:react-ts",
+    "body": [
+      "chore(vite): Scaffold react-ts project",
+      "",
+      "`pnpm create vite app --template react-ts`",
+      "",
+      "More: https://vitejs.dev/guide/#scaffolding-your-first-vite-project"
+    ],
+    "description": "Create vite project: react-ts"
+  },
+  "Create vite project: react-swc": {
+    "prefix": "ch:create:vite:react-swc",
+    "body": [
+      "chore(vite): Scaffold react-swc project",
+      "",
+      "`pnpm create vite app --template react-swc`",
+      "",
+      "More: https://vitejs.dev/guide/#scaffolding-your-first-vite-project"
+    ],
+    "description": "Create vite project: react-swc"
+  },
+  "Create vite project: react-swc-ts": {
+    "prefix": "ch:create:vite:react-swc-ts",
+    "body": [
+      "chore(vite): Scaffold react-swc-ts project",
+      "",
+      "`pnpm create vite app --template react-swc-ts`",
+      "",
+      "More: https://vitejs.dev/guide/#scaffolding-your-first-vite-project"
+    ],
+    "description": "Create vite project: react-swc-ts"
+  },
+  "Create vite project: preact": {
+    "prefix": "ch:create:vite:preact",
+    "body": [
+      "chore(vite): Scaffold preact project",
+      "",
+      "`pnpm create vite app --template preact`",
+      "",
+      "More: https://vitejs.dev/guide/#scaffolding-your-first-vite-project"
+    ],
+    "description": "Create vite project: preact"
+  },
+  "Create vite project: preact-ts": {
+    "prefix": "ch:create:vite:preact-ts",
+    "body": [
+      "chore(vite): Scaffold preact-ts project",
+      "",
+      "`pnpm create vite app --template preact-ts`",
+      "",
+      "More: https://vitejs.dev/guide/#scaffolding-your-first-vite-project"
+    ],
+    "description": "Create vite project: preact-ts"
+  },
+  "Create vite project: lit": {
+    "prefix": "ch:create:vite:lit",
+    "body": [
+      "chore(vite): Scaffold lit project",
+      "",
+      "`pnpm create vite app --template lit`",
+      "",
+      "More: https://vitejs.dev/guide/#scaffolding-your-first-vite-project"
+    ],
+    "description": "Create vite project: lit"
+  },
+  "Create vite project: lit-ts": {
+    "prefix": "ch:create:vite:lit-ts",
+    "body": [
+      "chore(vite): Scaffold lit-ts project",
+      "",
+      "`pnpm create vite app --template lit-ts`",
+      "",
+      "More: https://vitejs.dev/guide/#scaffolding-your-first-vite-project"
+    ],
+    "description": "Create vite project: lit-ts"
+  },
+  "Create vite project: svelte": {
+    "prefix": "ch:create:vite:svelte",
+    "body": [
+      "chore(vite): Scaffold svelte project",
+      "",
+      "`pnpm create vite app --template svelte`",
+      "",
+      "More: https://vitejs.dev/guide/#scaffolding-your-first-vite-project"
+    ],
+    "description": "Create vite project: svelte"
+  },
+  "Create vite project: svelte-ts": {
+    "prefix": "ch:create:vite:svelte-ts",
+    "body": [
+      "chore(vite): Scaffold svelte-ts project",
+      "",
+      "`pnpm create vite app --template svelte-ts`",
+      "",
+      "More: https://vitejs.dev/guide/#scaffolding-your-first-vite-project"
+    ],
+    "description": "Create vite project: svelte-ts"
+  },
+  "Add readme, contributor-covenant, .editorconfig & pre-commit": {
+    "prefix": "docs:readme:pre-commit:editorconfig",
+    "body": [
+      "docs(README): Add standard-readme badge",
+      "",
+      "A standard style for README files.",
+      "",
+      "Also:",
+      "- Adjusts README followig the standard-readme style;",
+      "- Add contributor-covenant badge;",
+      "- Add .editorconfig;",
+      "- Setup pre-commit;",
+      "",
+      "More:",
+      "- https://github.com/RichardLitt/standard-readme",
+      "- https://contributor-covenant.org",
+      "- https://editorconfig.org",
+      "- https://pre-commit.com/#usage"
+    ],
+    "description": "Add readme, contributor-covenant, .editorconfig & pre-commit"
+  },
+  "Create Raycast Extension Project": {
+    "prefix": "ch:raycast:create",
+    "body": [
+      "chore(bootstrap): Create Raycast Extension Project",
+      "",
+      "More: https://developers.raycast.com/basics/create-your-first-extension"
+    ],
+    "description": "Create Raycast Extension project"
+  },
+  "Add build workflow (Nx)": {
+    "prefix": "prefix",
+    "body": [
+      "ci(build): Add build workflow",
+      "",
+      "Which checks the code for each opened Pull Request.",
+      "",
+      "More: https://nx.dev/recipes/ci/monorepo-ci-github-actions"
+    ],
+    "description": "Add build workflow (Nx)"
+  },
+  "Setup Eslint settings (Nx)": {
+    "prefix": ["chore(codestyle)", "codestyle:eslint"],
+    "body": [
+      "chore(codestyle): Setup eslint",
+      "",
+      "Setup basic rules",
+      "",
+      "More:",
+      "- https://nx.dev/recipes/tips-n-tricks/eslint#configuring-eslint-with-typescript"
+    ],
+    "description": "Setup Eslint settings (Nx)"
+  },
+  "Setup lighthouse": {
+    "prefix": ["lighthouse", "lhci"],
+    "body": [
+      "ci(build): Add lighthouse step",
+      "",
+      "Open-source, automated tool for improving the quality of web pages.",
+      "",
+      "Also:",
+      "- Add and autorizes the LighthouseCI App;",
+      "- Copy the token provided on the authorization confirmation page;",
+      "- Add the token to build environment as LHCI_GITHUB_APP_TOKEN secret;",
+      "",
+      "More:",
+      "- https://github.com/apps/lighthouse-ci",
+      "- https://developers.google.com/web/tools/lighthouse"
+    ],
+    "description": "Setup lighthouse"
+  },
+  "Fix Page Description (lighthouse/SEO)": {
+    "prefix": ["lhci:seo:desc"],
+    "body": [
+      "fix(lighthouse/SEO): Add page description",
+      "",
+      "Which ensures that pages are optimized for search engine",
+      "results ranking.",
+      "",
+      "More: https://developer.chrome.com/docs/lighthouse/seo"
+    ],
+    "description": "Fix Page Description (lighthouse/SEO)"
+  },
+  "Add robots.txt file (lighthouse/SEO)": {
+    "prefix": "lhci:seo:robots",
+    "body": [
+      "fix(lighthouse/SEO): Add robots.txt file",
+      "",
+      "Which tells search engines which of your site's pages they can crawl",
+      "",
+      "More: ",
+      "  - https://robotstxt.org/robotstxt.html",
+      "  - https://developer.chrome.com/docs/lighthouse/seo/invalid-robots-txt"
+    ],
+    "description": "Add robots.txt file (lighthouse/SEO)"
+  },
+  "Add mise": {
+    "prefix": ["mise", "ch:mise"],
+    "body": [
+      "chore(config): Add mise and configuration",
+      "",
+      "A tool that manages installations of programming language runtimes and",
+      "other tools for local development.",
+      "",
+      "Also:",
+      "- Introduce a new configuration file to specify the Node version as LTS.",
+      "",
+      "More:",
+      "- https://mise.jdx.dev",
+      "- https://mise.jdx.dev/configuration.html"
+    ],
+    "description": "Add mise"
+  }
+}

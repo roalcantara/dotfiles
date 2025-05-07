@@ -1,0 +1,270 @@
+{
+  "flake8: In-line Ignoring Errors": {
+    "prefix": [
+      "flake8:ignore",
+      "flake8:noqa",
+      "ignore",
+      "# noqa"
+    ],
+    "body": [
+      "# noqa: ${1|E123,E731,E741,F123,F401,F402,F403,F404,F405,F811,F812,F821,F822,F823,F831,F841|} $0"
+    ],
+    "description": "flake8: In-line Ignoring Errors"
+  },
+  "flake8: In-line Ignoring Errors (Multiple Rules)": {
+    "prefix": [
+      "flake8:ignore",
+      "flake8:noqa",
+      "ignore",
+      "# noqa"
+    ],
+    "body": [
+      "# noqa: ${1|E123,E731,E741,F123,F401,F402,F403,F404,F405,F811,F812,F821,F822,F823,F831,F841|},${2|E123,E731,E741,F123,F401,F402,F403,F404,F405,F811,F812,F821,F822,F823,F831,F841|} $0"
+    ],
+    "description": "flake8: In-line Ignoring Errors (Multiple Rules)"
+  },
+  "flake8: Ignore whole file": {
+    "prefix": [
+      "flake8:ignore",
+      "flake8:noqa",
+      "ignore",
+      "# noqa"
+    ],
+    "body": [
+      "# flake8:noqa $0"
+    ],
+    "description": "flake8: Ignore whole file"
+  },
+  "BigO functions": {
+    "prefix": [
+      "bigO",
+      "O("
+    ],
+    "body": "${1|O(c),O(n),O(n^2),O(n^3),O(2^n),O(n*m),O(log n),O(n log n)|}",
+    "description": "BigO functions"
+  },
+  "Time Complexity": {
+    "prefix": [
+      "bigO:time_complexity",
+      "time_complexity"
+    ],
+    "body": "time_complexity: ${1|O(c),O(n),O(n^2),O(n^3),O(2^n),O(n*m),O(log n),O(n log n)|}",
+    "description": "Time Complexity"
+  },
+  "Space Complexity": {
+    "prefix": [
+      "bigO:space_complexity",
+      "space_complexity"
+    ],
+    "body": "space_complexity: ${1|O(c),O(n),O(n^2),O(n^3),O(2^n),O(n*m),O(log n),O(n log n)|}",
+    "description": "Space Complexity"
+  },
+  "sliding window O(n)": {
+    "prefix": "algo:sliding_window",
+    "body": [
+      "def sliding_window(temperatures):",
+      "    res = [0] * len(temperatures)",
+      "    stack = []  # pair: [temp, index]",
+      "",
+      "    for i, t in enumerate(temperatures):",
+      "        while stack and t > stack[-1][0]:",
+      "            stackT, stackInd = stack.pop()",
+      "            res[stackInd] = i - stackInd",
+      "        stack.append((t, i))",
+      "    return res"
+    ],
+    "description": "Algo: sliding window O(n)"
+  },
+  "binary search O(log n)": {
+    "prefix": [
+      "algo:binary_search",
+      "algo:bin"
+    ],
+    "body": [
+      "def binary_search(nums, target): # [1, 2, 3, 4, 5], 6",
+      "    l, r = 0, len(nums) - 1",
+      "",
+      "    while l <= r:  # noqa: E741",
+      "        m = (l + r) // 2",
+      "        if target < nums[m]:",
+      "            r = m - 1",
+      "        elif target > nums[m]:",
+      "            l = m + 1  # noqa: E741",
+      "        else:",
+      "            print(m)",
+      "            break"
+    ],
+    "description": "Algo: binary search O(log n)"
+  },
+  "binary search balanced BST O(log n)": {
+    "prefix": [
+      "algo:binary_search:bst",
+      "algo:bin:bst"
+    ],
+    "body": [
+      "# Binary Search on balanced BST (Binary Search Tree)",
+      "def search(root, target):",
+      "    if not root:",
+      "        return False",
+      "    if target < root.val:",
+      "        return search(root.left, target)",
+      "    elif target > root.val:",
+      "        return search(root.right, target)",
+      "    else:",
+      "        return True"
+    ],
+    "description": "Algo: binary search balanced BST O(log n)"
+  },
+  "heap sort: O(n log n)": {
+    "prefix": [
+      "algo:heap:sort"
+    ],
+    "body": [
+      "def heap_sort(nums): # [1, 2, 3, 4, 5]",
+      "    import heapq",
+      "",
+      "    heapq.heapify(nums)  # O(n)",
+      "    while nums:",
+      "        heapq.heappop(nums)  # O(logn)"
+    ],
+    "description": "Algo: heap sort: O(n log n)"
+  },
+  "all possible combinations rec: O( 2^n )": {
+    "prefix": [
+      "algo:all:combinations:recursively"
+    ],
+    "body": [
+      "# Recursion, tree height n, two branches",
+      "def get_all_possible_combinations_recursively(i, nums):",
+      "    if i == len(nums):",
+      "        return 0",
+      "    branch1 = get_all_possible_combinations_recursively(i + 1, nums)",
+      "    branch2 = get_all_possible_combinations_recursively(i + 2, nums)",
+      "    print(branch1, branch2)"
+    ],
+    "description": "Algo: all possible combinations rec: O( 2^n )"
+  },
+  "fatorial: O(n!)": {
+    "prefix": [
+      "algo:fatorial"
+    ],
+    "body": [
+      "# Fatorial",
+      "def fatorial(n): # 5! = 5 * 4 * 3 * 2 * 1 = 120",
+      "    if n == 1:",
+      "        return 1",
+      "    else:",
+      "        return n * fatorial(n - 1)"
+    ],
+    "description": "Algo: fatorial: O(n!)"
+  },
+  "find the maximum value from an unsorted array: O(N)": {
+    "prefix": [
+      "algo:find:max"
+    ],
+    "body": [
+      "# find the maximum value from an unsorted array",
+      "# time_complexity: O(c) + O(n) + O(1) + O(1) => O(n)",
+      "# space_complexity: O(1)",
+      "def find_max(nums):",
+      "    largest = nums[0]  # O(1)",
+      "",
+      "    for num in nums[1:]:  # O(n)",
+      "        if num > largest:  # O(1)",
+      "            largest = num  # O(1)",
+      "",
+      "    return largest"
+    ],
+    "description": "Algo: find the maximum value from an unsorted array: O(N)"
+  },
+  "For Loop Starting at Index N": {
+    "prefix": [
+      "array:for:from:index",
+      "for"
+    ],
+    "body": [
+      "for ${3:val} in ${1:ARR}[${2|1,2,3,4,5,6,7,8,9|}:]:",
+      "    if $3 > 0:",
+      "       return $3"
+    ],
+    "description": "For Loop Starting at Index N"
+  },
+  "Basic leetcode schema": {
+    "prefix": "leetcode",
+    "body": [
+      "# https://leetcode.com/problems/${TM_FILENAME_BASE/[\\_]/-/g}",
+      "",
+      "\"\"\"",
+      "# ${TM_FILENAME_BASE/[\\_]/ /g}",
+      "",
+      "## CONSTRAINTS",
+      "",
+      "    *",
+      "",
+      "## HOW-TO",
+      "",
+      "    1.",
+      "",
+      "## COMPLEXITY",
+      "",
+      "    - **Time Complexity**:",
+      "    - **Space Complexity**:",
+      "\"\"\"",
+      "",
+      "from typing import List",
+      "",
+      "",
+      "def ${TM_FILENAME_BASE}(input: List[int]):",
+      "    return False",
+      "",
+      "",
+      "assert ${TM_FILENAME_BASE}([])",
+      "assert not ${TM_FILENAME_BASE}([])",
+      ""
+    ],
+    "description": "leetcode simple schema"
+  },
+"Short Description": {
+    "prefix": "prefix",
+    "body": [
+      "# https://leetcode.com/problems/min-stack",
+      "",
+      "\"\"\"",
+      "# min-stack",
+      "",
+      "## CONSTRAINTS",
+      "",
+      "    *",
+      "",
+      "## HOW-TO",
+      "",
+      "    1.",
+      "",
+      "## COMPLEXITY",
+      "",
+      "    - **Time Complexity**:",
+      "    - **Space Complexity**:",
+      "\"\"\"",
+      "",
+      "from typing import List",
+      "",
+      "",
+      "def min_stack(input: List[int]):",
+      "    return False",
+      "",
+      "",
+      "assert min_stack([1, 2, 3, 1])",
+      "assert not min_stack([1, 2, 3, 4])",
+      ""
+    ],
+    "description": "Long Description"
+  }  
+  "Is Alphanumeric": {
+    "prefix": "is_alphanum",
+    "body": [
+      "def is_alphanum(char):",
+      "    return (\"a\" <= char <= \"z\") or (\"A\" <= char <= \"Z\") or (\"0\" <= char <= \"9\")"
+    ],
+    "description": "Check if char is alphanumeric"
+  }  
+}

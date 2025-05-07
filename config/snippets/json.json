@@ -1,0 +1,417 @@
+{
+  "Add eslint scripts": {
+    "prefix": "scripts:eslint",
+    "body": [
+      ",",
+      "\"lint\": \"eslint\",",
+      "\"lint:fix\": \"npm run lint -- --fix\""
+    ],
+    "description": "Add eslint scripts"
+  },
+  "Kotlin VSCode settings.json": {
+    "prefix": "kotlin",
+    "body": [
+      "\"kotlin.languageServer.path\": \"/usr/local/bin/kotlin-language-server\",",
+      "\"java.configuration.updateBuildConfiguration\": \"automatic\",",
+      "\"java.test.config\": [",
+      "  {",
+      "    \"name\": \"JavaTestConfig\",",
+      "    \"workingDirectory\": \"${workspaceFolder}\",",
+      "    \"args\": [\"-c\", \"br.com\"],",
+      "    \"vmargs\": [\"-Xmx512M\"],",
+      "    \"env\": { \"key\": \"value\" }",
+      "  }",
+      "],"
+    ],
+    "description": "Kotlin VSCode settings.json"
+  },
+  "Simple package.json": {
+    "prefix": ["npm", "package"],
+    "body": [
+      "{",
+      "  \"name\": \"${1:${TM_DIRECTORY/^.+[\\/\\\\]+(.*)$/$1/}}\",",
+      "  \"version\": \"0.1.0\",",
+      "  \"license\": \"MIT\",",
+      "  \"main\": \"index.ts\",",
+      "  \"decription\": \"A simple package\",",
+      "  \"private\": true,",
+      "  \"author\": \"@roalcantara <rogerio.alcantara@gmail.com>\",",
+      "  \"scripts\": {",
+      "    \"clear\": \"rm -rf dist tmp coverage && npx nx clear-cache\",",
+      "    \"purge\": \"npm run clear && rm -rf node-modules\",",
+      "    \"reset\": \"npm run purge && rm package-lock.json && npm install && npm audit fix\"",
+      "  },",
+      "  \"engines\": {",
+      "    \"node\": \">= ${2:16.15.0}\"",
+      "  },",
+      "  \"repository\": {",
+      "    \"type\": \"git\",",
+      "    \"url\": \"git+ssh://git@github.com/roalcantara/$1.git\"",
+      "  },",
+      "  \"bugs\": {",
+      "    \"url\": \"https://github.com/roalcantara/$1/issues\"",
+      "  },",
+      "  \"homepage\": \"https://github.com/roalcantara/$1#readme\"",
+      "}",
+      "$0"
+    ],
+    "description": "Simple package.json (npm init)"
+  },
+  "package.json repository": {
+    "prefix": ["package:repo"],
+    "body": [
+      "  \"repository\": {",
+      "    \"type\": \"git\",",
+      "    \"url\": \"git+ssh://git@github.com/roalcantara/${1:${TM_DIRECTORY/^.+[\\/\\\\]+(.*)$/$1/}}.git\"",
+      "  },"
+    ],
+    "description": "package.json repository"
+  },
+  "package.json author & repo": {
+    "prefix": ["package:repo:author"],
+    "body": [
+      "  \"author\": \"@roalcantara <rogerio.alcantara@gmail.com>\",",
+      "  \"repository\": {",
+      "    \"type\": \"git\",",
+      "    \"url\": \"git+ssh://git@github.com/roalcantara/${1:${TM_DIRECTORY/^.+[\\/\\\\]+(.*)$/$1/}}.git\"",
+      "  },"
+    ],
+    "description": "package.json author & repo"
+  },
+  "package.json > engines": {
+    "prefix": ["package:engines"],
+    "body": [
+      "  \"engines\": {",
+      "    \"node\": \">= ${1:16.15.0}\"",
+      "    \"${2|pnpm,npm|}\": \">= ${3:9.5.1}\"",
+      "  },"
+    ],
+    "description": "package.json > engines"
+  },
+  "Add Nx script section": {
+    "prefix": ["nx:scripts"],
+    "body": [
+      "  \"scripts\": {",
+      "    \"ng\": \"nx\",",
+      "    \"postinstall\": \"node ./tools/decorate-angular-cli.js && ngcc --properties es2015 browser module main\",",
+      "    \"start\": \"nx serve\",",
+      "    \"build\": \"nx build\",",
+      "    \"test\": \"nx test\",",
+      "    \"clear\": \"rm -rf dist tmp coverage && npx nx clear-cache\",",
+      "    \"purge\": \"npm run clear && rm -rf node-modules\",",
+      "    \"reset\": \"npm run purge && rm package-lock.json && npm install && npm audit fix\",",
+      "    \"e2e\": \"nx e2e\",",
+      "    \"lint\": \"nx workspace-lint && nx lint\",",
+      "    \"test:all\": \"npx nx run-many --all --target=test --parallel\",",
+      "    \"lint:all\": \"nx workspace-lint && npx nx run-many --all --target=lint --parallel\",",
+      "    \"e2e:all\": \"npx nx run-many --all --target=e2e --parallel\",",
+      "    \"affected:apps\": \"nx affected:apps\",",
+      "    \"affected:libs\": \"nx affected:libs\",",
+      "    \"affected:build\": \"nx affected:build\",",
+      "    \"affected:e2e\": \"nx affected:e2e\",",
+      "    \"affected:test\": \"nx affected:test\",",
+      "    \"affected:lint\": \"nx affected:lint\",",
+      "    \"affected:dep-graph\": \"nx affected:dep-graph\",",
+      "    \"affected\": \"nx affected\",",
+      "    \"format\": \"nx format:write\",",
+      "    \"format:write\": \"nx format:write\",",
+      "    \"format:check\": \"nx format:check\",",
+      "    \"update\": \"nx migrate latest\",",
+      "    \"dep-graph\": \"nx dep-graph\",",
+      "    \"help\": \"nx help\"",
+      "  },"
+    ],
+    "description": "Add Nx script section"
+  },
+  "Snippets: [VsCode] Replace the first . with _": {
+    "prefix": ["snip:vsc:replace:dot", "vsc:replace:dot"],
+    "body": "\"$${${1|TM_FILENAME,TM_FILENAME_BASE,TM_SELECTED_TEXT,TM_CURRENT_LINE,TM_CURRENT_WORD,TM_LINE_INDEX,TM_LINE_NUMBER,TM_DIRECTORY,TM_FILEPATH,RELATIVE_FILEPATH,CLIPBOARD,WORKSPACE_NAME,WORKSPACE_FOLDER,CURSOR_INDEX,CURSOR_NUMBER,CURRENT_YEAR,CURRENT_YEAR_SHORT,CURRENT_MONTH,CURRENT_MONTH_NAME,CURRENT_MONTH_NAME_SHORT,CURRENT_DATE,CURRENT_DAY_NAME,CURRENT_DAY_NAME_SHORT,CURRENT_HOUR,CURRENT_MINUTE,CURRENT_SECOND,CURRENT_SECONDS_UNIX,RANDOM,RANDOM_HEX,UUID,BLOCK_COMMENT_START,BLOCK_COMMENT_END,LINE_COMMENT|}/[\\\\.]/_/}\"",
+    "description": "Snippets [VsCode] Replace the first . with _"
+  },
+  "Snippets [VsCode] Replace each . or - with _": {
+    "prefix": ["snip:vsc:replace:dot-or-dash", "vsc:replace:dot-or-dash"],
+    "body": "$${${1|TM_FILENAME,TM_FILENAME_BASE,TM_SELECTED_TEXT,TM_CURRENT_LINE,TM_CURRENT_WORD,TM_LINE_INDEX,TM_LINE_NUMBER,TM_DIRECTORY,TM_FILEPATH,RELATIVE_FILEPATH,CLIPBOARD,WORKSPACE_NAME,WORKSPACE_FOLDER,CURSOR_INDEX,CURSOR_NUMBER,CURRENT_YEAR,CURRENT_YEAR_SHORT,CURRENT_MONTH,CURRENT_MONTH_NAME,CURRENT_MONTH_NAME_SHORT,CURRENT_DATE,CURRENT_DAY_NAME,CURRENT_DAY_NAME_SHORT,CURRENT_HOUR,CURRENT_MINUTE,CURRENT_SECOND,CURRENT_SECONDS_UNIX,RANDOM,RANDOM_HEX,UUID,BLOCK_COMMENT_START,BLOCK_COMMENT_END,LINE_COMMENT|}/[\\\\.-]/_/g}\"",
+    "description": "Snippets [VsCode] Replace each . or - with _"
+  },
+  "Snippets [VsCode] Transform VsCode VAR case": {
+    "prefix": ["snip:vsc:transform:case", "vsc:transform:case"],
+    "body": "$${${1|TM_FILENAME,TM_FILENAME_BASE,TM_SELECTED_TEXT,TM_CURRENT_LINE,TM_CURRENT_WORD,TM_LINE_INDEX,TM_LINE_NUMBER,TM_DIRECTORY,TM_FILEPATH,RELATIVE_FILEPATH,CLIPBOARD,WORKSPACE_NAME,WORKSPACE_FOLDER,CURSOR_INDEX,CURSOR_NUMBER,CURRENT_YEAR,CURRENT_YEAR_SHORT,CURRENT_MONTH,CURRENT_MONTH_NAME,CURRENT_MONTH_NAME_SHORT,CURRENT_DATE,CURRENT_DAY_NAME,CURRENT_DAY_NAME_SHORT,CURRENT_HOUR,CURRENT_MINUTE,CURRENT_SECOND,CURRENT_SECONDS_UNIX,RANDOM,RANDOM_HEX,UUID,BLOCK_COMMENT_START,BLOCK_COMMENT_END,LINE_COMMENT|}/(.*)/${1:/${2|upcase,downcase,capitalize,camelcase,pascalcase}]}$$}/}\"",
+    "description": "Snippets [VsCode] Transform case"
+  },
+  "Snippets [VsCode] Transform case": {
+    "prefix": ["snip:transform:case", "transform:case"],
+    "body": "$${1:/${2|upcase,downcase,capitalize,camelcase,pascalcase|}}$0\"",
+    "description": "Snippets [VsCode] Transform case"
+  },
+  "Snippets [VsCode] Remove non-alphanumeric characters from VsCode Var": {
+    "prefix": ["snip:vsc:remove:non-alphanums", "remove:vsc:non-alphanums"],
+    "body": "$${${1|TM_FILENAME,TM_FILENAME_BASE,TM_SELECTED_TEXT,TM_CURRENT_LINE,TM_CURRENT_WORD,TM_LINE_INDEX,TM_LINE_NUMBER,TM_DIRECTORY,TM_FILEPATH,RELATIVE_FILEPATH,CLIPBOARD,WORKSPACE_NAME,WORKSPACE_FOLDER,CURSOR_INDEX,CURSOR_NUMBER,CURRENT_YEAR,CURRENT_YEAR_SHORT,CURRENT_MONTH,CURRENT_MONTH_NAME,CURRENT_MONTH_NAME_SHORT,CURRENT_DATE,CURRENT_DAY_NAME,CURRENT_DAY_NAME_SHORT,CURRENT_HOUR,CURRENT_MINUTE,CURRENT_SECOND,CURRENT_SECONDS_UNIX,RANDOM,RANDOM_HEX,UUID,BLOCK_COMMENT_START,BLOCK_COMMENT_END,LINE_COMMENT|}/[^0-9^a-z]//gi}\"",
+    "description": "Snippets [VsCode] Remove non-alphanumeric characters"
+  },
+  "Snippets [VsCode] Remove non-alphanumeric characters": {
+    "prefix": ["snip:vsc:remove:non-alphanums", "remove:vsc:non-alphanums"],
+    "body": "$${${1:term}/[^0-9^a-z]//gi}\"",
+    "description": "Snippets [VsCode] Remove non-alphanumeric characters"
+  },
+  "Snippets [VsCode] Placeholders choices": {
+    "prefix": ["snip:choices", "choices"],
+    "body": "$${1|${1:one},${2:two},${3:three}|}",
+    "description": "Snippets [VsCode] Placeholders choices"
+  },
+  "Snippets: [VsCode] Vars": {
+    "prefix": ["snip:vsc:vars", "vsc:vars"],
+    "body": "$${1|TM_FILENAME,TM_FILENAME_BASE,TM_SELECTED_TEXT,TM_CURRENT_LINE,TM_CURRENT_WORD,TM_LINE_INDEX,TM_LINE_NUMBER,TM_DIRECTORY,TM_FILEPATH,RELATIVE_FILEPATH,CLIPBOARD,WORKSPACE_NAME,WORKSPACE_FOLDER,CURSOR_INDEX,CURSOR_NUMBER,CURRENT_YEAR,CURRENT_YEAR_SHORT,CURRENT_MONTH,CURRENT_MONTH_NAME,CURRENT_MONTH_NAME_SHORT,CURRENT_DATE,CURRENT_DAY_NAME,CURRENT_DAY_NAME_SHORT,CURRENT_HOUR,CURRENT_MINUTE,CURRENT_SECOND,CURRENT_SECONDS_UNIX,RANDOM,RANDOM_HEX,UUID,BLOCK_COMMENT_START,BLOCK_COMMENT_END,LINE_COMMENT|}",
+    "description": "Snippets: [VsCode] Vars"
+  },
+  "Snippets: [VsCode] Use TM_SELECTED_TEXT": {
+    "prefix": ["snip:vsc:selected", "vsc:selected"],
+    "body": "$$TM_SELECTED_TEXT",
+    "description": "Snippets: [VsCode] The currently selected text or the empty string"
+  },
+  "Snippets: [VsCode] Use TM_CURRENT_LINE": {
+    "prefix": ["snip:vsc:current_line", "vsc:current_line"],
+    "body": "$$TM_CURRENT_LINE",
+    "description": "Snippets: [VsCode] The contents of the current line"
+  },
+  "Snippets: [VsCode] Use TM_CURRENT_WORD": {
+    "prefix": ["snip:vsc:current_word", "vsc:current_word"],
+    "body": "$$TM_CURRENT_WORD",
+    "description": "Snippets: [VsCode] The contents of the word under cursor or the empty string"
+  },
+  "Snippets: [VsCode] Use TM_LINE_INDEX": {
+    "prefix": ["snip:vsc:line_index", "vsc:line_index"],
+    "body": "$$TM_LINE_INDEX",
+    "description": "Snippets: [VsCode] The zero-index based line number"
+  },
+  "Snippets: [VsCode] Use TM_LINE_NUMBER": {
+    "prefix": ["snip:vsc:line_number", "vsc:line_number"],
+    "body": "$$TM_LINE_NUMBER",
+    "description": "Snippets: [VsCode] The one-index based line number"
+  },
+  "Snippets: [VsCode] Use TM_FILENAME": {
+    "prefix": ["snip:vsc:filename", "vsc:filename"],
+    "body": "$$TM_FILENAME",
+    "description": "Snippets: [VsCode] The filename of the current document"
+  },
+  "Snippets: [VsCode] Use TM_FILENAME_BASE": {
+    "prefix": ["snip:vsc:filename_base", "vsc:filename_base"],
+    "body": "$$TM_FILENAME_BASE",
+    "description": "Snippets: [VsCode] The filename of the current document without its extensions"
+  },
+  "Snippets: [VsCode] Use TM_DIRECTORY": {
+    "prefix": ["snip:vsc:directory", "vsc:directory"],
+    "body": "$$TM_DIRECTORY",
+    "description": "Snippets: [VsCode] The directory of the current document"
+  },
+  "Snippets: [VsCode] Use TM_FILEPATH": {
+    "prefix": ["snip:vsc:filepath", "vsc:filepath"],
+    "body": "$$TM_FILEPATH",
+    "description": "Snippets: [VsCode] The full file path of the current document"
+  },
+  "Snippets: [VsCode] Use RELATIVE_FILEPATH": {
+    "prefix": ["snip:vsc:ative_filepath", "vsc:ative_filepath"],
+    "body": "$$RELATIVE_FILEPATH",
+    "description": "Snippets: [VsCode] The relative (to the opened workspace or folder) file path of the current document"
+  },
+  "Snippets: [VsCode] Use CLIPBOARD": {
+    "prefix": ["snip:vsc:pboard", "vsc:pboard"],
+    "body": "$$CLIPBOARD",
+    "description": "Snippets: [VsCode] The contents of your clipboard"
+  },
+  "Snippets: [VsCode] Use WORKSPACE_NAME": {
+    "prefix": ["snip:vsc:kspace_name", "vsc:kspace_name"],
+    "body": "$$WORKSPACE_NAME",
+    "description": "Snippets: [VsCode] The name of the opened workspace or folder"
+  },
+  "Snippets: [VsCode] Use WORKSPACE_FOLDER": {
+    "prefix": ["snip:vsc:kspace_folder", "vsc:kspace_folder"],
+    "body": "$$WORKSPACE_FOLDER",
+    "description": "Snippets: [VsCode] The path of the opened workspace or folder"
+  },
+  "Snippets: [VsCode] Use CURSOR_INDEX": {
+    "prefix": ["snip:vsc:sor_index", "vsc:sor_index"],
+    "body": "$$CURSOR_INDEX",
+    "description": "Snippets: [VsCode] The zero-index based cursor number"
+  },
+  "Snippets: [VsCode] Use CURSOR_NUMBER": {
+    "prefix": ["snip:vsc:sor_number", "vsc:sor_number"],
+    "body": "$$CURSOR_NUMBER",
+    "description": "Snippets: [VsCode] The one-index based cursor number"
+  },
+  "Snippets: [VsCode] Use CURRENT_YEAR": {
+    "prefix": ["snip:vsc:rent_year", "vsc:rent_year"],
+    "body": "$$CURRENT_YEAR",
+    "description": "Snippets: [VsCode] The current year"
+  },
+  "Snippets: [VsCode] Use CURRENT_YEAR_SHORT": {
+    "prefix": ["snip:vsc:rent_year_short", "vsc:rent_year_short"],
+    "body": "$$CURRENT_YEAR_SHORT",
+    "description": "Snippets: [VsCode] The current year's last two digits"
+  },
+  "Snippets: [VsCode] Use CURRENT_MONTH": {
+    "prefix": ["snip:vsc:rent_month", "vsc:rent_month"],
+    "body": "$$CURRENT_MONTH",
+    "description": "Snippets: [VsCode] The month as two digits (example '02')"
+  },
+  "Snippets: [VsCode] Use CURRENT_MONTH_NAME": {
+    "prefix": ["snip:vsc:rent_month_name", "vsc:rent_month_name"],
+    "body": "$$CURRENT_MONTH_NAME",
+    "description": "Snippets: [VsCode] The full name of the month (example 'July')"
+  },
+  "Snippets: [VsCode] Use CURRENT_MONTH_NAME_SHORT": {
+    "prefix": ["snip:vsc:rent_month_name_short", "vsc:rent_month_name_short"],
+    "body": "$$CURRENT_MONTH_NAME_SHORT",
+    "description": "Snippets: [VsCode] The short name of the month (example 'Jul')"
+  },
+  "Snippets: [VsCode] Use CURRENT_DATE": {
+    "prefix": ["snip:vsc:rent_date", "vsc:rent_date"],
+    "body": "$$CURRENT_DATE",
+    "description": "Snippets: [VsCode] The day of the month as two digits (example '08')"
+  },
+  "Snippets: [VsCode] Use CURRENT_DAY_NAME": {
+    "prefix": ["snip:vsc:rent_day_name", "vsc:rent_day_name"],
+    "body": "$$CURRENT_DAY_NAME",
+    "description": "Snippets: [VsCode] The name of day (example 'Monday')"
+  },
+  "Snippets: [VsCode] Use CURRENT_DAY_NAME_SHORT": {
+    "prefix": ["snip:vsc:rent_day_name_short", "vsc:rent_day_name_short"],
+    "body": "$$CURRENT_DAY_NAME_SHORT",
+    "description": "Snippets: [VsCode] The short name of the day (example 'Mon')"
+  },
+  "Snippets: [VsCode] Use CURRENT_HOUR": {
+    "prefix": ["snip:vsc:rent_hour", "vsc:rent_hour"],
+    "body": "$$CURRENT_HOUR",
+    "description": "Snippets: [VsCode] The current hour in 24-hour clock format"
+  },
+  "Snippets: [VsCode] Use CURRENT_MINUTE": {
+    "prefix": ["snip:vsc:rent_minute", "vsc:rent_minute"],
+    "body": "$$CURRENT_MINUTE",
+    "description": "Snippets: [VsCode] The current minute as two digits"
+  },
+  "Snippets: [VsCode] Use CURRENT_SECOND": {
+    "prefix": ["snip:vsc:rent_second", "vsc:rent_second"],
+    "body": "$$CURRENT_SECOND",
+    "description": "Snippets: [VsCode] The current second as two digits"
+  },
+  "Snippets: [VsCode] Use CURRENT_SECONDS_UNIX": {
+    "prefix": ["snip:vsc:rent_seconds_unix", "vsc:rent_seconds_unix"],
+    "body": "$$CURRENT_SECONDS_UNIX",
+    "description": "Snippets: [VsCode] The number of seconds since the Unix epoch"
+  },
+  "Snippets: [VsCode] Use RANDOM": {
+    "prefix": ["snip:vsc:dom", "vsc:dom"],
+    "body": "$$RANDOM",
+    "description": "Snippets: [VsCode] 6 random Base-10 digits"
+  },
+  "Snippets: [VsCode] Use RANDOM_HEX": {
+    "prefix": ["snip:vsc:dom_hex", "vsc:dom_hex"],
+    "body": "$$RANDOM_HEX",
+    "description": "Snippets: [VsCode] 6 random Base-16 digits"
+  },
+  "Snippets: [VsCode] Use UUID": {
+    "prefix": ["snip:vsc:d", "vsc:d"],
+    "body": "$$UUID",
+    "description": "Snippets: [VsCode] A Version 4 UUID"
+  },
+  "Snippets: [VsCode] Use BLOCK_COMMENT_START": {
+    "prefix": ["snip:vsc:ck_comment_start", "vsc:ck_comment_start"],
+    "body": "$$BLOCK_COMMENT_START",
+    "description": "Snippets: [VsCode] Example output: in PHP /* or in HTML <!--"
+  },
+  "Snippets: [VsCode] Use BLOCK_COMMENT_END": {
+    "prefix": ["snip:vsc:block_comment_end", "vsc:block_comment_end"],
+    "body": "$$BLOCK_COMMENT_END",
+    "description": "Example output: in PHP */ or in HTML -->"
+  },
+  "Snippets: [VsCode] Use LINE_COMMENT": {
+    "prefix": ["snip:vsc:line_comment", "vsc:line_comment"],
+    "body": "$$LINE_COMMENT",
+    "description": "Snippets: [VsCode] Example output: in PHP //"
+  },
+  "Snippets: [VsCode] Snippet template": {
+    "prefix": ["snip:vsc", "vsc:snip", "snip"],
+    "body": [
+      ",",
+      "\"${1:description}\": {",
+      "\t\"prefix\": [\"${2:prefix}\"",
+      "\t\"body\": \"${3:body}\",",
+      "\t\"description\": \"${4:description}\"",
+      "}"
+    ],
+    "description": "Snippets: [VsCode] Snippet template"
+  },
+  ".eslintrc.json": {
+    "prefix": ["eslintrc"],
+    "body": [
+      "{",
+      "  \"root\": true,",
+      "  \"extends\": [\"eslint:recommended\", \"plugin:eslint-plugin/recommended\", \"plugin:node/recommended\"],",
+      "  \"env\": {",
+      "    \"node\": true",
+      "  },",
+      "  \"ignorePatterns\": [\"dist/\"],",
+      "  \"rules\": {",
+      "    \"prefer-arrow-callback\": 1,",
+      "    \"arrow-body-style\": [\"error\", \"as-needed\", { \"requireReturnForObjectLiteral\": false }],",
+      "    \"camelcase\": \"error\",",
+      "    \"curly\": [\"error\", \"multi\"],",
+      "    \"func-style\": [\"error\", \"expression\"],",
+      "    \"no-lonely-if\": \"error\",",
+      "    \"no-unneeded-ternary\": \"error\",",
+      "    \"prefer-const\": \"error\",",
+      "    \"prefer-object-spread\": \"error\",",
+      "    \"prefer-promise-reject-errors\": [\"error\", { \"allowEmptyReject\": true }],",
+      "    \"object-shorthand\": \"error\",",
+      "    \"no-magic-numbers\": [\"error\", { \"ignoreDefaultValues\": true, \"ignore\": [-1, 0, 1] }],",
+      "    \"no-extra-label\": \"error\",",
+      "    \"no-console\": 0,",
+      "    \"consistent-return\": 0,",
+      "    \"object-curly-newline\": 0,",
+      "    \"lines-between-class-members\": 0,",
+      "    \"implicit-arrow-linebreak\": 0,",
+      "    \"quotes\": [",
+      "      \"error\",",
+      "      \"single\",",
+      "      {",
+      "        \"avoidEscape\": true,",
+      "        \"allowTemplateLiterals\": true",
+      "      }",
+      "    ]",
+      "  }",
+      "}",
+      ""
+    ],
+    "description": ".eslintrc.json"
+  },
+  "Raycast .eslintrc.json": {
+    "prefix": ["eslintrc:raycast"],
+    "body": [
+      "{",
+      "  \"root\": true,",
+      "  \"extends\": [\"@raycast\"],",
+      "  \"rules\": {",
+      "    \"prefer-arrow-callback\": 1,",
+      "    \"arrow-body-style\": [\"error\", \"as-needed\", { \"requireReturnForObjectLiteral\": false }],",
+      "    \"camelcase\": \"error\",",
+      "    \"curly\": [\"error\", \"multi\"],",
+      "    \"func-style\": [\"error\", \"expression\"],",
+      "    \"no-lonely-if\": \"error\",",
+      "    \"no-unneeded-ternary\": \"error\",",
+      "    \"prefer-const\": \"error\",",
+      "    \"prefer-object-spread\": \"error\",",
+      "    \"prefer-promise-reject-errors\": [\"error\", { \"allowEmptyReject\": true }],",
+      "    \"object-shorthand\": \"error\",",
+      "    \"no-magic-numbers\": [\"error\", { \"ignoreDefaultValues\": true, \"ignore\": [-1, 0, 1] }],",
+      "    \"no-extra-label\": \"error\",",
+      "    \"no-console\": 0,",
+      "    \"consistent-return\": 0,",
+      "    \"object-curly-newline\": 0,",
+      "    \"lines-between-class-members\": 0,",
+      "    \"implicit-arrow-linebreak\": 0",
+      "  }",
+      "}",
+      ""
+    ],
+    "description": "Raycast .eslintrc.json"
+  }
+}

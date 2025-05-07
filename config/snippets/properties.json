@@ -1,0 +1,23 @@
+{
+  "Flake8: Config file (setup.cfg)": {
+    "prefix": [
+      "flake8:config",
+      "flake8:cfg",
+      "flake8:setup.cfg"
+    ],
+    "body": [
+      "[flake8]",
+      "ignore = D203,E266,E402,E241",
+      "exclude =",
+      "  .git,",
+      "  __pycache__,",
+      "  docs/source/conf.py,",
+      "  old,",
+      "  build,",
+      "  dist",
+      "max-complexity = 10",
+      ""
+    ],
+    "description": "Flake8: Config file (setup.cfg)"
+  }
+}

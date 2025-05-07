@@ -1,0 +1,96 @@
+{
+  "class with ctor": {
+    "prefix": ["class"],
+    "body": [
+      "class ${1:Class}",
+      "\tnew: =>",
+      "\t\t@${2:item}s = {}",
+      "",
+      "\tadd_${2:item}: (name) =>",
+      "\t\tif @${2:item}[name]",
+      "\t\t\t@${2:item}[name] += 1",
+      "\t\telse",
+      "\t\t@${2:item}[name] = 1"
+    ],
+    "description": "Add class with ctor"
+  },
+  "plugin scaffold": {
+    "prefix": ["plugin", "init"],
+    "body": ["init =()->", "", "{ :init }"],
+    "description": "Add plugin scaffold"
+  },
+  "import module": {
+    "prefix": ["require", "import"],
+    "body": ["import $1 from require '${2}'"],
+    "description": "Import module"
+  },
+  "import module (config)": {
+    "prefix": ["require", "import"],
+    "body": [
+      "import $1 from require '${2|config|config/theme|config/autocmd|config/mapping|config/options|config/plugins|config/source|}'"
+    ],
+    "description": "Import config module"
+  },
+  "import module (util)": {
+    "prefix": ["require", "import"],
+    "body": [
+      "import $1 from require '${2|utils/lodash|utils/packer|utils/path|utils/setup|utils/sys|utils/path|}'"
+    ],
+    "description": "Import util module"
+  },
+  "require module and execute function": {
+    "prefix": ["require", "import"],
+    "body": ["require('${1:module}').${2:function}($3)"],
+    "description": "Require module and execute function"
+  },
+  "require module": {
+    "prefix": ["require", "import"],
+    "body": ["$1 require '$2'"],
+    "description": "Require module"
+  },
+  "import [protected mode} or return": {
+    "prefix": ["require", "import", "pcall"],
+    "body": [
+      "status, ${1:lib} = pcall(require, ${2:lib})",
+      "return unless status"
+    ],
+    "description": "Import module in protected mode or return"
+  },
+  "import [protected mode} and if": {
+    "prefix": ["require", "import", "pcall"],
+    "body": [
+      "status, ${1:lib} = pcall(require, ${2:lib})",
+      "if status and lib",
+      "\t$3"
+    ],
+    "description": "Import module in protected mode with if"
+  },
+  "Print message": {
+    "prefix": ["print", "echo"],
+    "body": ["print \"$1\" ;"],
+    "description": "Print message"
+  },
+  "Printf message": {
+    "prefix": ["cons", "echo", "printf"],
+    "body": ["printf \"%s %s\", \"$1\" \"$2\" ;"],
+    "description": [
+      "Formats and prints arguments:",
+      "\tprintf [-v var] format [arguments]"
+    ]
+  },
+  "Debug log level 1 (DEBUG)": {
+    "prefix": ["log", "puts", "printf", "print", "echo", "debug"],
+    "body": ["print \"[${1:DEBUG}] -> '${2:message}'\";"],
+    "description": ["Add debug log"]
+  },
+  "Debug log level 2 (WARN)": {
+    "prefix": ["log", "puts", "printf", "print", "echo", "debug"],
+    "body": ["print \"[${1:WARN}] ---> '${2:message}'\";"],
+    "description": ["Add debug log"]
+  },
+  "Debug log level 3 (ALERT)": {
+    "prefix": ["log", "puts", "printf", "print", "echo", "debug"],
+    "body": ["print \"[${1:ALERT}] ------> '${2:message}'\";"],
+    "description": ["Add debug log"]
+  }
+}

@@ -1,0 +1,269 @@
+{
+  "Add debug module": {
+    "prefix": ["log", "debug", "info"],
+    "body": [
+      "- name: (DEBUG) ${1:message}",
+      "\tansible.builtin.debug:",
+      "\t\tmsg: ${0:message}"
+    ],
+    "description": "Add debug module"
+  },
+  "Iterating over hard-coded list": {
+    "prefix": ["loop-list"],
+    "body": [
+      "- name: ${0:Add several users}",
+      "\tansible.builtin.user:",
+      "\t\tname: \"{{ ${1:var} }}\"",
+      "\t\tstate: present",
+      "\t\tgroups: \"wheel\"",
+      "\tloop:",
+      "\t\t- ${2:testuser1}",
+      "\t\t- ${3:testuser1}",
+      "\tloop_control:",
+      "\t\tloop_var: _${1}"
+    ],
+    "description": "Iterating over hard-coded list"
+  },
+  "Iterating over a var list": {
+    "prefix": ["loop-var"],
+    "body": [
+      "- name: ${0:Add several users}",
+      "\tansible.builtin.user:",
+      "\t\tname: \"{{ ${1:var} }}\"",
+      "\t\tstate: present",
+      "\t\tgroups: \"wheel\"",
+      "\tloop: \"{{ somelist }}\"",
+      "\tloop_control:",
+      "\t\tloop_var: _${1}"
+    ],
+    "description": "Iterating over a var list"
+  },
+  "Yum from list var": {
+    "prefix": ["loop-var"],
+    "body": [
+      "- name: ${0:Add package}",
+      "\tansible.builtin.yum:",
+      "\t\tname: \"{{ ${1:list_of_packages} }}\"",
+      "\t\tstate: present"
+    ],
+    "description": "Yum from list var"
+  },
+  "Iterating over a list of hashes": {
+    "prefix": ["loop-hashs"],
+    "body": [
+      "- name: ${0:Add several users}",
+      "\tansible.builtin.user:",
+      "\t\tname: \"{{ $1.name} }}\"",
+      "\t\tstate: present",
+      "\t\tgroups: \"{{ $1.groups} }}\"",
+      "\tloop:",
+      "\t\t- { name: 'testuser1', groups: 'wheel' }",
+      "\t\t- { name: 'testuser2', groups: 'root' }",
+      "\tloop_control:",
+      "\t\tloop_var: _${1:item}"
+    ],
+    "description": "Iterating over a list of hashes"
+  },
+  "Iterating over nested lists": {
+    "prefix": "nested-list",
+    "body": [
+      "- name: Give users access to multiple databases",
+      "  ${1:community.mysql.mysql_user}:",
+      "    name: \"{{ item[0] }}\"",
+      "    priv: \"{{ item[1] }}.*:ALL\"",
+      "    append_privs: yes",
+      "    password: \"${1:foo}\"",
+      "  loop: \"{{ ['alice', 'bob'] |product(['clientdb', 'employeedb', 'providerdb'])|list }}\""
+    ],
+    "description": "Iterating over nested lists"
+  },
+  "include_task": {
+    "prefix": "task",
+    "body": [
+      "- name: ({{ os }}) Setup user",
+      "  include_tasks: \"{{ os }}.yml\""
+    ],
+    "description": "Include ansible task"
+  },
+  "include_vars": {
+    "prefix": "include_vars",
+    "body": [
+      "- name: ({{ ansible_os_family | lower }}) Include variables",
+      "  ansible.builtin.include_vars: \"{{ ansible_os_family | lower }}.yml\""
+    ],
+    "description": "Include ansible vars"
+  },
+  "Nest two looping tasks using include_tasks": {
+    "prefix": "loop_task_nested",
+    "description": "Nest two looping tasks using include_tasks",
+    "body": [
+      "## main.yml",
+      "- include_tasks: inner.yml",
+      "  loop:",
+      "    - 1",
+      "    - 2",
+      "    - 3",
+      "  loop_control:",
+      "    loop_var: outer_item",
+      "",
+      "## inner.yml",
+      "- name: Print outer and inner items",
+      "  ansible.builtin.debug:",
+      "    msg: \"outer item={{ outer_item }} inner item={{ item }}\"",
+      "  loop:",
+      "    - a",
+      "    - b",
+      "    - c"
+    ]
+  },
+  "with_items": {
+    "prefix": "loop_with_items",
+    "description": "With_items is replaced by loop and the flatten filter.",
+    "body": [
+      "- name: with_items",
+      "  ansible.builtin.debug:",
+      "    msg: \"{{ item }}\"",
+      "  with_items: \"{{ items }}\"",
+      "",
+      "- name: with_items -> loop",
+      "  ansible.builtin.debug:",
+      "    msg: \"{{ item }}\"",
+      "  loop: \"{{ items|flatten(levels=1) }}\""
+    ]
+  },
+  "is replaced by loop, the flatten filter and loop_control.index_var.": {
+    "prefix": "loop_with_indexed_items",
+    "description": "With_indexed_items is replaced by loop, the flatten filter and loop_control.index_var.",
+    "body": [
+      "- name: with_indexed_items",
+      "  ansible.builtin.debug:",
+      "    msg: \"{{ item.0 }} - {{ item.1 }}\"",
+      "  with_indexed_items: \"{{ items }}\"",
+      "",
+      "- name: with_indexed_items -> loop",
+      "  ansible.builtin.debug:",
+      "    msg: \"{{ index }} - {{ item }}\"",
+      "  loop: \"{{ items|flatten(levels=1) }}\"",
+      "  loop_control:",
+      "    index_var: index"
+    ]
+  },
+  "with_flattened is replaced by loop and the flatten filter": {
+    "prefix": "loop-with_flattened",
+    "description": "with_flattened is replaced by loop and the flatten filter",
+    "body": [
+      "- name: with_flattened",
+      "  ansible.builtin.debug:",
+      "    msg: \"{{ item }}\"",
+      "  with_flattened: \"{{ items }}\"",
+      "",
+      "- name: with_flattened -> loop",
+      "  ansible.builtin.debug:",
+      "    msg: \"{{ item }}\"",
+      "  loop: \"{{ items|flatten }}\""
+    ]
+  },
+  "With_together is replaced by loop and the zip filter": {
+    "prefix": "loop-with_together",
+    "description": "With_together is replaced by loop and the zip filter.",
+    "body": [
+      "- name: with_together",
+      "  ansible.builtin.debug:",
+      "    msg: \"{{ item.0 }} - {{ item.1 }}\"",
+      "  with_together:",
+      "    - \"{{ list_one }}\"",
+      "    - \"{{ list_two }}\"",
+      "",
+      "- name: with_together -> loop",
+      "  ansible.builtin.debug:",
+      "    msg: \"{{ item.0 }} - {{ item.1 }}\"",
+      "  loop: \"{{ list_one|zip(list_two)|list }}\""
+    ]
+  },
+  "With_dict can be substituted by loop and either the dictsort or dict2items filters": {
+    "prefix": "loop-with_dict",
+    "description": "With_dict can be substituted by loop and either the dictsort or dict2items filters",
+    "body": [
+      "- name: with_dict",
+      "  ansible.builtin.debug:",
+      "    msg: \"{{ item.key }} - {{ item.value }}\"",
+      "  with_dict: \"{{ dictionary }}\"",
+      "",
+      "- name: with_dict -> loop (option 1)",
+      "  ansible.builtin.debug:",
+      "    msg: \"{{ item.key }} - {{ item.value }}\"",
+      "  loop: \"{{ dictionary|dict2items }}\"",
+      "",
+      "- name: with_dict -> loop (option 2)",
+      "  ansible.builtin.debug:",
+      "    msg: \"{{ item.0 }} - {{ item.1 }}\"",
+      "  loop: \"{{ dictionary|dictsort }}\""
+    ]
+  },
+  "With_sequence is replaced by loop and the range function, and potentially the format filter": {
+    "prefix": "loop-sequence",
+    "description": "With_sequence is replaced by loop and the range function, and potentially the format filter",
+    "body": [
+      "- name: with_sequence",
+      "  ansible.builtin.debug:",
+      "    msg: \"{{ item }}\"",
+      "  with_sequence: start=0 end=4 stride=2 format=testuser%02x",
+      "",
+      "- name: with_sequence -> loop",
+      "  ansible.builtin.debug:",
+      "    msg: \"{{ 'testuser%02x' | format(item) }}\"",
+      "  ## range is exclusive of the end point",
+      "  loop: \"{{ range(0, 4 + 1, 2)|list }}\""
+    ]
+  },
+  "loop-subelements - with_subelements is replaced by loop and the subelements filter": {
+    "prefix": "loop-subelements",
+    "description": "with_subelements is replaced by loop and the subelements filter",
+    "body": [
+      "- name: with_subelements",
+      "  ansible.builtin.debug:",
+      "    msg: \"{{ item.0.name }} - {{ item.1 }}\"",
+      "  with_subelements:",
+      "    - \"{{ users }}\"",
+      "    - mysql.hosts",
+      "",
+      "- name: with_subelements -> loop",
+      "  ansible.builtin.debug:",
+      "    msg: \"{{ item.0.name }} - {{ item.1 }}\"",
+      "  loop: \"{{ users|subelements('mysql.hosts') }}\""
+    ]
+  },
+  "with_nested and with_cartesian are replaced by loop and the product filter": {
+    "prefix": "loop-nested",
+    "description": "with_nested and with_cartesian are replaced by loop and the product filter",
+    "body": [
+      "- name: with_nested",
+      "  ansible.builtin.debug:",
+      "    msg: \"{{ item.0 }} - {{ item.1 }}\"",
+      "  with_nested:",
+      "    - \"{{ list_one }}\"",
+      "    - \"{{ list_two }}\"",
+      "",
+      "- name: with_nested -> loop",
+      "  ansible.builtin.debug:",
+      "    msg: \"{{ item.0 }} - {{ item.1 }}\"",
+      "  loop: \"{{ list_one|product(list_two)|list }}\"",
+      ""
+    ]
+  },
+  "With_random_choice is replaced by just use of the random filter, without need of loop": {
+    "prefix": "loop-random",
+    "description": "With_random_choice is replaced by just use of the random filter, without need of loop",
+    "body": [
+      "- name: with_random_choice",
+      "  ansible.builtin.debug:",
+      "    msg: \"{{ item }}\"",
+      "  with_random_choice: \"{{ my_list }}\"",
+      "",
+      "- name: with_random_choice -> loop (No loop is needed here)",
+      "  ansible.builtin.debug:",
+      "    msg: \"{{ my_list|random }}\"",
+      "  tags: random"
+    ]
+  }
+}

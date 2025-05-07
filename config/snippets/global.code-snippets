@@ -1,0 +1,457 @@
+{
+  // Place your global snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and
+  // description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope
+  // is left empty or omitted, the snippet gets applied to all languages. The prefix is what is
+  // used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+  // $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders.
+  // Placeholders with the same ids are connected.
+  // Example:
+  "Print to console": {
+    "scope": "javascript,typescript",
+    "prefix": "log",
+    "body": ["console.log('$1');", "$2"],
+    "description": "Log output to console"
+  },
+  "CheatSheet": {
+    "prefix": ["cheat", "ch"],
+    "body": [
+      "---",
+      "syntax: markdown",
+      "tags: [ $1, ${2:tag} ]",
+      "version: $3",
+      "---",
+      "",
+      "# $1",
+      "",
+      "${4:description}",
+      "",
+      "## Installation",
+      "",
+      "```${7|sh,zsh,bash,markdown,yml,go,js,ts,json,htm,apache,cmake,css,csv,erb,http,java,less,make,python,rust,scss,sql,rb,vim,vue,xml|}",
+      "${5|brew install,npm install,${6:command}|}",
+      "```",
+      "",
+      "## Usage",
+      "",
+      "Run $1",
+      "",
+      "\t`$1`",
+      "${0}",
+      "",
+      "## References",
+      "",
+      "- [$9][0]",
+      "",
+      "[0]: http://${8:url} \"${9:title}\"",
+      "",
+      "<!-- vi: set ft=markdown -->"
+    ],
+    "description": "Add CheatSheet Template"
+  },
+  "Add Cheat Header": {
+    "prefix": ["ch", "ch:header"],
+    "body": [
+      "---",
+      "syntax: ${1|markdown,sh,zsh,bash,yml,go,js,ts,json,htm,apache,cmake,css,csv,erb,http,java,less,make,python,rust,scss,sql,rb,vim,vue,xml|}",
+      "tags: [${2:term}, ${3:tag}]",
+      "${4:version: v0.1.0}",
+      "---",
+      "${0}"
+    ],
+    "description": "Add Cheat Header"
+  },
+  "AddFtMarkdown": {
+    "prefix": ["vi:ft:md", "ft:md"],
+    "body": ["<!-- vi: set ft=markdown: -->"],
+    "description": "Add ft=markdown comment"
+  },
+  "AddFt": {
+    "prefix": ["vi:ft:md", "ft:md"],
+    "body": [
+      "<!-- vi: set ft=${1|sh,zsh,bash,markdown,yml,go,js,ts,json,htm,apache,cmake,css,csv,erb,http,java,less,make,python,rust,scss,sql,rb,vim,vue,xml|}: -->"
+    ],
+    "description": "Add vi ft comment"
+  },
+  "Add Keybord Unicode Symbol": {
+    "prefix": ["::key", "::keyboard"],
+    "body": ["${1|^,⇧,❖,⌘,⎇,⌥,✦,◆,⇪,↵,⌫,⌦,↹,⎀,␣,⇱,⇲,←,↑,↓,→,⎋|}"],
+    "description": "Add keyboard unicode symbols"
+  },
+  "Add Emoji: Smileys": {
+    "prefix": ["::em:smilly", "::smilly"],
+    "body": [
+      "${1|😅,😂,🤔,😖,😭,🤯,😳,😥,😓,😬,🤤,😋,🤨,🧐,🤓,😎,😀,😆,🤣,🥲,☺️,😊,😇,🙂,🙃,😉,😌,😍,🥰,😘,😗,😙,😚,,😛,😝,😜,🤪,🥸,🤩,🥳,😏,😒,😞,😔,😟,😕,🙁,☹️,😣,😫,😩,🥺,😢,😤,😠,😡,🤬,🥵,🥶,😱,😨,😰,🤗,🤭,🤫,🤥,😶,😐,😑,🙄,😯,😦,😧,😮,😲,🥱,😴,😪,😵,🤐,🥴,🤢,🤮,🤧,😷,🤒,🤕,🤑,🤠,😈,👿,👹,👺,🤡,💩,👻,💀,☠️,👽,👾,🤖,🎃|}"
+    ],
+    "description": "Add Emoji: Smileys"
+  },
+  "Add Emoji: Gestures": {
+    "prefix": ["::em:gestures", "::gestures", "::em:hands", "::hands"],
+    "body": ["${1|🖖,👌,✌️,🤟,🤘,🤙,👍,👊,👏,🙌,👐,🤲,🙏|}"],
+    "description": "Add Emoji: Gestures"
+  },
+  "Add Emoji: People": {
+    "prefix": ["::em:ppl", "::ppl"],
+    "body": [
+      "${1|👩‍💻,👨‍💻,🥷,🧙‍♀️,🧙,🧙‍♂️,🧝‍♀️,🧝,🧝‍♂️,🧛‍♀️,🧟‍♀️,🧞‍♂️,🧜‍♀️,🧚‍♀️,🙇,🙇‍♂️,💁‍♀️,💁‍♂️,🙋‍♀️,🙋,🤦‍♀️,🤦‍♂️,🤷‍♀️,🤷‍♂️|}"
+    ],
+    "description": "Add Emoji: People"
+  },
+  "Add Emoji: Ouch!": {
+    "prefix": ["::em:ouch", "::ouch"],
+    "body": ["${1|🤦‍♀️,🤦‍♂️|}", "$0"],
+    "description": "Add Emoji: Ouch!"
+  },
+  "Add Emoji: Nature": {
+    "prefix": ["::em:nature", "::nature"],
+    "body": [
+      "${1|🍀,🍄,⭐️,🌟,✨,⚡️,☄️,💥,🔥,🐛,🐞,🦁,🐵,🙈,🙉,🙊,🐒,🦄,🐝,,🪲,🪳,🦟,🦗,🕷,🦂,🐢,🦖,🦕,🐳,🌙,🌎,🪐,💫,🌈,☀️,☁️,❄️,☃️,🗿|}"
+    ],
+    "description": "Add Emoji: Nature"
+  },
+  "Add Emoji: Objects": {
+    "prefix": ["::em:obj", "::obj"],
+    "body": [
+      "${1|💡,🔖,🏷,🎉,🛠,⚙️,📦,🔑,🎁,🪄,📋,📁,📙,📚,📖,🔎,✏️,🔓,📱,💻,⌨️,🖥,🖨,🖱,🕹,💾,💿,📸,🎥,📟,📺,🎙,🎚,🎛,⏱,⌛️,💵,🪙,💰,💳,💎,🧰,🔩,🪤,🧱,⛓,🧲,💣,🧨,🪓,⚰️,🔭,🔬,🩹,💊,🩸,🧬,🦠,🌡,🧺,🧻,🚽,🚰,🚿,🧼,🪥,🪒,🧴,🛎,🗝,🚪,🧸,🪆,🖼,🪞,🪟,🛍,🛒,✉️,📩,📤,🪧,📮,📜,📃,📊,📅,🗑,📇,🗃,🗳,🗄,🗂,🧷,🔗,📎,🖇,📐,📏,📌,📍,✂️,📝|}"
+    ],
+    "description": "Add Emoji: Objects"
+  },
+  "Add Emoji: Symbols": {
+    "prefix": ["::em:symols", "::symols"],
+    "body": [
+      "${1|✔︎,✘︎,✖︎,✗︎,✩︎,✬︎,✭︎,✰︎,✯,✡︎,✩,✪,✫,✬,✭,✮,✶,✦,✧,✵︎,✶︎,✷︎,✻︎,❃︎,❄︎,❅︎,❊︎,♯,☛,☞,🂠,⚈,⚆,⚇,✙︎,✚︎,✝︎,✞︎,✢︎,✥︎,❁︎,❂︎,❍︎,❖︎,❗|}"
+    ],
+    "description": "Add Emoji: Symbols"
+  },
+  "Add Emoji: Symbols Currency": {
+    "prefix": ["::em:curr", "::curr"],
+    "body": ["${1|$,¢,£,€,¥|}"],
+    "description": "Add Emoji: Symbols Currency"
+  },
+  "Add Emoji: Symbols Math": {
+    "prefix": ["::em:math", "::math"],
+    "body": ["${1|+,−,×,÷,=,≠,±,√,‰,Ω,∞,≈,~|}"],
+    "description": "Add Emoji: Symbols Math"
+  },
+  "Add Emoji: Check mark": {
+    "prefix": ["::em:check", "::check", "::ok"],
+    "body": "✔︎",
+    "description": "Add Emoji: Check mark"
+  },
+  "Add Emoji: Cross": {
+    "prefix": ["::em:cross", "::cross", "::nok", "::err"],
+    "body": "✘︎",
+    "description": "Add Emoji: Cross"
+  },
+  "Add Emoji: Rocket": {
+    "prefix": ["::em:rocket", "::rocket"],
+    "body": "🚀",
+    "description": "Add Emoji: Rocket"
+  },
+  "Add Emoji: Lamp": {
+    "prefix": ["::em:lamp", "::lamp"],
+    "body": "💡",
+    "description": "Add Emoji: Lamp"
+  },
+  "Add Emoji: Alert": {
+    "prefix": ["::em:alert", "::alert"],
+    "body": "🚨",
+    "description": "Add Emoji: Alert"
+  },
+  "Add Emoji: Tada": {
+    "prefix": ["::em:tada", "::tada"],
+    "body": "🎉",
+    "description": "Add Emoji: Tada"
+  },
+  "Add Emoji: Arrows": {
+    "prefix": ["::em:arrow", "::arrow", "::arr"],
+    "body": ["${1|↑,↓,←,→,➘,➚,→,⇒,⟹,⇨,➔,➜,➙,➛,➞,⇾,➾,⇢,➝,❪︎,❫︎,❬︎,❭︎,❰︎,❱︎|}"],
+    "description": "Add Emoji: Arrows"
+  },
+  "Arrow Up": {
+    "prefix": ["::em:arrow:up", "::arrow:up", "::arr:up", "::up"],
+    "body": "↑",
+    "description": "Arrow Up"
+  },
+  "Arrow Down": {
+    "prefix": ["::em:arrow:down", "::arrow:down", "::arr:down", "::down"],
+    "body": "↓",
+    "description": "Arrow Down"
+  },
+  "Dot": {
+    "prefix": ["::em:dot", "::dot"],
+    "body": "·",
+    "description": "Dot"
+  },
+  "Arrow Left": {
+    "prefix": ["::em:arrow:left", "::arrow:left", "::arr:left", "::left"],
+    "body": "←",
+    "description": "Arrow Left"
+  },
+  "Arrow Right": {
+    "prefix": ["::em:arrow:right", "::arrow:right", "::arr:right", "::right"],
+    "body": "→",
+    "description": "Arrow Right"
+  },
+  "Add Emoji: Symbols Computers": {
+    "prefix": ["::em:key:comp", "::key:comp", "::key"],
+    "body": ["${1|⌘,,#,⌥,⌃,⇧,⇪,⌫,⌦,␡,⎋,␛,⏎,↩,␣|}"],
+    "description": "Add Emoji: Symbols Computers"
+  },
+  "Keyboard: Command": {
+    "prefix": ["::key:cmd", "::cmd"],
+    "body": "⌘",
+    "description": "Keyboard: Command"
+  },
+  "Keyboard: Control": {
+    "prefix": ["::key:ctrl", "::ctrl"],
+    "body": "⌃",
+    "description": "Keyboard: Control"
+  },
+  "Keyboard: Option": {
+    "prefix": ["::key:opt", "::opt"],
+    "body": "⌥",
+    "description": "Keyboard: Option"
+  },
+  "Keyboard: Shift": {
+    "prefix": ["::key:shift", "::shift"],
+    "body": "⇧",
+    "description": "Keyboard: Shift"
+  },
+  "Keyboard: Space": {
+    "prefix": ["::key:space", "::space"],
+    "body": "␣",
+    "description": "Keyboard: Space"
+  },
+  "Keyboard: Tab": {
+    "prefix": ["::key:tab", "::tab"],
+    "body": "⇥",
+    "description": "Keyboard: Tab"
+  },
+  "Keyboard: Backspace": {
+    "prefix": ["::key:backspace", "::key:bsp", "::backspace", "::bsp"],
+    "body": "⌫",
+    "description": "Keyboard: Backspace"
+  },
+  "Keyboard: Enter": {
+    "prefix": ["::key:enter", "::enter"],
+    "body": "⏎",
+    "description": "Keyboard: Enter"
+  },
+  "Keyboard: Escape": {
+    "prefix": ["::key:esc", "::esc"],
+    "body": "⎋",
+    "description": "Keyboard: Escape"
+  },
+  "Keyboard: Delete": {
+    "prefix": ["::key:del", "::del"],
+    "body": "⌦",
+    "description": "Keyboard: Delete"
+  },
+  "Keyboard: Apple": {
+    "prefix": ["::key:apple", "::apple"],
+    "body": "",
+    "description": "Keyboard: Apple"
+  },
+  "Extract Variable": {
+    "prefix": "extract",
+    "body": "${TM_SELECTED_TEXT/[\\.:-]/_/g}_version",
+    "description": "Extract Variable"
+  },
+  "Add a custom zsh bin": {
+    "prefix": ["::zsh:bin", "::bin"],
+    "body": [
+      "#!/usr/bin/env zsh",
+      "# shellcheck shell=bash disable=SC2154",
+      "",
+      "#? $TM_FILENAME 0.1.0",
+      "#? License RIT (Robot Institute of Technology)",
+      "#? This is free software: you are free to change and redistribute it.",
+      "#? There is NO WARRANTY, to the extent permitted by law.",
+      "",
+      "##? ${1:Shows the help text that matches each argument}",
+      "##?",
+      "##? Usage:",
+      "##?      $TM_FILENAME [ options ]",
+      "##?",
+      "##? Options:",
+      "##?     --version             Show version.",
+      "##?     -h, --help            Show this screen.",
+      "##?     -c <cmd>, --cmd=<cmd> Command to be explained.",
+      "##?",
+      "##? Examples:",
+      "##?     $TM_FILENAME",
+      "##?     $TM_FILENAME 'md5sum /Downloads/pop-os.iso | cut -d\" \" -f1'",
+      "",
+      "$TM_FILENAME() {",
+      "  if eval \"$(\\${DOC_OPTS} \"\\$0\" \"\\$@\")\"; then",
+      "    if [[ -n \"${args['--cmd']}\" ]]; then",
+      "      open \"https://explainshell.com/explain?cmd=${args['--cmd']}\"",
+      "    else",
+      "      local CMD=\"$(history -50 | cut -c 8- | bat --language 'zsh' | fzf --ansi)\"",
+      "      if [ -n \"$$CMD\" ]; then",
+      "        explainsh --cmd=$$CMD",
+      "      fi",
+      "    fi",
+      "  fi",
+      "}",
+      "",
+      "$TM_FILENAME \"$@\"$0"
+    ],
+    "description": "Add a custom bash bin"
+  },
+  "Add a custom zsh keybinding": {
+    "prefix": ["::zsh:keybinding", "::keybinding"],
+    "body": [
+      "# ${1:fuzzy find and explain a command from history}",
+      "# ${2:https://linuxhint.com/search-in-my-zsh-history}",
+      "${3:TM_FILENAME_BASE/[\\.:-]/_/g}() {",
+      "  printf \"💡 ${4:explainsh}\" && $4 && zle reset-prompt",
+      "}",
+      "",
+      "# ${5:⌘ + e}",
+      "zle -N $3",
+      "bindkey -M emacs '${6:^[[101;9u}' $3",
+      "bindkey -M vicmd '$6' $3",
+      "bindkey -M viins '$6' $3",
+      "$0"
+    ],
+    "description": "Add a custom zsh keybinding"
+  },
+  "Docker ignore example (Node)": {
+    "prefix": ["docker:ignore:node", "docker:ignore"],
+    "body": ["node_modules/", "dist/", "tmp/"],
+    "description": ".dockerignore (Node)"
+  },
+  "Add snippet": {
+    "prefix": ["snip", "snippet:template"],
+    "body": [
+      "\"$1\": {",
+      "  \"prefix\": [\"$2\", \"$3\"],",
+      "  \"body\": [",
+      "    \"$4/\"",
+      "  ],",
+      "  \"description\": \"$5\"",
+      "},"
+    ],
+    "description": "Snippet template"
+  },
+  "Fix yaml": {
+    "prefix": ["fix:yaml", "yaml", "yml"],
+    "body": ["${TM_SELECTED_TEXT/^-/  - $1/gm}"],
+    "description": "Fix yaml"
+  },
+  "Raycast Script Command": {
+    "prefix": [
+      "raycast:script-command",
+      "raycast:command",
+      "rc:script-command",
+      "rc:command"
+    ],
+    "body": [
+      "#!/bin/bash",
+      "",
+      "# Required parameters:",
+      "# @raycast.schemaVersion ${2|1,2,3,4,5|}",
+      "# @raycast.title ${3:My First Script}",
+      "# @raycast.mode ${4|fullOutput,compact,silent,inline|}",
+      "# @raycast.refreshTime ${5|1,2,3,4,5|}${6|d,s,m,h,d|}",
+      "#",
+      "# Optional parameters:",
+      "# @raycast.icon 🤖",
+      "# @raycast.packageName ${6:Raycast Scripts}",
+      "# @raycast.currentDirectoryPath ${7:~}",
+      "# @raycast.needsConfirmation ${8|false,true|}",
+      "# @raycast.argument1 { \"type\": \"text\", \"placeholder\": \"from city\", \"percentEncoded\": true }",
+      "# @raycast.argument2 { \"type\": \"text\", \"placeholder\": \"to city\", \"optional\": true, \"percentEncoded\": true, \"secure\": false }",
+      "#",
+      "# Documentation:",
+      "# @raycast.description ${1:Command summary}",
+      "# @raycast.author ${9:roalcantara}",
+      "# @raycast.authorURL ${10:http://github.com/roalcantara}",
+      "",
+      "echo \"Hello World arg1: \\$1 arg2: \\$2\"",
+      ""
+    ],
+    "description": "Raycast Script Command"
+  },
+  "Raycast Script Command with 2 arguments": {
+    "prefix": [
+      "raycast:script-command:args",
+      "raycast:command:args",
+      "rc:script-command:args",
+      "rc:command:args"
+    ],
+    "body": [
+      "#!/bin/bash",
+      "",
+      "# Required parameters:",
+      "# @raycast.schemaVersion 1",
+      "# @raycast.title Search Flights",
+      "# @raycast.mode silent",
+      "",
+      "# Optional parameters:",
+      "# @raycast.icon 🛩",
+      "# @raycast.packageName Web Searches",
+      "# @raycast.argument1 { \"type\": \"text\", \"placeholder\": \"from city\", \"percentEncoded\": true }",
+      "# @raycast.argument2 { \"type\": \"text\", \"placeholder\": \"to city\", \"optional\": true, \"percentEncoded\": true, \"secure\": false }",
+      "",
+      "open \"https://google.com/search?q=flights%20from%20$1%20to%20$2\""
+    ],
+    "description": "Raycast Script Command google search with 2 arguments"
+  },
+  "Raycast Script Command: ruby": {
+    "prefix": [
+      "raycast:script-cmd:rb",
+      "raycast:cmd:rb",
+      "rc:script-cmd:rb",
+      "rc:cmd:rb"
+    ],
+    "body": [
+      "#!/usr/bin/env ruby",
+      "",
+      "# Required parameters:",
+      "# @raycast.schemaVersion ${2|1,2,3,4,5|}",
+      "# @raycast.title ${3:My First Script}",
+      "# @raycast.mode ${4|fullOutput,compact,silent,inline|}",
+      "# @raycast.refreshTime ${5|1,2,3,4,5|}${6|d,s,m,h,d|}",
+      "#",
+      "# Optional parameters:",
+      "# @raycast.icon 🤖",
+      "# @raycast.packageName ${6:Raycast Scripts}",
+      "# @raycast.currentDirectoryPath ${7:~}",
+      "# @raycast.needsConfirmation ${8|false,true|}",
+      "#",
+      "# Documentation:",
+      "# @raycast.description ${1:Command summary}",
+      "# @raycast.author ${9:roalcantara}",
+      "# @raycast.authorURL ${10:http://github.com/roalcantara}",
+      "",
+      "class String",
+      "  def black;          \"\\033[30m#{self}\\033[0m\" end",
+      "  def red;            \"\\033[31m#{self}\\033[0m\" end",
+      "  def green;          \"\\033[32m#{self}\\033[0m\" end",
+      "  def brown;          \"\\033[33m#{self}\\033[0m\" end",
+      "  def blue;           \"\\033[34m#{self}\\033[0m\" end",
+      "  def magenta;        \"\\033[35m#{self}\\033[0m\" end",
+      "  def cyan;           \"\\033[36m#{self}\\033[0m\" end",
+      "  def gray;           \"\\033[37m#{self}\\033[0m\" end",
+      "  def bold;           \"\\033[1m#{self}\\033[22m\" end",
+      "  def italic;         \"\\033[3m#{self}\\033[23m\" end",
+      "  def underline;      \"\\033[4m#{self}\\033[24m\" end",
+      "  def blink;          \"\\033[5m#{self}\\033[25m\" end",
+      "  def reverse_color;  \"\\033[7m#{self}\\033[27m\" end",
+      "  def no_color;       \"\\033[0m#{self}\\033[0m\" end",
+      "  def new_line;       \"#{self}\\n\\n\" end",
+      "end",
+      "",
+      "puts \"| ----------- | ------------ | ------------------------------ |\".cyan.bold",
+      "puts \"| Growth Rate | Name         | Description                    |\".cyan.bold",
+      "puts \"| ----------- | ------------ | ------------------------------ |\".cyan.bold",
+      "puts \"| 1           | Constant     | Statement (1 line of code)     |\"",
+      "puts \"| ----------- | ------------ | ------------------------------ |\".cyan.bold.new_line",
+      "",
+      "# vi: set ft=ruby"
+    ],
+    "description": "Raycast Script Command: ruby"
+  }
+}

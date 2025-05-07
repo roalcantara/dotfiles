@@ -1,0 +1,369 @@
+{
+  "Node Express @ Alpine": {
+    "prefix": [
+      "dk:node:express:alpine",
+      "node:express:alpine",
+      "express:alpine"
+    ],
+    "body": [
+      "FROM node:lts-alpine",
+      "COPY package*.json ./",
+      "WORKDIR '/var/www/app'",
+      "RUN npm install --save express redis ejs dotenv",
+      "COPY . .",
+      "EXPOSE 3000"
+    ],
+    "description": "express:3000 @ node:lts-alpine"
+  },
+  "Ubuntu trusty + Postgres + Mysql Dockerfile": {
+    "prefix": [
+      "dk:ubuntu:trusty:pg",
+      "ubuntu:trusty:pg"
+    ],
+    "body": [
+      "# https://github.com/komljen/dockerfile-examples/blob/master/ubuntu/Dockerfile",
+      "FROM ubuntu:trusty",
+      "MAINTAINER Alen Komljen <alen.komljen@live.com>",
+      "",
+      "ENV DEBIAN_FRONTEND noninteractive",
+      "",
+      "RUN locale-gen en_US.UTF-8",
+      "ENV LANG en_US.UTF-8",
+      "ENV LANGUAGE en_US:en",
+      "ENV LC_ALL en_US.UTF-8",
+      "",
+      "RUN echo \"force-unsafe-io\" > /etc/dpkg/dpkg.cfg.d/02apt-speedup",
+      "RUN echo \"Acquire::http {No-Cache=True;};\" > /etc/apt/apt.conf.d/no-cache",
+      "",
+      "RUN echo $'#!/bin/sh\\nexit 101' > /usr/sbin/policy-rc.d",
+      "RUN chmod +x /usr/sbin/policy-rc.d",
+      "",
+      "RUN \\",
+      "  apt-get update && \\",
+      "  apt-get -y install \\",
+      "          software-properties-common \\",
+      "          vim \\",
+      "          pwgen \\",
+      "          unzip \\",
+      "          curl \\",
+      "          git-core && \\",
+      "  rm -rf /var/lib/apt/lists/*",
+      "",
+      "COPY tcp_wait.sh tcp_wait.sh",
+      "COPY create_db_pg.sh create_db_pg.sh",
+      "COPY create_db_mysql.sh create_db_mysql.sh"
+    ],
+    "description": "Ubuntu trusty + Postgres + Mysql Dockerfile"
+  },
+  "Ubuntu latest": {
+    "prefix": [
+      "dk:ubuntu:latest",
+      "ubuntu:latest"
+    ],
+    "body": [
+      "FROM ubuntu:latest",
+      "",
+      "ARG USER=ubuntu",
+      "",
+      "# export USER=ubuntu SHELL=/bin/bash",
+      "ENV USER=\"$USER\" TERM=xterm-256color",
+      "",
+      "# updates OS and install essential dependencies",
+      "RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates sudo git curl locales gpa && apt-get clean && rm -rf /var/lib/apt/lists/* && locale-gen en_US.UTF-8",
+      "",
+      "# create user and add to sudoers",
+      "RUN echo \"$USER ALL=(ALL) NOPASSWD:ALL\" >>/etc/sudoers && echo \"$USER\" > /etc/hostname && useradd --user-group --system --create-home --shell /bin/bash --no-log-init $USER",
+      "",
+      "SHELL [\"/bin/bash\", \"-o\", \"pipefail\", \"-c\"]",
+      "",
+      "# switch user (su -l $USER)",
+      "USER \"$USER\"",
+      "WORKDIR \"/home/$USER\"",
+      "",
+      "ENTRYPOINT [ \"/bin/bash\", \"--login\" ]"
+    ],
+    "description": "Ubuntu latest Dockerfile"
+  },
+  "ASDF @ Alpine": {
+    "prefix": [
+      "dk:asdf:alpine",
+      "asdf:alpine",
+      "asdf"
+    ],
+    "body": [
+      "FROM alpine:latest",
+      "",
+      "RUN apk --no-cache -U add build-base bash git automake autoconf readline-dev ncurses-dev openssl-dev yaml-dev libxslt-dev libffi-dev libtool unixodbc-dev openssh-client curl gnupg coreutils && rm -rf /var/cache/apk/* /tmp/* /var/tmp/*",
+      "",
+      "ENV DOCKERIZE_VERSION v0.6.1",
+      "RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz &&",
+      "  tar -C /usr/local/bin -xzvf dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz &&",
+      "  rm dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz",
+      "",
+      "COPY shasum /bin/shasum",
+      "COPY asdf-install-plugins /bin/asdf-install-plugins",
+      "COPY asdf-install-versions /bin/asdf-install-versions",
+      "",
+      "WORKDIR ~/",
+      "",
+      "RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf",
+      "RUN echo -e '\\nsource $HOME/.asdf/asdf.sh' >>~/.bashrc",
+      "",
+      "CMD [ \"bash\" ]",
+      ""
+    ],
+    "description": "ASDF @ alpine:latest"
+  },
+  "nginx @ Alpine": {
+    "prefix": [
+      "dk:nginx:alpine",
+      "nginx:alpine",
+      "nginx"
+    ],
+    "body": [
+      "FROM alpine:latest",
+      "RUN apk -U upgrade nginx",
+      "RUN mkdir -p /run/nginx",
+      "RUN touch /run/nginx/nginx.pid",
+      "RUN adduser -D -g 'www' www",
+      "RUN mkdir /www ",
+      "RUN chown -R www:www /var/lib/nginx",
+      "RUN chown -R www:www /www",
+      "COPY nginx.conf /etc/nginx/nginx.conf",
+      "COPY index.html /www",
+      "RUN [\"./usr/sbin/nginx\"]"
+    ],
+    "description": "nginx @ alpine:latest"
+  },
+  "Fullstack NodeJS @ Alpine": {
+    "prefix": [
+      "dk:fullstack:node:alpine",
+      "fullstack:node:alpine",
+      "fullstack:node"
+    ],
+    "body": [
+      "FROM alpine:latest",
+      "",
+      "# Add dependencies",
+      "RUN apk add -U --no-cache sudo nodejs npm mongodb zsh",
+      "",
+      "# Setup user",
+      "RUN adduser -S naruto -G wheel -h /home/naruto -s /bin/zsh --disabled-password",
+      "RUN echo '%wheel ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers",
+      "WORKDIR /home/naruto",
+      "",
+      "# Setup mongodb:27017",
+      "VOLUME /data/db",
+      "RUN chown -R mongodb /data/db",
+      "RUN mongod --bind_ip 0.0.0.0 --dbpath /data/db",
+      "EXPOSE 27017",
+      "",
+      "# Setup api @ localhost:3001",
+      "COPY . api",
+      "RUN npm --prefix ./api run install",
+      "RUN npm --prefix ./api run build",
+      "RUN npm --prefix ./api run script",
+      "EXPOSE 3001",
+      "",
+      "# Setup app @ localhost:3000",
+      "COPY . app",
+      "RUN npm --prefix ./app run install",
+      "RUN npm --prefix ./app run build",
+      "RUN npm --prefix ./app run script",
+      "EXPOSE 3000",
+      "",
+      "USER naruto",
+      "",
+      "CMD [ \"zsh\", \"-l\" ]"
+    ],
+    "description": "Fullstack NodeJS (mongodb:27017, api:30001, app:3000) @ alpine:latest"
+  },
+  "Python 3.10 @ alpine": {
+    "prefix": [
+      "dk:python310:alpine",
+      "python310:alpine",
+      "python310"
+    ],
+    "body": [
+      "FROM python:3.10-alpine",
+      "",
+      "# set work directory",
+      "WORKDIR /app",
+      "",
+      "# install dependencies",
+      "COPY requirements.txt ./app/requirements.txt",
+      "RUN pip install --no-cache-dir --upgrade -r requirements.txt",
+      "",
+      "# copy project",
+      "COPY . /app",
+      "",
+      "# start server",
+      "CMD [ \"python\", \"./app/main.py\" ]",
+      "",
+      "# docker build -t python .",
+      "# docker run -rm -d python"
+    ],
+    "description": "Python 3.10 @ alpine"
+  },
+  "Python 3.9 @ slim": {
+    "prefix": [
+      "dk:python39:slim",
+      "python39:slim",
+      "python39"
+    ],
+    "body": [
+      "FROM python:3.9-slim",
+      "WORKDIR /code",
+      "COPY ./requirements.txt /code/requirements.txt",
+      "RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt",
+      "COPY ./app /code/app",
+      "CMD [\"uvicorn\", \"app.main:app\", \"--host\", \"0.0.0.0\", \"--port\", \"80\"]"
+    ],
+    "description": "Python 3.10 @ Slim"
+  },
+  "Uvicorn Python 3.10 @ alpine": {
+    "prefix": [
+      "dk:alpine:python:uvicorn",
+      "alpine:python:uvicorn"
+    ],
+    "body": [
+      "FROM python:3.10-alpine",
+      "",
+      "# set work directory",
+      "WORKDIR /app",
+      "",
+      "# install dependencies",
+      "COPY requirements.txt ./app/requirements.txt",
+      "RUN pip install --no-cache-dir --upgrade -r requirements.txt",
+      "",
+      "# copy project",
+      "COPY . /app",
+      "",
+      "# start server",
+      "CMD [ \"uvicorn\", \"main:app\", \"--host\", \"0.0.0.0\", \"--port\", \"80\" ]",
+      "",
+      "# docker build & run",
+      "# docker build -t uvicorn .",
+      "# docker run -rm -d -p 8080:80 uvicorn",
+      "",
+      "# docker compose.yml",
+      "# version: '3.9'",
+      "# services:",
+      "#   app:",
+      "#     build: .",
+      "#     ports:",
+      "#       - 8080:80",
+      "#     volumes:",
+      "#       - .:/app",
+      "#     command: uvicorn main:app --host 0.0.0.0 --port 80 --reload",
+      "",
+      "# docker compose build",
+      "# docker compose up"
+    ],
+    "description": "Uvicorn Python 3.10 @ alpine"
+  },
+  "Go Multi-Stage App (distroless)": {
+    "prefix": "go:distroless",
+    "body": [
+      "FROM golang:${1:1.19} as builder",
+      "WORKDIR /${2:app}",
+      "COPY . .",
+      "RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ${3:api}",
+      "",
+      "FROM gcr.io/distroless/static:latest",
+      "WORKDIR /$2",
+      "COPY --from=builder /$2/$3 /$3",
+      "ENTRYPOINT [ \"/$3\" ]",
+      "$0"
+    ],
+    "description": "Go Multi-Stage App (distroless)"
+  },
+  "Python3 @ distroless": {
+    "prefix": [
+      "dk:python3:distroless",
+      "python3:distroless",
+      "python3"
+    ],
+    "body": [
+      "# Build the application",
+      "FROM python:3-slim AS build-env",
+      "COPY . /app",
+      "WORKDIR /app",
+      "",
+      "# Copy it into the base image",
+      "FROM gcr.io/distroless/python3",
+      "COPY --from=build-env /app /app",
+      "",
+      "WORKDIR /app",
+      "CMD [\"hello.py\", \"/etc\"]"
+    ],
+    "description": "Distroless image for Python3 apps"
+  },
+  "Java 11 @ distroless": {
+    "prefix": [
+      "dk:java11:distroless",
+      "java11:distroless",
+      "java11"
+    ],
+    "body": [
+      "# Build the application",
+      "FROM openjdk:11-jdk-slim-bullseye AS build-env",
+      "COPY . /app/examples",
+      "WORKDIR /app",
+      "RUN javac examples/*.java",
+      "RUN jar cfe main.jar examples.HelloJava examples/*.class ",
+      "",
+      "# Copy it into the base image",
+      "FROM gcr.io/distroless/java11-debian11",
+      "COPY --from=build-env /app /app",
+      "",
+      "WORKDIR /app",
+      "CMD [\"main.jar\"]"
+    ],
+    "description": "Distroless image for Java 11 apps"
+  },
+  "Node 18 @ distroless": {
+    "prefix": [
+      "dk:node18:distroless",
+      "node18:distroless",
+      "node18"
+    ],
+    "body": [
+      "# Build the application",
+      "FROM node:18 AS build-env",
+      "COPY . /app",
+      "WORKDIR /app",
+      "",
+      "RUN npm ci --omit=dev",
+      "",
+      "# Copy it into the base image",
+      "FROM gcr.io/distroless/nodejs:18",
+      "COPY --from=build-env /app /app",
+      "",
+      "WORKDIR /app",
+      "CMD [\"hello.js\"]"
+    ],
+    "description": "Distroless image for Node 18 apps"
+  },
+  "Rust 1.14 @ distroless": {
+    "prefix": [
+      "dk:rust1_14:distroless",
+      "rust1_14:distroless",
+      "rust1_14"
+    ],
+    "body": [
+      "# Build the application",
+      "FROM rust:1.41.0 as build-env",
+      "WORKDIR /app",
+      "COPY . /app",
+      "RUN cargo build --release",
+      "",
+      "# Copy it into the base image",
+      "FROM gcr.io/distroless/cc",
+      "COPY --from=build-env /app/target/release/hello-world-distroless /",
+      "",
+      "CMD [\"./hello-world-distroless\"]"
+    ],
+    "description": "Distroless image for Rust 1.14 apps"
+  }
+}

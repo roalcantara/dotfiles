@@ -1,0 +1,107 @@
+{
+  "Add variable": {
+    "prefix": "var",
+    "body": ["\\${name:default}"],
+    "description": "When a variable is unknown the name of the variable is inserted and it is transformed into a placeholder"
+  },
+  "Add TM_SELECTED_TEXT variable": {
+    "prefix": "var",
+    "body": ["\\$TM_SELECTED_TEXT"],
+    "description": "TM_SELECTED_TEXT: The currently selected text or the empty string"
+  },
+  "Add TM_CURRENT_LINE variable": {
+    "prefix": "var",
+    "body": ["\\$TM_CURRENT_LINE"],
+    "description": "TM_CURRENT_LINE: The contents of the current line"
+  },
+  "Add TM_CURRENT_WORD variable": {
+    "prefix": "var",
+    "body": ["\\$TM_CURRENT_WORD"],
+    "description": "TM_CURRENT_WORD: The contents of the word under cursor or the empty string"
+  },
+  "Add TM_LINE_INDEX variable": {
+    "prefix": "var",
+    "body": ["\\$TM_LINE_INDEX"],
+    "description": "TM_LINE_INDEX: The zero-index based line number"
+  },
+  "Add TM_LINE_NUMBER variable": {
+    "prefix": "var",
+    "body": ["\\$TM_LINE_NUMBER"],
+    "description": "TM_LINE_NUMBER: The one-index based line number"
+  },
+  "Add TM_FILENAME variable": {
+    "prefix": "var",
+    "body": ["\\$TM_FILENAME"],
+    "description": "TM_FILENAME: The filename of the current document"
+  },
+  "Add TM_FILENAME_BASE variable": {
+    "prefix": "var",
+    "body": ["\\$TM_FILENAME_BASE"],
+    "description": "TM_FILENAME_BASE: The filename of the current document without its extensions"
+  },
+  "Add TM_DIRECTORY variable": {
+    "prefix": "var",
+    "body": ["\\$TM_DIRECTORY"],
+    "description": "TM_DIRECTORY: The directory of the current document"
+  },
+  "Add TM_FILEPATH variable": {
+    "prefix": "var",
+    "body": ["\\$TM_FILEPATH"],
+    "description": "TM_FILEPATH: The full file path of the current document"
+  },
+  "Add RELATIVE_FILEPATH variable": {
+    "prefix": "var",
+    "body": ["\\$RELATIVE_FILEPATH"],
+    "description": "RELATIVE_FILEPATH: The relative (to the opened workspace or folder) file path of the current document"
+  },
+  "Add CLIPBOARD variable": {
+    "prefix": "var",
+    "body": ["\\$CLIPBOARD"],
+    "description": "CLIPBOARD: The contents of your clipboard"
+  },
+  "Add WORKSPACE_NAME variable": {
+    "prefix": "var",
+    "body": ["\\$WORKSPACE_NAME"],
+    "description": "WORKSPACE_NAME: The name of the opened workspace or folder"
+  },
+  "Add WORKSPACE_FOLDER variable": {
+    "prefix": "var",
+    "body": ["\\$WORKSPACE_FOLDER"],
+    "description": "WORKSPACE_FOLDER: The path of the opened workspace or folder"
+  },
+  "Add placeholder": {
+    "prefix": "placeholder",
+    "body": ["\\${1:one \\${2:another}}"],
+    "description": "Placeholder text will be inserted and selected such that it can be easily changed"
+  },
+  "Add placeholder choices": {
+    "prefix": "placeholder-choices",
+    "body": ["\\${1|one,two,three|}"],
+    "description": "When the snippet is inserted and the placeholder selected, choices will prompt the user to pick one of the values"
+  },
+  "Replace the first . with _": {
+    "prefix": "transform",
+    "body": ["\\${TM_FILENAME/[\\.]/_/}"],
+    "description": "Replace each . or - with _ (example-123_456-TEST.js)"
+  },
+  "Replace each . or - with _": {
+    "prefix": "transform",
+    "body": ["\\${TM_FILENAME/[\\.-]/_/g}"],
+    "description": "Replace each . or - with => (example_123_456_TEST_js)"
+  },
+  "Change to all uppercase": {
+    "prefix": "transform",
+    "body": ["\\${TM_FILENAME/[\\.-]/_/g}"],
+    "description": "Change to all uppercase => (EXAMPLE-123.456-TEST.JS)"
+  },
+  "Remove non-alphanumeric characters": {
+    "prefix": "transform",
+    "body": ["\\${TM_FILENAME/[^0-9^a-z]//gi}"],
+    "description": "Remove non-alphanumeric characters => (example123456TESTjs)"
+  },
+  "Remove non-alphanumeric characters and replace each . or - with _": {
+    "prefix": "transform",
+    "body": ["\\${TM_FILENAME/[^0-9^a-z]//gi/[\\.-]/_/g}"],
+    "description": "Remove non-alphanumeric characters and replace each . or - with _ => (example_123_456_TEST_js)"
+  },
+}
