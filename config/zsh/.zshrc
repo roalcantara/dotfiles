@@ -29,6 +29,7 @@ export ZSH_CACHE_DIR=${ZSH_CACHE_DIR:="$HOME/.cache/zsh"}
 # PATH {
 # set PATH so it includes user's private bin if it exists
 declare -gaU path=(
+  $XDG_BIN_HOME
   $path
 )
 # }
