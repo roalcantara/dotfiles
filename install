@@ -2,10 +2,24 @@
 
 root="$(pwd)"
 
+puts() {
+  echo "[SETUP] [$1] $2"
+}
+i() {
+  puts "INFO" "$1"
+}
+e() {
+  puts "ERROR" "$1"
+}
+w() {
+  puts "WARN" "$1"
+}
+
 cleanup() {
   for file in .bashrc .bash_logout .oh-my-zsh .profile; do
     if [[ -f "${HOME:?}/$file" ]]; then
       rm -rf "${HOME:?}/$file"
+      i "${HOME:?}/$file removed ✔︎"
     fi
   done
 }
@@ -16,9 +30,11 @@ setup_config() {
   if [[ -d "${HOME:?}/.config" ]]; then
     # Create a symlink for each directory in the config directory in the current ~/.config
     rm -rf "${HOME:?}/.config"
+    i "${HOME:?}/.config removed ✔︎"
   fi
   # Create a symlink to the config directory
   ln -sf "${root:?}/config" "${HOME:?}/.config"
+  i "${HOME:?}/.config symlinked to ${root:?}/config ✔︎"
 }
 
 # Setup ZSH
@@ -26,21 +42,27 @@ setup_zsh() {
   # Create the ~/.cache/zsh/compcache directory if it doesn't exist
   if [[ ! -d "${ZSH_CACHE_DIR:-${XDG_CACHE_HOME:-${HOME:?}/.cache}/zsh}/compcache" ]]; then
     mkdir -p "${ZSH_CACHE_DIR:-${XDG_CACHE_HOME:-${HOME:?}/.cache}/zsh}/compcache"
+    i "${ZSH_CACHE_DIR:-${XDG_CACHE_HOME:-${HOME:?}/.cache}/zsh}/compcache created ✔︎"
   fi
 
   # Create symlinks for the ZSH config files
   for file in .zshenv .zprofile .zshrc; do
     if [[ -f "${HOME:?}/.config/zsh/$file" ]]; then
       ln -sf "${HOME:?}/.config/zsh/$file" "${HOME:?}/$file"
+      i "${HOME:?}/.config/zsh/$file symlinked to ${HOME:?}/$file ✔︎"
     fi
   done
 }
 
 # Main function
 main() {
+  m "Cleaning up..."
   cleanup
+  m "Setting up config..."
   setup_config
+  m "Setting up ZSH..."
   setup_zsh
+  m "Done!"
 }
 
 # Run the main function
