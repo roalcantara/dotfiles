@@ -37,6 +37,21 @@ setup_config() {
   i "${HOME:?}/.config symlinked to ${root:?}/config ✔︎"
 }
 
+setup_nvim() {
+  if [[ command -v nvim &>/dev/null && -d "${HOME:?}/.config/nvim" ]]; then
+    cd ~/.config/nvim && \
+      nvim --headless +verbose \
+        +'Lazy! sync' \
+        +'Lazy! clean' \
+        +'Lazy! clear' \
+        +'TSUpdateSync' \
+        -c 'lua require('lazy').load({plugins = {'mason-lspconfig.nvim'}})' \
+        -c 'MasonInstall ast-grep bash-language-server css-lsp diagnostic-languageserver docker-compose-language-service dockerfile-language-server eslint-lsp html-lsp json-lsp lua-language-server marksman neocmakelsp prettier pyright ruby-lsp shfmt stylua taplo vim-language-server vtsls yaml-language-server' +qa      
+  else
+    w "nvim is not installed, skipping nvim setup."
+  fi
+}
+
 # Setup ZSH
 setup_zsh() {
   # Create the ~/.cache/zsh/compcache directory if it doesn't exist
@@ -56,13 +71,15 @@ setup_zsh() {
 
 # Main function
 main() {
-  m "Cleaning up..."
+  w "Cleaning up..."
   cleanup
-  m "Setting up config..."
+  w "Setting up config..."
   setup_config
-  m "Setting up ZSH..."
+  w "Setting up ZSH..."
   setup_zsh
-  m "Done!"
+  w "Setting up nvim..."
+  setup_nvim
+  m "Done! ✔︎✔︎"
 }
 
 # Run the main function
