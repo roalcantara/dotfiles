@@ -37,6 +37,7 @@ zmodule completion # calls compinit and must be sourced after all modules that a
 #
 # Modules that must be initialized last
 #
+zmodule zsh-users/zsh-completions
 zmodule "$ZDOTDIR_OPT" --fpath completions
 zmodule chrisands/zsh-yarn-completions --if-command yarn
 zmodule lukechilds/zsh-better-npm-completion --if-command npm
