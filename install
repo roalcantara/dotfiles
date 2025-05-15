@@ -38,15 +38,21 @@ setup_config() {
 }
 
 setup_nvim() {
-  if [[ command -v nvim &>/dev/null && -d "${HOME:?}/.config/nvim" ]]; then
-    cd ~/.config/nvim && \
-      nvim --headless +verbose \
+  # Check if nvim is installed
+  if ! command -v "${HOME:?}/.local/share/mise/shims/nvim" &>/dev/null; then
+    w "nvim is not installed, skipping nvim setup."
+    return
+  fi
+
+  if [[ -d "${HOME:?}/.config/nvim" ]]; then
+    cd "${HOME:?}/.config/nvim" &&
+      "${HOME:?}/.local/share/mise/shims/nvim" --headless +verbose \
         +'Lazy! sync' \
         +'Lazy! clean' \
         +'Lazy! clear' \
         +'TSUpdateSync' \
-        -c 'lua require('lazy').load({plugins = {'mason-lspconfig.nvim'}})' \
-        -c 'MasonInstall ast-grep bash-language-server css-lsp diagnostic-languageserver docker-compose-language-service dockerfile-language-server eslint-lsp html-lsp json-lsp lua-language-server marksman neocmakelsp prettier pyright ruby-lsp shfmt stylua taplo vim-language-server vtsls yaml-language-server' +qa      
+        -c 'lua require("lazy").load({plugins = {"mason-lspconfig.nvim"}})' \
+        -c 'MasonInstall ast-grep bash-language-server css-lsp diagnostic-languageserver docker-compose-language-service dockerfile-language-server eslint-lsp html-lsp json-lsp lua-language-server marksman neocmakelsp prettier pyright ruby-lsp shfmt stylua taplo vim-language-server vtsls yaml-language-server' +qa
   else
     w "nvim is not installed, skipping nvim setup."
   fi
