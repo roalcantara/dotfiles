@@ -292,3 +292,9 @@ result
 # Rust
 ##########################
 ~/.rustup/
+
+# SOS
+##########################
+# https://marketplace.visualstudio.com/items?itemName=signageos.signageos-vscode-sops
+*.decrypted~*
+*.decrypted~secret.*
