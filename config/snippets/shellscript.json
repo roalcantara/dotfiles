@@ -1,31 +1,76 @@
 {
   "Print message": {
-    "prefix": ["print", "echo"],
-    "body": ["print \"$1\" ;"]
+    "prefix": [
+      "print",
+      "echo"
+    ],
+    "body": [
+      "print \"$1\" ;"
+    ]
   },
   "Echo message": {
-    "prefix": ["cons", "print", "echo"],
-    "body": ["echo \"$1\" ;"]
+    "prefix": [
+      "cons",
+      "print",
+      "echo"
+    ],
+    "body": [
+      "echo \"$1\" ;"
+    ]
   },
   "Printf message": {
-    "prefix": ["cons", "echo", "printf"],
-    "body": ["printf \"%s %s\", \"$1\" \"$2\" ;"]
+    "prefix": [
+      "cons",
+      "echo",
+      "printf"
+    ],
+    "body": [
+      "printf \"%s %s\", \"$1\" \"$2\" ;"
+    ]
   },
   "Debug log level 1 (DEBUG)": {
-    "prefix": ["log", "printf", "print", "echo", "debug"],
-    "body": ["print \"[${1:DEBUG}] -> '${2:message}'\";"]
+    "prefix": [
+      "log",
+      "printf",
+      "print",
+      "echo",
+      "debug"
+    ],
+    "body": [
+      "print \"[${1:DEBUG}] -> '${2:message}'\";"
+    ]
   },
   "Debug log level 2 (WARN)": {
-    "prefix": ["log", "printf", "print", "echo", "debug"],
-    "body": ["print \"[${1:WARN}] ---> '${2:message}'\";"]
+    "prefix": [
+      "log",
+      "printf",
+      "print",
+      "echo",
+      "debug"
+    ],
+    "body": [
+      "print \"[${1:WARN}] ---> '${2:message}'\";"
+    ]
   },
   "Debug log level 3 (ALERT)": {
-    "prefix": ["log", "printf", "print", "echo", "debug"],
-    "body": ["print \"[${1:ALERT}] ------> '${2:message}'\";"]
+    "prefix": [
+      "log",
+      "printf",
+      "print",
+      "echo",
+      "debug"
+    ],
+    "body": [
+      "print \"[${1:ALERT}] ------> '${2:message}'\";"
+    ]
   },
   "Cat to file": {
     "prefix": "cat",
-    "body": ["cat <<-EOF ${1:>/path/to/file}", "\t$2", "EOF"]
+    "body": [
+      "cat <<-EOF ${1:>/path/to/file}",
+      "\t$2",
+      "EOF"
+    ]
   },
   "Function": {
     "prefix": "function",
@@ -42,7 +87,10 @@
     ]
   },
   "Getopts simple": {
-    "prefix": ["getopts", "opts"],
+    "prefix": [
+      "getopts",
+      "opts"
+    ],
     "body": [
       "while getopts :${1:?}h arg",
       "do",
@@ -297,29 +345,52 @@
   },
   "disable shellcheck": {
     "prefix": "dis",
-    "body": ["# shellcheck disable=$2"]
+    "body": [
+      "# shellcheck disable=$2"
+    ]
   },
   "add shellcheck": {
-    "prefix": ["check", "shell", "shellcheck"],
+    "prefix": [
+      "check",
+      "shell",
+      "shellcheck"
+    ],
     "body": "${1|# shellcheck shell=bash,shellcheck shell=sh|}\n"
   },
   "Shebang": {
-    "prefix": ["shebang", "bang", "!", "#!"],
-    "body": ["#!/bin/${1|sh,bash,zsh|}", "$0"],
+    "prefix": [
+      "shebang",
+      "bang",
+      "!",
+      "#!"
+    ],
+    "body": [
+      "#!/bin/${1|sh,bash,zsh|}",
+      "$0"
+    ],
     "description": "Shebang"
   },
   "Shebang: Deno": {
-    "prefix": ["shebang:deno", "bang:deno", "!", "#!"],
+    "prefix": [
+      "shebang:deno",
+      "bang:deno",
+      "!",
+      "#!"
+    ],
     "body": "#!/usr/bin/env -S deno run --allow-write",
     "description": "Shebang: Deno"
   },
   "which": {
     "prefix": "whi ",
-    "body": ["\"$(which \"$2\")\""]
+    "body": [
+      "\"$(which \"$2\")\""
+    ]
   },
   "whoami": {
     "prefix": "who ",
-    "body": ["\"$(whoami)\""]
+    "body": [
+      "\"$(whoami)\""
+    ]
   },
   "if..then..else": {
     "prefix": "ite",
@@ -327,39 +398,67 @@
   },
   "if null": {
     "prefix": "if",
-    "body": ["if [ -z \"$2\" ]; then", "\techo \"$3\"", "fi"]
+    "body": [
+      "if [ -z \"$2\" ]; then",
+      "\techo \"$3\"",
+      "fi"
+    ]
   },
   "if not null": {
     "prefix": "if",
-    "body": ["if [ -n \"$2\" ]; then", "\techo \"$3\"", "fi"]
+    "body": [
+      "if [ -n \"$2\" ]; then",
+      "\techo \"$3\"",
+      "fi"
+    ]
   },
   "if command exists inline": {
     "prefix": "if",
-    "body": ["if [[ -n \"$(command -v $2)\" ]]; then", "\techo \"$3\"", "fi"]
+    "body": [
+      "if [[ -n \"$(command -v $2)\" ]]; then",
+      "\techo \"$3\"",
+      "fi"
+    ]
   },
   "if command exists": {
     "prefix": "if",
-    "body": ["if type ${1:command} >/dev/null 2>&1; then", "   ${2:then}", "fi"]
+    "body": [
+      "if type ${1:command} >/dev/null 2>&1; then",
+      "   ${2:then}",
+      "fi"
+    ]
   },
   "if regex": {
     "prefix": "if",
-    "body": ["if [[ \"$2\" =~ $3 ]]; then", "\techo \"$4\"", "fi"]
+    "body": [
+      "if [[ \"$2\" =~ $3 ]]; then",
+      "\techo \"$4\"",
+      "fi"
+    ]
   },
   "if null else (inline)": {
     "prefix": "if",
-    "body": ["[ -z \"$1\" ] && echo \"$2\" || echo \"$3\""]
+    "body": [
+      "[ -z \"$1\" ] && echo \"$2\" || echo \"$3\""
+    ]
   },
   "if not null else (inline)": {
     "prefix": "if",
-    "body": ["[ -n \"$1\" ] && echo \"$2\" || echo \"$3\""]
+    "body": [
+      "[ -n \"$1\" ] && echo \"$2\" || echo \"$3\""
+    ]
   },
   "if regex else (inline)": {
     "prefix": "if",
-    "body": ["[[ \"$1\" =~ $2 ]] && echo \"$3\" || echo \"$4\""]
+    "body": [
+      "[[ \"$1\" =~ $2 ]] && echo \"$3\" || echo \"$4\""
+    ]
   },
   "if not regex else (inline)": {
     "prefix": "if",
-    "body": ["[[ \"$1\" =~ $2 ]] && echo \"$3\" || echo \"$4\""]
+    "body": [
+      "[[ \"$1\" =~ $2 ]] && echo \"$3\" || echo \"$4\""
+    ]
   },
   "if OSTYPE": {
     "prefix": "if",
@@ -379,19 +478,30 @@
   },
   "export env var": {
     "prefix": "export",
-    "body": ["export $1='$2'"]
+    "body": [
+      "export $1='$2'"
+    ]
   },
   "alias": {
     "prefix": "alias",
-    "body": ["alias $1='$2'"]
+    "body": [
+      "alias $1='$2'"
+    ]
   },
   "comment (foldable region)": {
     "prefix": "#c",
-    "body": ["# $1 {", " $2", "# }"]
+    "body": [
+      "# $1 {",
+      " $2",
+      "# }"
+    ]
   },
   "comment (gist)": {
     "prefix": "#g",
-    "body": ["# $1", "# http://$2"]
+    "body": [
+      "# $1",
+      "# http://$2"
+    ]
   },
   "case OSTYPE": {
     "prefix": "case",
@@ -408,52 +518,82 @@
     ]
   },
   "XDG": {
-    "prefix": ["$XDG["],
+    "prefix": [
+      "$XDG["
+    ],
     "body": [
       "$${XDG[${1|home,cache,data,autoload,bin,local,lib,opt,share,run,desktop,documents,download,music,pictures,public,templates,videos,work|}]}"
     ]
   },
   "NVIM": {
-    "prefix": ["$NVIM"],
-    "body": ["${{NVIM[${1|home,data,cache,rc,lua,plugin|}]}"]
+    "prefix": [
+      "$NVIM"
+    ],
+    "body": [
+      "${{NVIM[${1|home,data,cache,rc,lua,plugin|}]}"
+    ]
   },
   "ZDOT": {
-    "prefix": ["$ZDOT"],
+    "prefix": [
+      "$ZDOT"
+    ],
     "body": [
       "$${ZDOT[${1|home,history,history_dir,data,cache,zcompcache,compdump,cache_startup,recent_dirs_file,recent_dirs_max,conf,autoload,opt,lib,share,include,completions,hooks,keybindings,stats_statup_file,stats_benchmark_dir|}]}"
     ]
   },
   "docopt": {
-    "prefix": ["docopt"],
+    "prefix": [
+      "docopt"
+    ],
     "body": [
       "docopt ${1|get_help_string,get_version_string,get_values,get_eval_array,auto_parse,get_raw_value,print_ARGS|}"
     ]
   },
   "pick": {
-    "prefix": ["pick"],
-    "body": ["pick -f '${1:ichi ni san}' -x ${2:echo} ${3:-m}"]
+    "prefix": [
+      "pick"
+    ],
+    "body": [
+      "pick -f '${1:ichi ni san}' -x ${2:echo} ${3:-m}"
+    ]
   },
   "puts": {
-    "prefix": ["puts"],
+    "prefix": [
+      "puts"
+    ],
     "body": [
       "puts \"${1:message}\" ${2:|--desc,--trace|} ${3:|--green,--blue,--red|} ${4:|--bold,--dim|}"
     ]
   },
   "puts trace": {
-    "prefix": ["puts", "puts trace", "trace"],
+    "prefix": [
+      "puts",
+      "puts trace",
+      "trace"
+    ],
     "body": [
       "puts \"${1:message}\" --trace ${2:|--green,--blue,--red|} ${3:|--bold,--dim|}"
     ]
   },
   "puts description": {
-    "prefix": ["puts", "puts desc", "desc"],
+    "prefix": [
+      "puts",
+      "puts desc",
+      "desc"
+    ],
     "body": [
       "puts \"${1:message}\" \"${2:message}\" --desc ${3:|--green,--blue,--red|} ${4:|--bold,--dim|}"
     ]
   },
   "timestamp": {
-    "prefix": ["echo", "puts desc", "timestamp"],
-    "body": ["echo \"$(date +%s) $1 ✔✔\" >> \"${2:timestamp}.log\""]
+    "prefix": [
+      "echo",
+      "puts desc",
+      "timestamp"
+    ],
+    "body": [
+      "echo \"$(date +%s) $1 ✔✔\" >> \"${2:timestamp}.log\""
+    ]
   },
   "Script Templete": {
     "prefix": "script-template",
@@ -546,7 +686,9 @@
     ]
   },
   "forIn": {
-    "prefix": ["for"],
+    "prefix": [
+      "for"
+    ],
     "body": [
       "for ${2:i} in \"\\${${1:array}[@]}\"; do",
       "\techo \"\\$$2\"",
@@ -554,11 +696,19 @@
     ]
   },
   "forInRange": {
-    "prefix": ["for"],
-    "body": ["for ${3:i} in {${1:0}..${2:9}}; do", "\techo \"\\$$3\"", "done$0"]
+    "prefix": [
+      "for"
+    ],
+    "body": [
+      "for ${3:i} in {${1:0}..${2:9}}; do",
+      "\techo \"\\$$3\"",
+      "done$0"
+    ]
   },
   "forInStrings": {
-    "prefix": ["for"],
+    "prefix": [
+      "for"
+    ],
     "body": [
       "for ${4:i} in \"${1:one}\" \"${2:two}\" \"${3:three}\"; do",
       "\techo \"\\$$4\"",
@@ -566,7 +716,10 @@
     ]
   },
   "Docopt script": {
-    "prefix": ["bin", "docopt"],
+    "prefix": [
+      "bin",
+      "docopt"
+    ],
     "body": [
       "#!/usr/bin/env bash",
       "# shellcheck shell=bash",
@@ -601,7 +754,9 @@
     "description": "Docopt script template"
   },
   "Case statement": {
-    "prefix": ["case"],
+    "prefix": [
+      "case"
+    ],
     "body": [
       "case \"${@}\" in",
       "'') pick --from=\"--version --help\" -x 'f' ;;",
@@ -611,7 +766,10 @@
     "description": "Case statement template"
   },
   "If docopt statement": {
-    "prefix": ["if", "docopt:if"],
+    "prefix": [
+      "if",
+      "docopt:if"
+    ],
     "body": [
       "if [[ ${args['--flag']} == 'true' ]]; then",
       "\tputs \"f: --flag is 'true'\" --red",
@@ -620,17 +778,31 @@
     "description": "If docopt statement template"
   },
   "Declare local docopt variable": {
-    "prefix": ["docopt:local", "docopt:var", "local"],
-    "body": ["local ${1:flag}=\\${args['${2:--flag}']}$0"],
+    "prefix": [
+      "docopt:local",
+      "docopt:var",
+      "local"
+    ],
+    "body": [
+      "local ${1:flag}=\\${args['${2:--flag}']}$0"
+    ],
     "description": "Local docopt variable"
   },
   "Docopt option": {
-    "prefix": ["docopt:doc:option", "doc:option", "##?"],
+    "prefix": [
+      "docopt:doc:option",
+      "doc:option",
+      "##?"
+    ],
     "body": "##?     -${1:f}, --${2:flag}            ${3:A boolean flag}.$0",
     "description": "Docopt flag option"
   },
   "Docopt option with argument": {
-    "prefix": ["docopt:doc:arg", "doc:arg", "##?"],
+    "prefix": [
+      "docopt:doc:arg",
+      "doc:arg",
+      "##?"
+    ],
     "body": "##?     -${1:x} <${2:cmd}>, --${3:exec}=<$2>            ${4:Execute a command}.$0",
     "description": "Docopt flag option with argument"
   },
@@ -694,7 +866,9 @@
     "description": "Raycast Script Command google search with 2 arguments"
   },
   "Array Assoc": {
-    "prefix": ["array:assoc"],
+    "prefix": [
+      "array:assoc"
+    ],
     "body": [
       "declare -A ${1:FG}=(",
       "  [black]='30'",
@@ -711,27 +885,46 @@
     "description": "Array Associative"
   },
   "echo Array keys": {
-    "prefix": ["array:keys:echo", "echo"],
-    "body": ["echo \"${${1:ARR}[@]}\""],
+    "prefix": [
+      "array:keys:echo",
+      "echo"
+    ],
+    "body": [
+      "echo \"${${1:ARR}[@]}\""
+    ],
     "description": "echo Array keys"
   },
   "for each value": {
-    "prefix": ["array:values", "for"],
-    "body": ["for val in \"${${1:ARR}[@]}\"; do echo \\$val; done"],
+    "prefix": [
+      "array:values",
+      "for"
+    ],
+    "body": [
+      "for val in \"${${1:ARR}[@]}\"; do echo \\$val; done"
+    ],
     "description": "for each value in Array"
   },
   "for each key": {
-    "prefix": ["array:keys:for", "for"],
+    "prefix": [
+      "array:keys:for",
+      "for"
+    ],
     "body": "for key in \"${!${1:ARR}[@]}\"; do echo \\$key; done",
     "description": "for each key in Array"
   },
   "for each key value": {
-    "prefix": ["array:keys:for", "for"],
+    "prefix": [
+      "array:keys:for",
+      "for"
+    ],
     "body": "for key in \"${!${1:ARR}[@]}\"; do echo \"\\$key => ${${1:ARR}[\\$key]}\"; done",
     "description": "for each key value in Array"
   },
   "if key exists in Array": {
-    "prefix": ["array:keys:if", "if"],
+    "prefix": [
+      "array:keys:if",
+      "if"
+    ],
     "body": "if [ ${${1:ARR}[${2:key}]+_} ]; then echo \"Found\"; else echo \"Not found\"; fi",
     "description": "if key exists in Array"
   },
@@ -746,8 +939,125 @@
     "description": "Delete key from array"
   },
   "unset array": {
-    "prefix": ["array:unset", "array:delete", "array:remove", "unset"],
+    "prefix": [
+      "array:unset",
+      "array:delete",
+      "array:remove",
+      "unset"
+    ],
     "body": "unset ${1:ARR}",
     "description": "Delete the entire array"
+  },
+  "[ZSH] Using zparseopts to parse arguments": {
+    "prefix": [
+      "zargs",
+      "zparseopts"
+    ],
+    "body": [
+      "my_function() {",
+      "  local -a verbose help force",
+      "  local user=\"\"",
+      "  local port=8080  # Default value",
+      "  ",
+      "  # Parse options",
+      "  zparseopts -D -E -F -- \\",
+      "    v=verbose -verbose=verbose \\",
+      "    h=help -help=help \\",
+      "    f=force -force=force \\",
+      "    u:=user -user:=user \\",
+      "    p:=port -port:=port",
+      "  ",
+      "  # Handle parsing errors",
+      "  if [[ $? -ne 0 ]]; then",
+      "    echo \"Invalid options\"",
+      "    return 1",
+      "  fi",
+      "  ",
+      "  # Check for flags (boolean options)",
+      "  if (( $#verbose )); then",
+      "    echo \"Verbose mode enabled\"",
+      "  fi",
+      "  ",
+      "  if (( $#help )); then",
+      "    echo \"Help requested\"",
+      "    return 0",
+      "  fi",
+      "  ",
+      "  # Check for options with values",
+      "  if [[ -n \"$user\" ]]; then",
+      "    echo \"User: ${user[-1]}\"  # Get the value (last element of the array)",
+      "  fi",
+      "  ",
+      "  echo \"Port: ${port[-1]}\"  # Get the value (last element of the array)",
+      "  ",
+      "  # Remaining arguments (after options)",
+      "  echo \"Remaining arguments: $@\"",
+      "}"
+    ],
+    "description": "[ZSH] zparseopts is used to parse command line options in Zsh scripts"
+  },
+  "[ZSH] Using zparseopts to parse arguments as ASSOCIATIVE ARRAY": {
+    "prefix": [
+      "zargss",
+      "zparseoptss"
+    ],
+    "body": [
+      "my_function() {",
+      "  # Define help text",
+      "  local usage=\"",
+      "Usage: my_function [options] <args>",
+      "",
+      "Options:",
+      "  -v, --verbose       Enable verbose output",
+      "  -f, --force         Force operation",
+      "  -o, --output FILE   Specify output file",
+      "  -u, --user USER     Specify username",
+      "  -h, --help          Show this help message",
+      "\"",
+      "",
+      "  # Create the associative array for options",
+      "  local -A opts",
+      "  ",
+      "  # Parse options into the associative array",
+      "  zparseopts -D -F -A opts -- \\",
+      "    v -verbose \\",
+      "    f -force \\",
+      "    o: -output: \\",
+      "    u: -user: \\",
+      "    h -help",
+      "  ",
+      "  # Show help if requested",
+      "  if (( ${+opts[-h]} )) || (( ${+opts[--help]} )); then",
+      "    echo \"$usage\"",
+      "    return 0",
+      "  fi",
+      "  ",
+      "  # Check for flags (using parameter expansion flags to test for key existence)",
+      "  if (( ${+opts[-v]} )) || (( ${+opts[--verbose]} )); then",
+      "    echo \"Verbose mode enabled\"",
+      "  fi",
+      "  ",
+      "  if (( ${+opts[-f]} )) || (( ${+opts[--force]} )); then",
+      "    echo \"Force mode enabled\"",
+      "  fi",
+      "  ",
+      "  # Check for options with values",
+      "  if (( ${+opts[-o]} )); then",
+      "    echo \"Output file: ${opts[-o]}\"",
+      "  elif (( ${+opts[--output]} )); then",
+      "    echo \"Output file: ${opts[--output]}\"",
+      "  fi",
+      "  ",
+      "  if (( ${+opts[-u]} )); then",
+      "    echo \"User: ${opts[-u]}\"",
+      "  elif (( ${+opts[--user]} )); then",
+      "    echo \"User: ${opts[--user]}\"",
+      "  fi",
+      "  ",
+      "  # Remaining arguments (after options)",
+      "  echo \"Remaining arguments: $@\"",
+      "}"
+    ],
+    "description": "[ZSH] zparseopts is used to parse command line options in Zsh scripts as ASSOCIATIVE ARRAY"
   }
 }
