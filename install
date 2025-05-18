@@ -73,6 +73,8 @@ setup_zsh() {
       i "${HOME:?}/.config/zsh/$file symlinked to ${HOME:?}/$file ✔︎"
     fi
   done
+
+  export ZDOTDIR="${HOME:?}/.config/zsh"
 }
 
 # Main function
