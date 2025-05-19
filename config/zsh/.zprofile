@@ -27,3 +27,9 @@ if [[ -d /opt/homebrew || -d /home/linuxbrew/.linuxbrew || -d /usr/local/Homebre
   eval "$("$HOMEBREW_BIN"/brew shellenv)"
 fi
 # }
+
+# MISE {
+if (( $+commands[mise] )); then
+  eval "$(mise activate zsh --yes --quiet --shims)"
+fi
+# }
