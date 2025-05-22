@@ -69,7 +69,7 @@ mise_install() {
 mise_install_packages() {
   w "Installing mise packages..."
   if command -v mise &>/dev/null; then
-    mise install --yes cosign slsa-verifier node python ruby age bat delta eza fd fzf gh neovim sops starship usage watchexec
+    mise install --yes cosign slsa-verifier node python age bat delta eza fd fzf gh neovim sops starship usage watchexec
     i "mise packages installed ✔︎"
   else
     w "mise is not installed, skipping mise package installation."
@@ -80,7 +80,7 @@ mise_install_packages() {
 mise_use_global() {
   w "Setting mise to use global packages..."
   if command -v mise &>/dev/null; then
-    mise use --yes --global node python ruby age bat delta eza fd fzf gh neovim sops starship usage watchexec
+    mise use --yes --global node python age bat delta eza fd fzf gh neovim sops starship usage watchexec
     i "mise global set ✔︎"
   else
     w "mise is not installed, skipping mise package installation."
