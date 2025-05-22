@@ -155,7 +155,7 @@ remove_oh_my_zsh() {
 
 setup_dependencies() {
   # Install dependencies
-  sudo apt-get update && sudo apt-get install -y cowsay fortune fortunes fortunes-min build-essential rustc libssl-dev libyaml-dev zlib1g-dev libgmp-dev &&
+  sudo apt-get update && sudo apt-get install -y cowsay fortune fortunes fortunes-min build-essential rustc libssl-dev libyaml-dev zlib1g-dev libgmp-dev autoconf automake pkg-config libncurses5-dev libncursesw5-dev &&
     sudo apt-get clean &&
     sudo rm -rf /var/lib/apt/lists/* &&
     sudo ln -sf /usr/games/cowsay /usr/local/bin/cowsay &&

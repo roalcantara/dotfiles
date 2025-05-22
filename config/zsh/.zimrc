@@ -45,8 +45,8 @@ zmodule lukechilds/zsh-better-npm-completion --if-command npm
 zmodule MenkeTechnologies/zsh-cargo-completion --if-command cargo
 
 # fzf-tab needs to be loaded after comp init, but before plugins which will wrap widgets, such as zsh-autosuggestions or fast-syntax-highlighting
-zmodule Aloxaf/fzf-tab --source fzf-tab.zsh --if-command fzf --if '[[ ${OSTYPE} == darwin* ]]' --if '[[ $- =~ l && -z "$z_prof" && -z "$z_trace" && "$TERM_PROGRAM" != "vscode" ]]' --on-pull "if [[ ! -f ./build_fzf_tab_module.log ]]; then source fzf-tab.zsh && echo 'Pre-building fzf-tab module...' && yes | build-fzf-tab-module && echo $(date +\"%Y-%m-%dT%T.%3N%z\") > build_fzf_tab_module.log; fi && if [[ ! -e ./modules/Src/aloxaf/fzftab.bundle && -e ./modules/Src/aloxaf/fzftab.so ]]; then cp ./modules/Src/aloxaf/fzftab.so ./modules/Src/aloxaf/fzftab.bundle; fi"
-zmodule Aloxaf/fzf-tab --source fzf-tab.zsh --if-command fzf --if '[[ ${OSTYPE} != darwin* ]]'
+zmodule Aloxaf/fzf-tab --source fzf-tab.zsh --if-command fzf --if '[[ ${OSTYPE} == darwin* && $- =~ l && -z "$z_prof" && -z "$z_trace" && "$TERM_PROGRAM" != "vscode" ]]' --on-pull "if [[ ! -f ./build_fzf_tab_module.log ]]; then source fzf-tab.zsh && echo 'Pre-building fzf-tab module...' && yes | build-fzf-tab-module && echo $(date +\"%Y-%m-%dT%T.%3N%z\") > build_fzf_tab_module.log; fi && if [[ ! -e ./modules/Src/aloxaf/fzftab.bundle && -e ./modules/Src/aloxaf/fzftab.so ]]; then cp ./modules/Src/aloxaf/fzftab.so ./modules/Src/aloxaf/fzftab.bundle; fi"
+zmodule Aloxaf/fzf-tab --source fzf-tab.zsh --if-command fzf --if '[[ ${OSTYPE} != darwin* && $- =~ l && -z "$z_prof" && -z "$z_trace" && "$TERM_PROGRAM" != "vscode" ]]'
 
 # Fish-like syntax highlighting for Zsh. It must be sourced after completion
 zmodule zsh-users/zsh-syntax-highlighting
