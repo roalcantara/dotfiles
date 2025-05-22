@@ -37,7 +37,126 @@ setup_config() {
   i "${HOME:?}/.config symlinked to ${root:?}/config ✔︎"
 }
 
+# ============================================================================
+# APPROACH 1: System-wide installation (Recommended)
+# ============================================================================
+mise_install() {
+  # Check if mise is installed
+  if ! command -v "mise" &>/dev/null; then
+    echo "mise is not installed! Installing..."
+
+    # Install mise system-wide
+    if curl https://mise.run | sudo MISE_INSTALL_PATH=/usr/local/bin/mise sh; then
+      echo "mise installed system-wide ✔︎"
+
+      # Make sure it's executable
+      sudo chmod +x /usr/local/bin/mise
+    else
+      echo "mise installation failed!"
+      return 1
+    fi
+  fi
+
+  # Set up user config (no sudo needed for user files)
+  export MISE_GLOBAL_CONFIG_FILE="${HOME}/.local/share/mise/config.toml"
+  # Create config directory if it doesn't exist
+  sudo mkdir -p "$(dirname "$MISE_GLOBAL_CONFIG_FILE")"
+  sudo mkdir -p "${HOME:?}/.local/state/mise"
+  i "MISE_GLOBAL_CONFIG_FILE set to ${HOME:?}/.local/share/mise/config.toml ✔︎"
+  sudo chown -R vscode:vscode "${HOME}/.local/share/mise" "${HOME:?}/.local/state/mise"
+}
+
+mise_install_packages() {
+  w "Installing mise packages..."
+  if command -v mise &>/dev/null; then
+    mise install --yes cosign slsa-verifier node python ruby age bat delta eza fd fzf gh neovim sops starship usage watchexec
+    i "mise packages installed ✔︎"
+  else
+    w "mise is not installed, skipping mise package installation."
+    return 1
+  fi
+}
+
+mise_use_global() {
+  w "Setting mise to use global packages..."
+  if command -v mise &>/dev/null; then
+    mise use --yes --global node python ruby age bat delta eza fd fzf gh neovim sops starship usage watchexec
+    i "mise global set ✔︎"
+  else
+    w "mise is not installed, skipping mise package installation."
+    return 1
+  fi
+}
+
+mise_setup_activation() {
+  w "Setting up mise activation..."
+  if command -v mise &>/dev/null; then
+    MISE_CMD="$(command -v mise)"
+    for SHELL in bash zsh; do
+      # Generate activation command for the shell
+      MISE_ACTIVATION=$(eval "$MISE_CMD activate $SHELL --shims")
+      for USER_DIR in "${HOME:?}" /root; do
+        echo "$MISE_ACTIVATION" | sudo tee -a "$USER_DIR/.${SHELL}rc" >/dev/null
+      done
+    done
+    sudo chmod 644 "${HOME:?}"/.bashrc "${HOME:?}"/.zshrc
+    sudo chown -R vscode:vscode /home/vscode
+  else
+    w "mise is not installed, skipping mise package installation."
+    return 1
+  fi
+}
+
+setup_mise() {
+  # Check if mise is installed
+  if ! command -v "mise" &>/dev/null; then
+    w "mise is not installed, installing..."
+    mise_install || return 1
+  fi
+
+  # Install mise packages
+  mise_install_packages
+
+  # Set mise to use global packages
+  mise_use_global
+
+  # Setup mise activation
+  mise_setup_activation
+}
+
+remove_oh_my_zsh() {
+  w "Removing oh-my-zsh..."
+  sudo rm -rf /root/.oh-my-zsh /home/vscode/.oh-my-zsh
+
+  for f in "${HOME:?}/.zshrc" "${HOME:?}/.bashrc" "/root/.zshrc" "/root/.bashrc"; do
+    sudo sed -i -e '/oh-my-zsh/d' -e '/ZSH_THEME/d' -e '/plugins=/d' -e '/:omz:/d' "$f"
+  done
+  w "oh-my-zsh removed ✔︎"
+}
+
+setup_dependencies() {
+  # IF OS is Ubuntu
+  if [[ -f /etc/os-release ]]; then
+    if grep -q "Ubuntu" /etc/os-release; then
+      # Install dependencies
+      sudo apt-get update && sudo apt-get install -y cowsay fortune fortunes fortunes-min autoconf patch build-essential rustc libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libgmp-dev libncurses5-dev libffi-dev libgdbm6 libgdbm-dev libdb-dev uuid-dev &&
+        sudo apt-get clean &&
+        sudo rm -rf /var/lib/apt/lists/* &&
+        sudo ln -sf /usr/games/cowsay /usr/local/bin/cowsay &&
+        sudo ln -sf /usr/games/fortune /usr/local/bin/fortune
+    fi
+  fi
+}
+
 setup_nvim() {
+  w "Setting up nvim..."
+  sudo mkdir -p "${HOME:?}/.local/state/npm" "${HOME}/.local/state/nvim" "${HOME:?}/.local/share/nvim"
+  w "'${HOME:?}/.local/state/npm' & '${HOME:?}/.local/(state|share)/nvim' CREATED ✔︎"
+  sudo chown -R vscode:vscode "${HOME}/.local/state/npm" "${HOME}/.local/state/nvim" "${HOME:?}/.local/share/nvim"
+  w "'${HOME:?}/.local/state/npm' & '${HOME:?}/.local/(state|share)/nvim' owned by vscode ✔︎"
+  export npm_config_cache="${HOME:?}/.local/state/npm"
+  w "npm_config_cache exported to '${npm_config_cache}' ✔︎"
+
   # Check if nvim is installed
   if ! command -v "${HOME:?}/.local/share/mise/shims/nvim" &>/dev/null; then
     w "nvim is not installed, skipping nvim setup."
@@ -81,13 +200,19 @@ setup_zsh() {
 main() {
   w "Cleaning up..."
   cleanup
+  w "Removing oh-my-zsh..."
+  remove_oh_my_zsh
+  w "Setting up dependencies..."
+  setup_dependencies
   w "Setting up config..."
   setup_config
   w "Setting up ZSH..."
   setup_zsh
+  w "Setting up mise..."
+  setup_mise
   w "Setting up nvim..."
   setup_nvim
-  m "Done! ✔︎✔︎"
+  w "Done! ✔︎✔︎"
 }
 
 # Run the main function
