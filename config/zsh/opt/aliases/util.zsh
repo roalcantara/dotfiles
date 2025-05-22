@@ -66,3 +66,13 @@ if (( $+commands[fabric-ai] )); then
   # As Homebrew or the Arch Linux package managers makes fabric available as fabric-ai
   alias fabric="fabric-ai"
 fi
+
+# ZOXIDE
+# A smarter cd command
+# https://github.com/ajeetdsouza/zoxide
+# https://youtu.be/-2Nz8rn05bk
+if (( $+commands[zoxide] )); then
+  alias cd="z"
+  alias cdi="zi"
+  alias 'cd!'='builtin cd'
+fi
