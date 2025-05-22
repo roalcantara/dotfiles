@@ -23,10 +23,10 @@ zmodule input       # Applies correct bindkeys for input events. (https://github
 zmodule run-help    # Figures out where to get the best help, and gets it. Type ESC-H to execute run-help for the current command. (https://github.com/zimfw/run-help)
 
 # Tool Integration
-zmodule fzf --if-command fzf                                         # Fuzzy finder (https://github.com/zimfw/fzf)
-zmodule joke/zim-mise --if-command mise                              # Sets up mise Zsh shell integration (https://github.com/joke/zim-mise)
-zmodule joke/zim-starship --if-command starship                      # The minimal, blazing-fast, and infinitely customizable prompt for any shell (https://starship.rs)
-zmodule sorin-ionescu/prezto --root modules/spectrum --no-submodules # This module contains git submodules, which are not supported by zimfw's degit. The zmodule option --no-submodules disable this warning.
+zmodule joke/zim-mise --if-command mise --if '[[ -z $MISE_GLOBAL_CONFIG_FILE ]]' # Sets up mise Zsh shell integration (https://github.com/joke/zim-mise)
+zmodule fzf --if-command fzf                                                     # Fuzzy finder (https://github.com/zimfw/fzf)
+zmodule joke/zim-starship --if-command starship                                  # The minimal, blazing-fast, and infinitely customizable prompt for any shell (https://starship.rs)
+zmodule sorin-ionescu/prezto --root modules/spectrum --no-submodules             # This module contains git submodules, which are not supported by zimfw's degit. The zmodule option --no-submodules disable this warning.
 
 #
 # Completion

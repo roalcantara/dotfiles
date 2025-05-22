@@ -29,6 +29,10 @@ fi
 # }
 
 # MISE {
+if [[ -e $XDG_DATA_HOME/mise/config.toml ]]; then
+  export MISE_GLOBAL_CONFIG_FILE=$XDG_DATA_HOME/mise/config.toml
+fi
+
 if (( $+commands[mise] )); then
   eval "$(mise activate zsh --yes --quiet --shims)"
 fi

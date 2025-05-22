@@ -120,9 +120,9 @@ setup_xdg_directories
 
 # ZSH DEFAULTS
 export ZSH_VERSION="5.9" # zsh --version | cut -d ' ' -f2
-export ZDOTDIR="${ZDOTDIR:="$HOME/.config/zsh"}"
-export ZIM_HOME="${ZIM_HOME:="$HOME/.local/state/zim"}"
-export ZSH_CACHE_DIR="${ZSH_CACHE_DIR:="$HOME/.cache/zsh"}"
+export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
+export ZIM_HOME="$XDG_STATE_HOME/zim"
+export ZSH_CACHE_DIR="$XDG_CACHE_HOME/zsh"
 export SHELL="$(which zsh)"
 
 # Only source this once

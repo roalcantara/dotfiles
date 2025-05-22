@@ -7,6 +7,14 @@
 # https://zsh.sourceforge.io/Contrib/startup/std/zshrc
 # Contains commands that loads shell options, aliases, functions, key bindings and plugins
 
+if [[ -e $XDG_DATA_HOME/mise/config.toml ]]; then
+  export MISE_GLOBAL_CONFIG_FILE=$XDG_DATA_HOME/mise/config.toml
+fi
+
+if (( $+commands[mise] )); then
+  eval "$(mise activate zsh --yes --quiet --shims)"
+fi
+
 # COLORS, TERM & PATH {
 export CLICOLOR=1
 export LSCOLORS=ExFxBxDxCxegedabagacad
@@ -240,3 +248,10 @@ export SUDO_EDITOR=$EDITOR
 export GIT_EDITOR="$EDITOR -c 'startinsert'"
 export LAUNCH_EDITOR=$EDITOR
 # }
+export PATH="/home/vscode/.local/share/mise/shims:$PATH"
+export PATH="/home/vscode/.local/share/mise/shims:$PATH"
+export PATH="/home/vscode/.local/share/mise/shims:$PATH"
+export PATH="/home/vscode/.local/share/mise/shims:$PATH"
+export PATH="/home/vscode/.local/share/mise/shims:$PATH"
+export PATH="/home/vscode/.local/share/mise/shims:$PATH"
+export PATH="/home/vscode/.local/share/mise/shims:$PATH"

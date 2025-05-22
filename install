@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# ============================================================================
+# Smart dotfiles installation script for devcontainers
+# Save this as ~/dotfiles/install.sh
+# ============================================================================
+
+set -euo pipefail
+
 root="$(pwd)"
 
 puts() {
@@ -16,11 +23,14 @@ w() {
 }
 
 cleanup() {
-  for file in .bashrc .bash_logout .oh-my-zsh .profile; do
-    if [[ -f "${HOME:?}/$file" ]]; then
-      rm -rf "${HOME:?}/$file"
-      i "${HOME:?}/$file removed ✔︎"
-    fi
+  for e in "${HOME:?}" /root; do
+    for f in "$e/.bashrc" "$e/.bash_logout" "$e/.oh-my-zsh" "$e/.profile"; do
+      w "Checking for '$f' exist!!"
+      if [[ -f "$f" ]]; then
+        rm -rf "$f"
+        w "'$f' removed ✔︎"
+      fi
+    done
   done
 }
 
@@ -62,14 +72,19 @@ mise_install() {
   # Create config directory if it doesn't exist
   sudo mkdir -p "$(dirname "$MISE_GLOBAL_CONFIG_FILE")"
   sudo mkdir -p "${HOME:?}/.local/state/mise"
-  i "MISE_GLOBAL_CONFIG_FILE set to ${HOME:?}/.local/share/mise/config.toml ✔︎"
   sudo chown -R vscode:vscode "${HOME}/.local/share/mise" "${HOME:?}/.local/state/mise"
+  i "MISE_GLOBAL_CONFIG_FILE set to ${HOME:?}/.local/share/mise/config.toml ✔︎"
+
+  mise settings set activate_aggressive true
+  mise settings set auto_install true
+  mise settings set global_config_file "${HOME}/.local/share/mise/config.toml"
+  mise settings add trusted_config_paths "${HOME}/.local/share/dots/config"
 }
 
 mise_install_packages() {
   w "Installing mise packages..."
   if command -v mise &>/dev/null; then
-    mise install --yes cosign slsa-verifier node python age bat delta eza fd fzf gh neovim sops starship usage watchexec
+    mise install --yes cosign slsa-verifier ruby node python age bat delta eza fd fzf gh neovim sops starship usage watchexec
     i "mise packages installed ✔︎"
   else
     w "mise is not installed, skipping mise package installation."
@@ -80,7 +95,7 @@ mise_install_packages() {
 mise_use_global() {
   w "Setting mise to use global packages..."
   if command -v mise &>/dev/null; then
-    mise use --yes --global node python age bat delta eza fd fzf gh neovim sops starship usage watchexec
+    mise use --yes --global ruby node python age bat delta eza fd fzf gh neovim sops starship usage watchexec
     i "mise global set ✔︎"
   else
     w "mise is not installed, skipping mise package installation."
@@ -94,13 +109,12 @@ mise_setup_activation() {
     MISE_CMD="$(command -v mise)"
     for SHELL in bash zsh; do
       # Generate activation command for the shell
-      MISE_ACTIVATION=$(eval "$MISE_CMD activate $SHELL --shims")
+      MISE_ACTIVATION=$(eval "$MISE_CMD activate $SHELL --yes --quiet --shims")
       for USER_DIR in "${HOME:?}" /root; do
         echo "$MISE_ACTIVATION" | sudo tee -a "$USER_DIR/.${SHELL}rc" >/dev/null
       done
     done
     sudo chmod 644 "${HOME:?}"/.bashrc "${HOME:?}"/.zshrc
-    sudo chown -R vscode:vscode /home/vscode
   else
     w "mise is not installed, skipping mise package installation."
     return 1
@@ -115,37 +129,37 @@ setup_mise() {
   fi
 
   # Install mise packages
-  mise_install_packages
+  mise_install_packages || return 1
 
   # Set mise to use global packages
-  mise_use_global
+  mise_use_global || return 1
 
   # Setup mise activation
-  mise_setup_activation
+  mise_setup_activation || return 1
 }
 
 remove_oh_my_zsh() {
   w "Removing oh-my-zsh..."
   sudo rm -rf /root/.oh-my-zsh /home/vscode/.oh-my-zsh
 
-  for f in "${HOME:?}/.zshrc" "${HOME:?}/.bashrc" "/root/.zshrc" "/root/.bashrc"; do
-    sudo sed -i -e '/oh-my-zsh/d' -e '/ZSH_THEME/d' -e '/plugins=/d' -e '/:omz:/d' "$f"
+  for e in "${HOME:?}" /root; do
+    for f in "$e/.zshrc" "$e/.bashrc"; do
+      if [[ -f "$f" ]]; then
+        sudo sed -i -e '/oh-my-zsh/d' -e '/ZSH_THEME/d' -e '/plugins=/d' -e '/:omz:/d' "$f"
+      fi
+    done
   done
+
   w "oh-my-zsh removed ✔︎"
 }
 
 setup_dependencies() {
-  # IF OS is Ubuntu
-  if [[ -f /etc/os-release ]]; then
-    if grep -q "Ubuntu" /etc/os-release; then
-      # Install dependencies
-      sudo apt-get update && sudo apt-get install -y cowsay fortune fortunes fortunes-min autoconf patch build-essential rustc libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libgmp-dev libncurses5-dev libffi-dev libgdbm6 libgdbm-dev libdb-dev uuid-dev &&
-        sudo apt-get clean &&
-        sudo rm -rf /var/lib/apt/lists/* &&
-        sudo ln -sf /usr/games/cowsay /usr/local/bin/cowsay &&
-        sudo ln -sf /usr/games/fortune /usr/local/bin/fortune
-    fi
-  fi
+  # Install dependencies
+  sudo apt-get update && sudo apt-get install -y cowsay fortune fortunes fortunes-min build-essential rustc libssl-dev libyaml-dev zlib1g-dev libgmp-dev &&
+    sudo apt-get clean &&
+    sudo rm -rf /var/lib/apt/lists/* &&
+    sudo ln -sf /usr/games/cowsay /usr/local/bin/cowsay &&
+    sudo ln -sf /usr/games/fortune /usr/local/bin/fortune
 }
 
 setup_nvim() {
@@ -193,6 +207,12 @@ setup_zsh() {
     fi
   done
 
+  if [[ ! -d "$HOME"/.local/state/zim ]]; then
+    sudo mkdir -p "$HOME"/.local/state/zim
+    sudo chown -R vscode:vscode "$HOME"/.local/state/zim
+    i "$HOME/.local/state/zim created and owned by vscode ✔︎"
+  fi
+
   export ZDOTDIR="${HOME:?}/.config/zsh"
 }
 
@@ -216,4 +236,4 @@ main() {
 }
 
 # Run the main function
-main
+main "$@"
