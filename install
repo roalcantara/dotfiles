@@ -22,6 +22,51 @@ w() {
   puts "WARN" "$1"
 }
 
+# GitHub Token Setup for API Access
+setup_github_token() {
+  # Check for mounted token file (devcontainer)
+  if [ -f /run/secrets/github_token ]; then
+    export GITHUB_TOKEN=$(cat /run/secrets/github_token)
+    echo "✓ GitHub token loaded from mounted secret"
+    return 0
+  fi
+
+  # Check for environment variable
+  if [ -n "$GITHUB_TOKEN" ]; then
+    echo "✓ GitHub token found in environment"
+    return 0
+  fi
+
+  # Check for token file in various locations
+  local token_locations=(
+    "${HOME}/.github_token"
+    "${HOME}/.secrets/github_token"
+    "/tmp/github_env"
+  )
+
+  for location in "${token_locations[@]}"; do
+    if [ -f "$location" ]; then
+      export GITHUB_TOKEN=$(cat "$location")
+      echo "✓ GitHub token loaded from $location"
+      return 0
+    fi
+  done
+
+  echo "⚠ No GitHub token found - API rate limits may apply"
+  return 1
+}
+
+cleanup_github_token() {
+  # Check if the GITHUB_TOKEN variable is set
+  if [ -n "$GITHUB_TOKEN" ]; then
+    # Unset the GITHUB_TOKEN variable
+    unset GITHUB_TOKEN
+    echo "✓ GitHub token removed from environment"
+  else
+    echo "⚠ No GitHub token found in environment"
+  fi
+}
+
 cleanup() {
   for e in "${HOME:?}" /root; do
     for f in "$e/.bashrc" "$e/.bash_logout" "$e/.oh-my-zsh" "$e/.profile"; do
@@ -128,6 +173,9 @@ setup_mise() {
     mise_install || return 1
   fi
 
+  # load GitHub token
+  setup_github_token
+
   # Install mise packages
   mise_install_packages || return 1
 
@@ -136,6 +184,11 @@ setup_mise() {
 
   # Setup mise activation
   mise_setup_activation || return 1
+
+  # cleanup GitHub token
+  cleanup_github_token
+
+  w "mise setup complete ✔︎"
 }
 
 remove_oh_my_zsh() {
