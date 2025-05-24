@@ -248,3 +248,19 @@ export SUDO_EDITOR=$EDITOR
 export GIT_EDITOR="$EDITOR -c 'startinsert'"
 export LAUNCH_EDITOR=$EDITOR
 # }export PATH="/home/vscode/.local/share/mise/shims:$PATH"
+
+# ZPROF {
+# profilling
+if [[ -n "$z_prof" ]]; then
+  if [[ -n "$z_trace" ]]; then
+    unsetopt XTRACE
+    exec 2>&3 3>&-
+    zprof >$HOME/.config/zsh/tmp/benchmark.$$.prof.log
+  else
+    zprof
+  fi
+  zmodload -u zsh/zprof
+elif [[ -n "$z_trace" ]]; then
+  unsetopt XTRACE
+fi
+# }

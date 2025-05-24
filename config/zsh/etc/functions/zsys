@@ -1,0 +1,278 @@
+#!/usr/bin/env zsh
+# shellcheck shell=bash disable=SC2154,SC1073,SC1058,SC1072,SC1009,SC1036,SC2155,SC2034,SC2120,SC2296,SC2179,SC2066,SC2015,SC1008,SC2296,SC1087
+
+zsys() {
+  case "$1" in
+    path)
+      case "$2" in
+        list)
+          print -l "${(@)path}"
+          ;;
+        remove)
+          [[ -z "$3" ]] && { echo "zsys: path remove requires a path argument" >&2; return 1; }
+          path=("${(@)path:#$3}")
+          ;;
+        append)
+          [[ -z "$3" ]] && { echo "zsys: path append requires a path argument" >&2; return 1; }
+          [[ -d "$3" ]] && path+="$3" || { echo "zsys: directory '$3' does not exist" >&2; return 1; }
+          ;;
+        prepend)
+          [[ -z "$3" ]] && { echo "zsys: path prepend requires a path argument" >&2; return 1; }
+          [[ -d "$3" ]] && path=("$3" "${(@)path:#$3}") || { echo "zsys: directory '$3' does not exist" >&2; return 1; }
+          ;;
+        clean)
+          local clean_path=()
+          for dir in "${(@)path}"; do
+            [[ -d "$dir" ]] && clean_path+="$dir"
+          done
+          path=("${(@)clean_path}")
+          ;;
+        *)
+          echo "zsys: unknown path command '$2'" >&2
+          echo "Usage: zsys path {list|remove|append|prepend|clean} [path]" >&2
+          echo "Arguments:"
+          echo "  list    : List all paths"
+          echo "  remove  : Remove a path from the list"
+          echo "  append  : Append a path to the list"
+          echo "  prepend : Prepend a path to the list"
+          echo "  clean   : Remove non-existing paths from the list"
+          echo "  path    : The path to add or remove"
+          echo "Examples:"
+          echo "  zsys path list"
+          echo "  zsys path remove /path/to/remove"
+          echo "  zsys path append /path/to/append"
+          echo "  zsys path prepend /path/to/prepend"
+          echo "  zsys path clean"
+          echo "  zsys path clean /path/to/clean"
+          return 1
+          ;;
+      esac
+      ;;
+
+    cmd)
+      case "$2" in
+        exists)
+          [[ -z "$3" ]] && { echo "zsys: cmd exists requires a command name" >&2; return 1; }
+          (( ${+commands[$3]} ))
+          ;;
+        path)
+          [[ -z "$3" ]] && { echo "zsys: cmd path requires a command name" >&2; return 1; }
+          if (( ${+commands[$3]} )); then
+            echo "${commands[$3]}"
+          else
+            return 1
+          fi
+          ;;
+        *)
+          echo "zsys: unknown cmd command '$2'" >&2
+          echo "Usage: zsys cmd {exists|path} <command>" >&2
+          echo "Arguments:"
+          echo "  exists : Check if a command exists"
+          echo "  path   : Get the path of a command"
+          echo "Examples:"
+          echo "  if zsys cmd exists ls; then echo 'ls exists'; fi"
+          echo "  if zsys cmd path ls; then echo 'ls path is ${commands[ls]}'; fi"
+          return 1
+          ;;
+      esac
+      ;;
+
+    file)
+      case "$2" in
+        source)
+          [[ -z "$3" ]] && { echo "zsys: file source requires a file path" >&2; return 1; }
+          [[ -f "$3" ]] && source "$3"
+          ;;
+        mtime)
+          [[ -z "$3" ]] && { echo "zsys: file mtime requires a file path" >&2; return 1; }
+          if [[ -f "$3" ]]; then
+            case "$(uname)" in
+              Darwin) stat -f "%m" "$3" ;;
+              Linux)  stat -c "%Y" "$3" ;;
+            esac
+          fi
+          ;;
+        *)
+          echo "zsys: unknown file command '$2'" >&2
+          echo "Usage: zsys file {source|mtime} <file>" >&2
+          echo "Arguments:"
+          echo "  source : Source a file"
+          echo "  mtime  : Get the last modification time of a file"
+          echo "Examples:"
+          echo "  zsys file source /path/to/file"
+          echo "  zsys file mtime /path/to/file"
+          return 1
+          ;;
+      esac
+      ;;
+
+    xdg)
+      case "$2" in
+        set)
+          local var_name="$3"
+          local default_value="$4"
+          local create_dir="${5:-true}"
+
+          [[ -z "$var_name" ]] && { echo "zsys: xdg set requires variable name" >&2; return 1; }
+          [[ -z "$default_value" ]] && { echo "zsys: xdg set requires default value" >&2; return 1; }
+
+          if [[ -z "${(P)var_name}" ]]; then
+            export "$var_name"="$default_value"
+          fi
+
+          # Create directory if requested and it doesn't exist
+          if [[ "$create_dir" == "true" && ! -d "${(P)var_name}" ]]; then
+            if ! mkdir -p "${(P)var_name}"; then
+              echo "zsys: Failed to create directory '${(P)var_name}' for $var_name" >&2
+              return 1
+            fi
+          fi
+          ;;
+        ensure-runtime)
+          # Validate XDG_RUNTIME_DIR
+          if [[ -z "$XDG_RUNTIME_DIR" || "$XDG_RUNTIME_DIR" =~ ^[[:space:]]*$ ]]; then
+            export XDG_RUNTIME_DIR="/tmp/runtime-$USER"
+          fi
+
+          # Create directory if needed
+          if [[ ! -d "$XDG_RUNTIME_DIR" ]]; then
+            if ! mkdir -p "$XDG_RUNTIME_DIR"; then
+              echo "zsys: Failed to create directory '$XDG_RUNTIME_DIR'" >&2
+              return 1
+            fi
+          fi
+
+          # Helper function to get file stats
+          _get_file_stats() {
+            local dir="$1"
+            if command -v stat >/dev/null 2>&1; then
+              if stat --version >/dev/null 2>&1; then
+                # GNU stat (Linux)
+                printf "%s %s" "$(stat -c "%a" "$dir")" "$(stat -c "%u" "$dir")"
+              else
+                # BSD stat (macOS)
+                printf "%s %s" "$(stat -f "%Lp" "$dir")" "$(stat -f "%u" "$dir")"
+              fi
+            else
+              echo "zsys: stat command not available" >&2
+              return 1
+            fi
+          }
+
+          # Get current permissions and ownership
+          local stats
+          if ! stats=$(_get_file_stats "$XDG_RUNTIME_DIR"); then
+            return 1
+          fi
+
+          local current_perms="${stats%% *}"
+          local current_owner="${stats##* }"
+
+          # Fix permissions if needed
+          if [[ "$current_perms" != "700" ]]; then
+            echo "zsys: Fixing permissions '$current_perms' → '700' for '$XDG_RUNTIME_DIR'"
+            if ! chmod 700 "$XDG_RUNTIME_DIR"; then
+              echo "zsys: Failed to set permissions on '$XDG_RUNTIME_DIR'" >&2
+              return 1
+            fi
+          fi
+
+          # Fix ownership if needed
+          if [[ "$current_owner" != "$UID" ]]; then
+            echo "zsys: Fixing ownership '$current_owner' → '$UID' for '$XDG_RUNTIME_DIR'"
+            if ! chown "$USER" "$XDG_RUNTIME_DIR" 2>/dev/null; then
+              # Try with sudo if regular chown fails
+              if ! sudo chown "$USER" "$XDG_RUNTIME_DIR"; then
+                echo "zsys: Failed to change ownership of '$XDG_RUNTIME_DIR'" >&2
+                return 1
+              fi
+            fi
+          fi
+
+          # Final verification
+          if ! stats=$(_get_file_stats "$XDG_RUNTIME_DIR"); then
+            return 1
+          fi
+
+          local final_perms="${stats%% *}"
+          local final_owner="${stats##* }"
+
+          if [[ "$final_perms" != "700" || "$final_owner" != "$UID" ]]; then
+            echo "zsys: Verification failed - perms: $final_perms, owner: $final_owner" >&2
+            return 1
+          fi
+
+          return 0
+          ;;
+        setup)
+          # Check if user-dirs.dirs exists and source it
+          local user_dirs_file="$HOME/.config/user-dirs.dirs"
+          if [[ -f "$user_dirs_file" ]]; then
+            # Safely source the file
+            if ! source "$user_dirs_file"; then
+              echo "zsys: Warning - failed to source '$user_dirs_file'" >&2
+            fi
+          fi
+
+          # Set XDG Base Directory variables
+          zsys xdg set "XDG_CONFIG_HOME" "$HOME/.config" || return 1
+          zsys xdg set "XDG_CACHE_HOME" "$HOME/.cache" || return 1
+          zsys xdg set "XDG_DATA_HOME" "$HOME/.local/share" || return 1
+          zsys xdg set "XDG_STATE_HOME" "$HOME/.local/state" || return 1
+
+          # Handle XDG_BIN_HOME (non-standard but commonly used)
+          zsys xdg set "XDG_BIN_HOME" "$HOME/.local/bin" || return 1
+
+          # Handle XDG_RUNTIME_DIR specially (validation logic)
+          if [[ -z "$XDG_RUNTIME_DIR" || "$XDG_RUNTIME_DIR" =~ ^[[:space:]]*$ ]]; then
+            export XDG_RUNTIME_DIR="/tmp/runtime-$USER"
+          fi
+
+          # Set XDG User Directory variables (only set defaults, don't create)
+          zsys xdg set "XDG_DESKTOP_DIR" "$HOME/Desktop" "false"
+          zsys xdg set "XDG_DOWNLOAD_DIR" "$HOME/Downloads" "false"
+          zsys xdg set "XDG_DOCUMENTS_DIR" "$HOME/Documents" "false"
+          zsys xdg set "XDG_MUSIC_DIR" "$HOME/Music" "false"
+          zsys xdg set "XDG_PICTURES_DIR" "$HOME/Pictures" "false"
+          zsys xdg set "XDG_VIDEOS_DIR" "$HOME/Movies" "false"
+
+          # Custom directories (create these)
+          zsys xdg set "XDG_PROJECTS_DIR" "$HOME/Projects" || return 1
+          zsys xdg set "XDG_WORKSPACE_DIR" "$HOME/Work" || return 1
+
+          # Ensure XDG_RUNTIME_DIR has proper permissions and ownership
+          zsys xdg ensure-runtime || return 1
+
+          return 0
+          ;;
+        *)
+          echo "zsys: unknown xdg command '$2'" >&2
+          echo "Usage: zsys xdg {set|ensure-runtime|setup} [args...]" >&2
+          echo "Arguments:"
+          echo "  set             : Set an XDG variable"
+          echo "  ensure-runtime  : Ensure XDG_RUNTIME_DIR is set up correctly"
+          echo "  setup           : Set up XDG variables and directories"
+          echo "Examples:"
+          echo "  zsys xdg set XDG_CONFIG_HOME /path/to/config"
+          echo "  zsys xdg ensure-runtime"
+          echo "  zsys xdg setup"
+          return 1
+          ;;
+      esac
+      ;;
+
+    *)
+      echo "zsys: unknown command '$1'" >&2
+      echo "Usage: zsys {path|cmd|file|xdg} <subcommand> [args...]" >&2
+      echo "  path: list, remove, append, prepend, clean"
+      echo "  cmd:  exists, path"
+      echo "  file: source, mtime"
+      echo "  xdg: ensure-runtime, setup"
+      return 1
+      ;;
+  esac
+}
+
+zsys "${@}"
+
+# vi: set ft=sh:

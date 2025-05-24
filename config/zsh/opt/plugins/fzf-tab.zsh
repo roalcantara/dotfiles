@@ -1,3 +1,5 @@
+#!/usr/bin/env zsh
+
 # Tab completion using fzf
 # This is distinct from fzf's own implementation for completion, in that it works with the existing completion mechanisms rather than creating a new mechanism.
 # https://github.com/lincheney/fzf-tab-completion
@@ -88,6 +90,7 @@ export FZF_ALT_C_OPTS="
 # FZF_TAB
 # https://github.com/Aloxaf/fzf-tab
 # https://github.com/Aloxaf/fzf-tab/wiki/Configuration
+# c-x h -> get context of the completion
 zstyle ':fzf-tab:complete:*' menu no
 zstyle -d ':completion:*' format
 
@@ -148,6 +151,12 @@ zstyle ':fzf-tab:complete:systemctl-*:*' fzf-preview 'SYSTEMD_COLORS=1 systemctl
 # Preview for brew (https://github.com/Aloxaf/fzf-tab/wiki/Preview#homebrew)
 zstyle ':fzf-tab:complete:brew-(install|uninstall|search|info):*-argument-rest' fzf-preview 'brew info $word'
 
+# tags in context :completion::complete:mise:: argument-rest  (_arguments _mise)
+# tags in context :completion::complete:mise:argument-rest: argument-rest  (_arguments _mise)
+# Preview for mise install command with registry information
+# Create the preview function in your .zshrc
+zstyle ':fzf-tab:complete:mise:argument-rest' fzf-preview 'mise_tool_preview $word'
+
 # GIT (https://github.com/Aloxaf/fzf-tab/wiki/Preview#git)
 zstyle ':fzf-tab:complete:git-log:*' fzf-preview 'git show --color=always $word | bat --color=always -l diff -p' # Preview for git log
 # Show full path and diff preview
@@ -181,8 +190,8 @@ else
  fi
 fi'
 
-# preview directory's content with eza when completing cd (https://github.com/Aloxaf/fzf-tab/wiki/Preview)
-zstyle ':fzf-tab:complete:cd:*' fzf-preview '
+if zsys cmd exists eza; then
+  fzf_dir_preview='
   if [ -d $realpath ]; then
     eza --color=always --classify --group-directories-first --binary --long --icons --header --no-permissions --no-user --modified --time-style=iso -a --git $realpath
   elif [[ $realpath =~ \.(jpg|jpeg|png|gif|bmp)$ ]]; then
@@ -190,12 +199,12 @@ zstyle ':fzf-tab:complete:cd:*' fzf-preview '
   else
     bat --style=full --language=sh --color=always --theme=Dracula --line-range :500 <(eval echo $realpath) 2>/dev/null || echo $realpath
   fi'
+  zstyle ':fzf-tab:complete:eza:*' fzf-preview "$fzf_dir_preview"
+else
+  fzf_dir_preview='ls -1 --color=always $realpath'
+fi
 
-zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview '
-  if [ -d $realpath ]; then
-    eza --color=always --classify --group-directories-first --binary --long --icons --header --no-permissions --no-user --modified --time-style=iso -a --git $realpath
-  elif [[ $realpath =~ \.(jpg|jpeg|png|gif|bmp)$ ]]; then
-    chafa -c 256 --size=40x40 "$realpath"
-  else
-    bat --style=full --language=sh --color=always --theme=Dracula --line-range :500 <(eval echo $realpath) 2>/dev/null || echo $realpath
-  fi'
+# preview directory's content with eza when completing cd (https://github.com/Aloxaf/fzf-tab/wiki/Preview)
+zstyle ':fzf-tab:complete:cd:*' fzf-preview "$fzf_dir_preview"
+zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview "$fzf_dir_preview"
+zstyle ':fzf-tab:complete:z:*' fzf-preview "$fzf_dir_preview"

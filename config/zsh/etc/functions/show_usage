@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# shellcheck shell=bash disable=SC2154,SC2004
+
+##? Show help information for an autoloaded function
+##?
+##? Usage:
+##?    show_usage [function_name]
+##?
+##? Options:
+##?    function_name  Name of the function to show help for
+##?                  If not provided, shows help for the calling function
+##?
+##? Example: show_usage puts
+
+show_usage() {
+  local target_func="${1:-${funcstack[2]}}"
+  local script="${functions_source[$target_func]}"
+
+  # If script path not found, try to autoload it
+  if [[ -z "$script" ]] && (($ + functions[$target_func])); then
+    autoload -Uz +X "$target_func"
+    script="${functions_source[$target_func]}"
+  fi
+
+  if [[ -f "$script" ]]; then
+    grep '^##?' "$script" | sed 's/^##?//'
+    return 0
+  else
+    print "Error: Could not find help for function '$target_func'"
+    return 1
+  fi
+}
+
+show_usage "$@"
+
+# vi: set ft=sh:
