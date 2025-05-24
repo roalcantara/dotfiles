@@ -247,7 +247,7 @@ export VISUAL=$EDITOR
 export SUDO_EDITOR=$EDITOR
 export GIT_EDITOR="$EDITOR -c 'startinsert'"
 export LAUNCH_EDITOR=$EDITOR
-# }export PATH="/home/vscode/.local/share/mise/shims:$PATH"
+# }
 
 # ZPROF {
 # profilling
