@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+root="$(pwd)"
+
+for filepath in home/*; do
+  file=$(basename "$filepath")
+  source="$root/home/$file"
+  target="$HOME/.$file"
+
+  echo "Copying $source => $target"
+  cp -r "$source" "$target"
+done
